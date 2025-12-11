@@ -1,3 +1,13 @@
+@layer base {
+    html {
+        font-family: "Lexend", sans-serif;
+    }
+}
+
+.x-dropdown-menu {
+    @apply bg-white ; /* ubah sesuai warna */
+}
+
 @layer components {
   .btn {
     @apply inline-flex items-center justify-center px-5 py-3 rounded-xl font-semibold uppercase tracking-wide
@@ -15,6 +25,12 @@
   .btn-primary:active {
     @apply bg-gradient-to-br from-primaryLight to-primary translate-y-[1px] scale-[0.98] shadow-md;
   }
+}
+
+@layer components{
+    .bg-gradient-primary {
+        @apply bg-gradient-to-br from-primary to-primaryDark;
+    }
 }
 
 @layer components {
@@ -49,5 +65,22 @@
     @apply  text-gray-700 select-none;
   }
 }
+
+@layer components {
+    .title-brown {
+        @apply text-2xl font-bold text-primary;
+    }
+    .title {
+        @apply text-2xl font-black text-black;
+    }
+    .normal {
+        @apply text-base font-light text-black;
+    }
+    .normal-brown {
+        @apply text-base font-light text-primary;
+    }
+}
+
+
 
 
