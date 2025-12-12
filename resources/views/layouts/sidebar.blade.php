@@ -1,5 +1,5 @@
-<div
-    class="m-5 overflow-hidden shadow-2xl-lr rounded-xl flex w-96 min-h-screen p-5 bg-white transform transition-all duration-300 hover:shadow-3xl">
+<div id="sidebar"
+    class="sidebar mr-5 overflow-hidden shadow-2xl-lr rounded-xl flex w-96 min-h-screen p-5 bg-white transform transition-all duration-300 hover:shadow-3xl">
     <div class="flex min-h-full w-full flex-col">
 
         <!-- Logo -->
@@ -15,7 +15,7 @@
 
             <!-- Dashboard -->
             <a href="{{ route('dashboard') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('dashboard') ? 'bg-primary text-white shadow-md transform scale-105' : 'hover:bg-primaryUltraLight hover:shadow-md hover:transform hover:scale-102' }}">
+                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('dashboard') ? 'btn-primary text-white shadow-md transform scale-105' : 'hover:bg-primaryUltraLight hover:shadow-md' }}">
                 <svg xmlns="http://www.w3.org/2000/svg"
                     class="h-6 w-6 transition-colors duration-300 {{ request()->routeIs('dashboard') ? 'text-white' : 'text-primaryDark' }}"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -27,7 +27,7 @@
 
             <!-- Users -->
             <a href="#"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium hover:bg-primaryUltraLight hover:shadow-md hover:transform hover:scale-102">
+                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all btn-secondary">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primaryDark transition-colors duration-300"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -38,7 +38,7 @@
 
             <!-- Projects -->
             <a href="#"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium hover:bg-primaryUltraLight hover:shadow-md hover:transform hover:scale-102">
+                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all btn-secondary">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primaryDark transition-colors duration-300"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -49,7 +49,7 @@
 
             <!-- Settings -->
             <a href="#"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium hover:bg-primaryUltraLight hover:shadow-md hover:transform hover:scale-102">
+                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all btn-secondary">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primaryDark transition-colors duration-300"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -60,66 +60,25 @@
 
         </nav>
 
-        <!-- Footer / Logout -->
-        <div class="mt-auto pt-8 animate-fade-in-up">
-            <a href="#"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-red-600 font-medium hover:bg-red-100 hover:shadow-md hover:transform hover:scale-102">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 transition-colors duration-300"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M15.75 9V5.25a2.25 2.25 0 00-2.25-2.25h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                </svg>
-                Logout
-            </a>
-        </div>
-
     </div>
 </div>
 
 <style>
-    .animate-fade-in {
-        animation: fadeIn 0.8s ease-in-out;
+    .sidebar-hidden {
+        transform: translateX(-110%);
     }
 
-    .animate-slide-in-left {
-        animation: slideInLeft 0.6s ease-out 0.2s both;
-    }
-
-    .animate-fade-in-up {
-        animation: fadeInUp 0.6s ease-out 0.4s both;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-
-        to {
-            opacity: 1;
-        }
-    }
-
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-30px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .content-shift {
+        margin-left: -25.2rem;
+        transition: margin-left 0.3s ease;
     }
 </style>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        sidebar.classList.toggle('sidebar-hidden');
+        mainContent.classList.toggle('content-shift');
+    }
+</script>

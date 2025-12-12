@@ -1,15 +1,25 @@
-<div class="relative mt-5 mb-5 mr-5">
+<div class="relative mb-5">
     <div
         class="bg-gradient-to-br rounded-xl from-primary to-primaryDark shadow-2xl transform transition-all duration-500 relative z-30">
 
-        <div class="flex w-full justify-between items-center p-6 relative z-10">
-            <div class="flex flex-col animate-fade-in">
-                <p
-                    class="title text-white font-extrabold text-2xl tracking-wide transition-transform duration-500 drop-shadow-lg">
-                    {{ $title }}
-                </p>
-                <p class="normal text-white opacity-90 transition-opacity duration-500 hover:opacity-100 italic">Selamat
-                    datang kembali!</p>
+        <div class="flex w-full justify-between items-center p-5 relative z-10">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" name="button-sidebar"
+                    class="text-white hover:text-primaryUltraLight transition-all duration-300 transform hover:scale-110 hover:-translate-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <div class="flex flex-col animate-fade-in">
+                    <p
+                        class="title text-white font-extrabold text-2xl tracking-wide transition-transform duration-500 drop-shadow-lg">
+                        {{ $title }}
+                    </p>
+                    <p class="normal text-white opacity-90 transition-opacity duration-500 hover:opacity-100 italic">
+                        Selamat
+                        datang kembali!</p>
+                </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -48,7 +58,7 @@
                                     @csrf
 
                                     <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                                                    this.closest('form').submit();"
+                                                                            this.closest('form').submit();"
                                         class="transition-all duration-500 hover:bg-primaryExtraLight font-semibold">
                                         {{ __('Log Out') }}
                                     </x-dropdown-link>

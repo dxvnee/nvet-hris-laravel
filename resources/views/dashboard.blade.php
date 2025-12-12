@@ -2,8 +2,8 @@
     <x-slot name="header">Dashboard</x-slot>
 
     <div
-        class="py-12  min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+        class="">
+        <div class="space-y-8">
             <!-- Welcome Section -->
             <div
                 class="bg-white backdrop-blur-lg shadow-2xl overflow-hidden sm:rounded-2xl  animate-slide-up ">
@@ -32,7 +32,7 @@
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div
-                    class="bg-white/70 backdrop-blur-lg overflow-hidden shadow-xl sm:rounded-2xl border border-white/30 hover:shadow-2xl transition-all duration-500 animate-slide-up-delay-1 hover:transform hover:scale-105 relative group">
+                    class="bg-white backdrop-blur-lg overflow-hidden shadow-xl sm:rounded-2xl border border-white/30 hover:shadow-2xl transition-all duration-500 animate-slide-up-delay-1 hover:transform hover:scale-105 relative group">
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>

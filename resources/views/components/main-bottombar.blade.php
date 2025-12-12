@@ -1,5 +1,5 @@
 <div
-    class="bg-gradient-to-br from-primary to-primaryDark shadow-2xl-lr hover:shadow-3xl transition-all duration-500 relative z-30 overflow-hidden mb-5 mr-5 rounded-xl border-t border-white/20 backdrop-blur">
+    class="bg-gradient-to-br from-primary to-primaryDark shadow-2xl-lr hover:shadow-3xl transition-all duration-500 relative z-30 overflow-hidden mt-5 rounded-xl border-t border-white/20 backdrop-blur">
     <div
         class="absolute inset-0 bg-gradient-to-r from-primary/25 via-primaryDark/10 to-primary/35 opacity-70 animate-pulse-slow">
     </div>

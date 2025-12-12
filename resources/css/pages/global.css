@@ -17,11 +17,30 @@
   }
 
   .btn-primary:hover {
-    @apply from-primaryDark to-primaryDark shadow-xl -translate-y-[1px] scale-[1.02];
+    @apply from-primaryDark to-primaryDark shadow-xl scale-[1.02];
   }
 
   .btn-primary:active {
-    @apply bg-gradient-to-br from-primaryLight to-primary translate-y-[1px] scale-[0.98] shadow-md;
+    @apply bg-gradient-to-br from-primaryLight to-primary  scale-[0.98] shadow-md;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-5 py-3 rounded-xl font-semibold uppercase tracking-wide
+           transition-all duration-300 transform cursor-pointer select-none;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-black;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-primaryExtraLight scale-[1.02];
+  }
+
+  .btn-secondary:active {
+    @apply bg-primaryUltraLight scale-[0.98];
   }
 }
 
@@ -198,5 +217,68 @@
         @apply shadow-[12px_0_30px_-8px_rgba(0,0,0,0.12),-12px_0_30px_-8px_rgba(0,0,0,0.12)];
     }
 }
+
+@layer components {
+
+    .main-content {
+        transition: margin-left 0.3s ease;
+        margin-left: 0; /* posisi default */
+    }
+
+    .sidebar {
+        transition: transform 0.3s ease;
+        transform: translateX(0);
+    }
+}
+
+@layer components {
+
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .animate-slide-in-left {
+        animation: slideInLeft 0.6s ease-out 0.2s both;
+    }
+
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out 0.4s both;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
 
 

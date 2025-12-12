@@ -18,19 +18,21 @@
 
 <body class="font-sans antialiased">
     <div class="w-full min-h-screen bg-primaryUltraLight">
-        <div class="flex">
+        <div class="flex m-5">
 
             {{-- sidebar --}}
             @include('layouts.sidebar')
 
-            <div class="flex flex-col w-full">
+            <div id="main-content" class="main-content flex flex-col w-full">
 
                 {{-- topbar --}}
 
                 <!-- Page Content -->
                 <main>
                     @include('components.main-topbar', ['title' => $header])
-                    {{ $slot }}
+                    <div class="min-h-screen">
+                        {{ $slot }}
+                    </div>
                     @include('components.main-bottombar', ['title' => $header])
                 </main>
             </div>
