@@ -17,8 +17,7 @@
                         {{ $title }}
                     </p>
                     <p class="normal text-white opacity-90 transition-opacity duration-500 hover:opacity-100 italic">
-                        Selamat
-                        datang kembali!</p>
+                        {{ $subtle }}</p>
                 </div>
             </div>
 

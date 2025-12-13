@@ -25,7 +25,7 @@
             <div id="main-content" class="transform duration-300 ease-in-out h-full flex flex-col w-full overflow-y-auto">
 
 
-                @include('components.main-topbar', ['title' => $header])
+                @include('components.main-topbar', ['title' => $header, 'subtle' => $subtle])
 
                 <main class = "flex-1">
                     {{ $slot }}
@@ -39,10 +39,10 @@
             </div>
 
         </div>
-
-
-
     </div>
+
+    <x-loading-screen />
+
 </body>
 
 </html>

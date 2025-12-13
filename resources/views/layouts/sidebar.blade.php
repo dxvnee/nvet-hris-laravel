@@ -30,7 +30,7 @@
 
             <!-- Dashboard -->
             <a href="{{ route('dashboard') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('dashboard') ? 'btn-primary text-white shadow-md transform scale-105' : 'hover:bg-primaryUltraLight hover:shadow-md' }}">
+                class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('dashboard') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
                 <svg xmlns="http://www.w3.org/2000/svg"
                     class="h-6 w-6 transition-colors duration-300 {{ request()->routeIs('dashboard') ? 'text-white' : 'text-primaryDark' }}"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -40,6 +40,17 @@
                 Dashboard
             </a>
 
+            <a href="{{  route('absen.index') }}"
+                class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('absen.index') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 transition-colors duration-300 {{ request()->routeIs('absen.index') ? 'text-white' : 'text-primaryDark' }}"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M5.5 17a4.5 4.5 0 018.9 0M12 7.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Absen
+            </a>
+            
             <!-- Users -->
             <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all btn-secondary">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primaryDark transition-colors duration-300"
@@ -69,22 +80,6 @@
                 </svg>
                 Settings
             </a>
-
-            @for ($i = 0; $i < 50; $i++)
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all btn-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primaryDark transition-colors duration-300"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M9.75 3a1.5 1.5 0 013 0v1.051a7.5 7.5 0 014.95 4.95H21a1.5 1.5 0 010 3h-1.301a7.5 7.5 0 01-4.95 4.95V21a1.5 1.5 0 01-3 0v-1.301a7.5 7.5 0 01-4.95-4.95H3a1.5 1.5 0 010-3h1.051a7.5 7.5 0 014.95-4.95V3z" />
-                    </svg>
-                    Settings {{ $i + 1 }}
-                </a>
-            @endfor
-
-
-
-
-
 
         </nav>
 

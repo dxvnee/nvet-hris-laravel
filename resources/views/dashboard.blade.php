@@ -1,5 +1,7 @@
 <x-app-layout>
     <x-slot name="header">Dashboard</x-slot>
+    <x-slot name="subtle">Selamat datang kembali!</x-slot>
+
 
     <div
         class="">
