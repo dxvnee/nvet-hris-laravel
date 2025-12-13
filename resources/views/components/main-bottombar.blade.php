@@ -1,11 +1,9 @@
 <div
-    class="bg-gradient-to-br from-primary to-primaryDark shadow-2xl-lr hover:shadow-3xl transition-all duration-500 relative z-30 overflow-hidden mt-5 rounded-xl border-t border-white/20 backdrop-blur">
-    <div
-        class="absolute inset-0 bg-gradient-to-r from-primary/25 via-primaryDark/10 to-primary/35 opacity-70 animate-pulse-slow">
-    </div>
+    class="bg-gradient-to-br from-primary to-primaryDark shadow-2xl-lr transition-all duration-500 relative z-30 mt-5 rounded-xl border-t border-white/20 backdrop-blur">
+
     <div class="flex w-full justify-center items-center p-6 relative z-10">
         <div class="flex flex-col items-center gap-2 animate-fade-in">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3">   
                 <img src="{{ asset('images/logo3.png') }}" alt="logo"
                     class="h-8 w-8 transition-transform duration-300 hover:scale-110">
                 <p class="text-white font-bold text-lg tracking-wide">NVet Clinic & Lab</p>

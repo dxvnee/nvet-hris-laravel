@@ -17,24 +17,25 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="w-full min-h-screen bg-primaryUltraLight">
-        <div class="flex m-5">
+    <div class="w-full h-screen bg-primaryUltraLight">
+        <div class="flex h-full p-5">
 
-            {{-- sidebar --}}
             @include('layouts.sidebar')
 
-            <div id="main-content" class="main-content flex flex-col w-full">
+            <div id="main-content" class="transform duration-300 ease-in-out h-full flex flex-col w-full overflow-y-auto">
 
-                {{-- topbar --}}
 
-                <!-- Page Content -->
-                <main>
-                    @include('components.main-topbar', ['title' => $header])
-                    <div class="min-h-screen">
-                        {{ $slot }}
-                    </div>
-                    @include('components.main-bottombar', ['title' => $header])
+                @include('components.main-topbar', ['title' => $header])
+
+                <main class = "flex-1">
+                    {{ $slot }}
+                    {{ $slot }}
                 </main>
+
+                <div class="mt-auto">
+
+                    @include('components.main-bottombar', ['title' => $header])
+                </div>
             </div>
 
         </div>
