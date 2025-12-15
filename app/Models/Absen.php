@@ -7,22 +7,50 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Absen extends Model
 {
+    protected $table = 'absens';
+
     protected $fillable = [
         'user_id',
         'tanggal',
-        'tipe',
-        'jam',
+
+        // JAM
+        'jam_masuk',
+        'jam_pulang',
+
+        // TELAT
         'telat',
-        'latitude',
-        'longitude',
-        'keterangan',
+        'menit_telat',
+
+        // LOKASI
+        'lat_masuk',
+        'lng_masuk',
+        'lat_pulang',
+        'lng_pulang',
+
+        // IZIN
+        'izin',
+        'izin_keterangan',
+
+        // KERJA
+        'menit_kerja',
     ];
 
     protected $casts = [
         'tanggal' => 'date',
+
+        'jam_masuk' => 'datetime:H:i',
+        'jam_pulang' => 'datetime:H:i',
+
         'telat' => 'boolean',
-        'latitude' => 'decimal:8',
-        'longitude' => 'decimal:8',
+        'izin' => 'boolean',
+
+        'menit_telat' => 'integer',
+        'menit_kerja' => 'integer',
+
+        'lat_masuk' => 'decimal:8',
+        'lng_masuk' => 'decimal:8',
+        'lat_pulang' => 'decimal:8',
+        'lng_pulang' => 'decimal:8',
     ];
 
     public function user(): BelongsTo
@@ -30,3 +58,4 @@ class Absen extends Model
         return $this->belongsTo(User::class);
     }
 }
+

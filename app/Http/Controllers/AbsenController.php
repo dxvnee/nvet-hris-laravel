@@ -19,21 +19,22 @@ class AbsenController extends Controller
         $today = Carbon::today();
         $user = Auth::user();
 
-        // Ambil absen hari ini
+        // Ambil absen hari ini (single record per day)
         $absenHariIni = Absen::where('user_id', $user->id)
             ->whereDate('tanggal', $today)
-            ->get();
+            ->first();
 
-        $sudahHadir = $absenHariIni->where('tipe', 'hadir')->first();
-        $sudahIzin = $absenHariIni->where('tipe', 'izin')->first();
-        $sudahPulang = $absenHariIni->where('tipe', 'pulang')->first();
+        // Status berdasarkan model baru
+        $sudahHadir = $absenHariIni && $absenHariIni->jam_masuk ? $absenHariIni : null;
+        $sudahIzin = $absenHariIni && $absenHariIni->izin ? $absenHariIni : null;
+        $sudahPulang = $absenHariIni && $absenHariIni->jam_pulang ? $absenHariIni : null;
 
         // Hitung total jam kerja hari ini
         $totalJamKerja = 0;
         $totalJamKerjaText = '0 jam 0 menit';
         if ($sudahHadir && !$sudahIzin) {
-            $jamMasuk = Carbon::createFromFormat('H:i:s', $sudahHadir->jam);
-            $jamKeluar = $sudahPulang ? Carbon::createFromFormat('H:i:s', $sudahPulang->jam) : Carbon::now();
+            $jamMasuk = $absenHariIni->jam_masuk;
+            $jamKeluar = $absenHariIni->jam_pulang ?? Carbon::now();
 
             $totalMenit = $jamMasuk->diffInMinutes($jamKeluar, false);
             $jam = floor($totalMenit / 60);
@@ -43,16 +44,14 @@ class AbsenController extends Controller
             $totalJamKerjaText = $jam . ' jam ' . $menit . ' menit';
         }
 
-        // Riwayat absen 7 hari terakhir
-        $user = Auth::user();
-
+        // Riwayat absen
         $riwayat = Absen::where('user_id', $user->id)
             ->orderBy('tanggal', 'desc')
-            ->orderBy('jam', 'desc')
             ->limit(20)
             ->get();
 
         return view('absen', compact(
+            'absenHariIni',
             'sudahHadir',
             'sudahIzin',
             'sudahPulang',
@@ -62,44 +61,77 @@ class AbsenController extends Controller
         ));
     }
 
-    public function riwayat()
+    public function riwayat(Request $request)
     {
         $user = Auth::user();
 
-        $riwayat = Absen::where('user_id', $user->id)
-            ->orderBy('tanggal', 'desc')
-            ->orderBy('jam', 'desc')
-            ->paginate(10);
+        // Default sorting
+        $sortBy = $request->get('sort_by', 'tanggal');
+        $sortDirection = $request->get('sort_direction', 'desc');
+
+        // Validasi kolom yang bisa di-sort
+        $allowedSortColumns = ['tanggal', 'jam_masuk', 'jam_pulang', 'menit_kerja', 'izin', 'telat'];
+        if (!in_array($sortBy, $allowedSortColumns)) {
+            $sortBy = 'tanggal';
+        }
+
+        // Validasi arah sorting
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
+        $query = Absen::where('user_id', $user->id);
+
+        // Sorting berdasarkan kolom
+        if ($sortBy === 'tanggal') {
+            $query->orderBy('tanggal', $sortDirection);
+        } elseif ($sortBy === 'jam_masuk') {
+            $query->orderBy('jam_masuk', $sortDirection);
+        } elseif ($sortBy === 'jam_pulang') {
+            $query->orderBy('jam_pulang', $sortDirection);
+        } elseif ($sortBy === 'menit_kerja') {
+            $query->orderBy('menit_kerja', $sortDirection);
+        } elseif ($sortBy === 'izin') {
+            $query->orderBy('izin', $sortDirection);
+        } elseif ($sortBy === 'telat') {
+            $query->orderBy('telat', $sortDirection);
+        }
+
+        // Secondary sort by tanggal desc untuk konsistensi
+        if ($sortBy !== 'tanggal') {
+            $query->orderBy('tanggal', 'desc');
+        }
+
+        $riwayat = $query->paginate(10)->appends(request()->query());
 
         return view('riwayat', compact(
-            'riwayat'
+            'riwayat',
+            'sortBy',
+            'sortDirection'
         ));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'tipe' => 'required|in:hadir,izin,pulang',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'keterangan' => 'nullable|string|max:500',
-        ]);
-
         $user = Auth::user();
         $today = Carbon::today();
         $now = Carbon::now();
 
-        // Cek apakah sudah absen dengan tipe yang sama hari ini
-        $existing = Absen::where('user_id', $user->id)
-            ->whereDate('tanggal', $today)
-            ->where('tipe', $request->tipe)
-            ->first();
+        // Ambil / buat data absen hari ini
+        $absen = Absen::firstOrCreate(
+            [
+                'user_id' => $user->id,
+                'tanggal' => $today,
+            ],
+            [
+                'izin' => false,
+                'telat' => false,
+            ]
+        );
 
-        if ($existing) {
-            return back()->with('error', 'Anda sudah melakukan absen ' . $request->tipe . ' hari ini.');
-        }
-
-        // Validasi lokasi (radius 10 meter)
+        /* ===============================
+     * VALIDASI LOKASI
+     * =============================== */
         $distance = $this->calculateDistance(
             $request->latitude,
             $request->longitude,
@@ -108,57 +140,125 @@ class AbsenController extends Controller
         );
 
         if ($distance > $this->allowedRadius) {
-            return back()->with('error', 'Anda berada di luar radius kantor. Jarak Anda: ' . round($distance, 2) . ' meter.');
+            return back()->with(
+                'error',
+                'Anda berada di luar radius kantor. Jarak Anda: ' . round($distance, 2) . ' meter.'
+            );
         }
 
-        // Cek telat (jam 09:00 untuk hadir)
-        $telat = false;
-
+        /* ===============================
+     * HADIR
+     * =============================== */
         if ($request->tipe === 'hadir') {
 
-            $jamMasuk = Carbon::today()->setTime(9, 00, 0);
+            if ($absen->jam_masuk) {
+                return back()->with('error', 'Anda sudah absen masuk hari ini.');
+            }
+
+            $jamMasuk = Carbon::today()->setTime(9, 0);
             $batasAbsen = $jamMasuk->copy()->subMinutes(30);
 
-            // ❌ Terlalu cepat
             if ($now->lt($batasAbsen)) {
                 return back()->with('error', 'Anda hanya bisa absen mulai 30 menit sebelum jam masuk.');
             }
 
-            // ⏰ Telat
             $telat = $now->gt($jamMasuk);
+
+            $absen->update([
+                'jam_masuk'   => $now,
+                'telat'       => $telat,
+                'menit_telat' => $telat ? $jamMasuk->diffInMinutes($now) : 0,
+                'lat_masuk'   => $request->latitude,
+                'lng_masuk'   => $request->longitude,
+            ]);
+
+            return back()->with(
+                'success',
+                'Absen masuk berhasil dicatat pukul ' . $now->format('H:i') . ($telat ? ' (TELAT)' : '')
+            );
         }
 
-
-        // Untuk pulang, cek apakah sudah hadir
+        /* ===============================
+     * PULANG
+     * =============================== */
         if ($request->tipe === 'pulang') {
-            $sudahHadir = Absen::where('user_id', $user->id)
-                ->whereDate('tanggal', $today)
-                ->where('tipe', 'hadir')
-                ->first();
 
-            if (!$sudahHadir) {
-                return back()->with('error', 'Anda belum melakukan absen hadir hari ini.');
+            if (!$absen->jam_masuk) {
+                return back()->with('error', 'Anda belum melakukan absen masuk hari ini.');
             }
+
+            if ($absen->jam_pulang) {
+                return back()->with('error', 'Anda sudah absen pulang hari ini.');
+            }
+
+            if ($absen->izin) {
+                return back()->with('error', 'Anda sudah izin pulang awal hari ini.');
+            }
+
+            // Validasi jam pulang (minimal jam 20:00)
+            $jamPulang = Carbon::today()->setTime(20, 0);
+            if ($now->lt($jamPulang)) {
+                return back()->with('error', 'Absen pulang baru bisa dilakukan setelah jam 20:00 WIB. Gunakan "Izin Pulang Awal" jika ingin pulang sebelum waktunya.');
+            }
+
+            $menitKerja = $absen->jam_masuk->diffInMinutes($now);
+
+            $absen->update([
+                'jam_pulang' => $now,
+                'lat_pulang' => $request->latitude,
+                'lng_pulang' => $request->longitude,
+                'menit_kerja' => $menitKerja,
+            ]);
+
+            return back()->with(
+                'success',
+                'Absen pulang berhasil dicatat pukul ' . $now->format('H:i')
+            );
         }
 
-        Absen::create([
-            'user_id' => $user->id,
-            'tanggal' => $today,
-            'tipe' => $request->tipe,
-            'jam' => $now->format('H:i:s'),
-            'telat' => $telat,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-            'keterangan' => $request->keterangan,
-        ]);
+        /* ===============================
+     * IZIN
+     * =============================== */
+        if ($request->tipe === 'izin') {
 
-        $message = 'Absen ' . $request->tipe . ' berhasil dicatat pada ' . $now->format('H:i:s');
-        if ($telat) {
-            $message .= ' (TELAT)';
+            // Jika belum hadir, ini adalah izin tidak masuk
+            if (!$absen->jam_masuk) {
+                if ($absen->izin) {
+                    return back()->with('error', 'Anda sudah mengajukan izin hari ini.');
+                }
+
+                $absen->update([
+                    'izin' => true,
+                    'izin_keterangan' => $request->keterangan,
+                ]);
+
+                return back()->with('success', 'Izin tidak masuk berhasil dicatat.');
+            }
+
+            // Jika sudah hadir, ini adalah izin pulang awal
+            if ($absen->jam_pulang) {
+                return back()->with('error', 'Anda sudah absen pulang hari ini.');
+            }
+
+            if ($absen->izin) {
+                return back()->with('error', 'Anda sudah mengajukan izin pulang awal hari ini.');
+            }
+
+            $menitKerja = $absen->jam_masuk->diffInMinutes($now);
+
+            $absen->update([
+                'izin' => true,
+                'izin_keterangan' => $request->keterangan,
+                'jam_pulang' => $now,
+                'lat_pulang' => $request->latitude,
+                'lng_pulang' => $request->longitude,
+                'menit_kerja' => $menitKerja,
+            ]);
+
+            return back()->with('success', 'Izin pulang awal berhasil dicatat pukul ' . $now->format('H:i'));
         }
-
-        return back()->with('success', $message);
     }
+
 
     /**
      * Calculate distance between two coordinates using Haversine formula

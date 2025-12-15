@@ -64,36 +64,6 @@
                 Riwayat
             </a>
 
-            <!-- Users -->
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all btn-secondary">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primaryDark transition-colors duration-300"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M5.5 17a4.5 4.5 0 018.9 0M12 7.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Users
-            </a>
-
-            <!-- Projects -->
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all btn-secondary">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primaryDark transition-colors duration-300"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M3 7h18M3 12h18M3 17h18" />
-                </svg>
-                Projects
-            </a>
-
-            <!-- Settings -->
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all btn-secondary">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primaryDark transition-colors duration-300"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M9.75 3a1.5 1.5 0 013 0v1.051a7.5 7.5 0 014.95 4.95H21a1.5 1.5 0 010 3h-1.301a7.5 7.5 0 01-4.95 4.95V21a1.5 1.5 0 01-3 0v-1.301a7.5 7.5 0 01-4.95-4.95H3a1.5 1.5 0 010-3h1.051a7.5 7.5 0 014.95-4.95V3z" />
-                </svg>
-                Settings
-            </a>
-
         </nav>
 
     </div>
