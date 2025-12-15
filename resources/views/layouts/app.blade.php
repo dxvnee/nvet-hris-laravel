@@ -17,7 +17,21 @@
 </head>
 
 <body class="font-sans antialiased">
-    <x-error-message />
+    <x-error-message
+    :message="
+        session('success')
+        ?? session('error')
+        ?? session('warning')
+        ?? session('info')
+    "
+    :type="
+        session('success') ? 'success'
+        : (session('error') ? 'error'
+        : (session('warning') ? 'warning'
+        : (session('info') ? 'info' : null)))
+    "
+/>
+
 
     <div class="w-full h-screen bg-primaryUltraLight">
         <div class="flex h-full p-5">

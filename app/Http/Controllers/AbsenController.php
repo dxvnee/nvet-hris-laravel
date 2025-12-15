@@ -28,7 +28,24 @@ class AbsenController extends Controller
         $sudahIzin = $absenHariIni->where('tipe', 'izin')->first();
         $sudahPulang = $absenHariIni->where('tipe', 'pulang')->first();
 
+        // Hitung total jam kerja hari ini
+        $totalJamKerja = 0;
+        $totalJamKerjaText = '0 jam 0 menit';
+        if ($sudahHadir && !$sudahIzin) {
+            $jamMasuk = Carbon::createFromFormat('H:i:s', $sudahHadir->jam);
+            $jamKeluar = $sudahPulang ? Carbon::createFromFormat('H:i:s', $sudahPulang->jam) : Carbon::now();
+
+            $totalMenit = $jamMasuk->diffInMinutes($jamKeluar, false);
+            $jam = floor($totalMenit / 60);
+            $menit = $totalMenit % 60;
+
+            $totalJamKerja = $jam;
+            $totalJamKerjaText = $jam . ' jam ' . $menit . ' menit';
+        }
+
         // Riwayat absen 7 hari terakhir
+        $user = Auth::user();
+
         $riwayat = Absen::where('user_id', $user->id)
             ->orderBy('tanggal', 'desc')
             ->orderBy('jam', 'desc')
@@ -39,6 +56,22 @@ class AbsenController extends Controller
             'sudahHadir',
             'sudahIzin',
             'sudahPulang',
+            'riwayat',
+            'totalJamKerja',
+            'totalJamKerjaText'
+        ));
+    }
+
+    public function riwayat()
+    {
+        $user = Auth::user();
+
+        $riwayat = Absen::where('user_id', $user->id)
+            ->orderBy('tanggal', 'desc')
+            ->orderBy('jam', 'desc')
+            ->paginate(10);
+
+        return view('riwayat', compact(
             'riwayat'
         ));
     }
@@ -80,10 +113,21 @@ class AbsenController extends Controller
 
         // Cek telat (jam 09:00 untuk hadir)
         $telat = false;
+
         if ($request->tipe === 'hadir') {
-            $batasHadir = Carbon::today()->setTime(9, 0, 0);
-            $telat = $now->greaterThan($batasHadir);
+
+            $jamMasuk = Carbon::today()->setTime(9, 00, 0);
+            $batasAbsen = $jamMasuk->copy()->subMinutes(30);
+
+            // ❌ Terlalu cepat
+            if ($now->lt($batasAbsen)) {
+                return back()->with('error', 'Anda hanya bisa absen mulai 30 menit sebelum jam masuk.');
+            }
+
+            // ⏰ Telat
+            $telat = $now->gt($jamMasuk);
         }
+
 
         // Untuk pulang, cek apakah sudah hadir
         if ($request->tipe === 'pulang') {
