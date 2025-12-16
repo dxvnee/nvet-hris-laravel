@@ -31,6 +31,9 @@ class Absen extends Model
         'izin',
         'izin_keterangan',
 
+        // SHIFT
+        'shift_number',
+
         // KERJA
         'menit_kerja',
     ];
@@ -58,4 +61,3 @@ class Absen extends Model
         return $this->belongsTo(User::class);
     }
 }
-

@@ -155,26 +155,56 @@ class AbsenController extends Controller
                 return back()->with('error', 'Anda sudah absen masuk hari ini.');
             }
 
-            $jamMasuk = Carbon::today()->setTime(9, 0);
-            $batasAbsen = $jamMasuk->copy()->subMinutes(30);
+            // Determine jam masuk based on shift or non-shift
+            $jamMasukSetting = Carbon::today()->setTime(9, 0); // Default
+            $shiftNumber = null;
 
-            if ($now->lt($batasAbsen)) {
-                return back()->with('error', 'Anda hanya bisa absen mulai 30 menit sebelum jam masuk.');
+            if ($user->is_shift && $user->shift_partner_id) {
+                // Check if partner already clocked in today
+                $partnerAbsen = Absen::where('user_id', $user->shift_partner_id)
+                    ->whereDate('tanggal', $today)
+                    ->first();
+
+                if ($partnerAbsen && $partnerAbsen->jam_masuk) {
+                    // Partner already clocked in, this user is shift 2
+                    $shiftNumber = 2;
+                    $jamMasukSetting = Carbon::parse($user->shift2_jam_masuk);
+                } else {
+                    // This user is shift 1 (first to clock in)
+                    $shiftNumber = 1;
+                    $jamMasukSetting = Carbon::parse($user->shift1_jam_masuk);
+                }
+            } else {
+                // Non-shift user
+                if ($user->jam_masuk) {
+                    $jamMasukSetting = Carbon::parse($user->jam_masuk);
+                }
             }
 
-            $telat = $now->gt($jamMasuk);
+            $batasAbsen = Carbon::today()
+                ->setTime($jamMasukSetting->hour, $jamMasukSetting->minute)
+                ->subMinutes(30);
+
+            if ($now->lt($batasAbsen)) {
+                return back()->with('error', 'Anda hanya bisa absen mulai 30 menit sebelum jam masuk (' . $jamMasukSetting->format('H:i') . ').');
+            }
+
+            $jamMasukToday = Carbon::today()->setTime($jamMasukSetting->hour, $jamMasukSetting->minute);
+            $telat = $now->gt($jamMasukToday);
 
             $absen->update([
                 'jam_masuk'   => $now,
                 'telat'       => $telat,
-                'menit_telat' => $telat ? $jamMasuk->diffInMinutes($now) : 0,
+                'menit_telat' => $telat ? $jamMasukToday->diffInMinutes($now) : 0,
                 'lat_masuk'   => $request->latitude,
                 'lng_masuk'   => $request->longitude,
+                'shift_number' => $shiftNumber,
             ]);
 
+            $shiftInfo = $shiftNumber ? " (Shift $shiftNumber)" : '';
             return back()->with(
                 'success',
-                'Absen masuk berhasil dicatat pukul ' . $now->format('H:i') . ($telat ? ' (TELAT)' : '')
+                'Absen masuk berhasil dicatat pukul ' . $now->format('H:i') . ($telat ? ' (TELAT)' : '') . $shiftInfo
             );
         }
 
@@ -195,10 +225,34 @@ class AbsenController extends Controller
                 return back()->with('error', 'Anda sudah izin pulang awal hari ini.');
             }
 
-            // Validasi jam pulang (minimal jam 20:00)
-            $jamPulang = Carbon::today()->setTime(20, 0);
-            if ($now->lt($jamPulang)) {
-                return back()->with('error', 'Absen pulang baru bisa dilakukan setelah jam 20:00 WIB. Gunakan "Izin Pulang Awal" jika ingin pulang sebelum waktunya.');
+            // Determine jam pulang based on shift or non-shift
+            $jamPulangSetting = Carbon::today()->setTime(20, 0); // Default
+
+            if ($user->is_shift && $user->shift_partner_id) {
+                // Use shift-specific jam keluar
+                if ($absen->shift_number === 1) {
+                    $jamPulangSetting = Carbon::today()->setTime(
+                        Carbon::parse($user->shift1_jam_keluar)->hour,
+                        Carbon::parse($user->shift1_jam_keluar)->minute
+                    );
+                } elseif ($absen->shift_number === 2) {
+                    $jamPulangSetting = Carbon::today()->setTime(
+                        Carbon::parse($user->shift2_jam_keluar)->hour,
+                        Carbon::parse($user->shift2_jam_keluar)->minute
+                    );
+                }
+            } else {
+                // Non-shift user
+                if ($user->jam_keluar) {
+                    $jamPulangSetting = Carbon::today()->setTime(
+                        Carbon::parse($user->jam_keluar)->hour,
+                        Carbon::parse($user->jam_keluar)->minute
+                    );
+                }
+            }
+
+            if ($now->lt($jamPulangSetting)) {
+                return back()->with('error', 'Absen pulang baru bisa dilakukan setelah jam ' . $jamPulangSetting->format('H:i') . ' WIB. Gunakan "Izin Pulang Awal" jika ingin pulang sebelum waktunya.');
             }
 
             $menitKerja = $absen->jam_masuk->diffInMinutes($now);

@@ -57,7 +57,14 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="font-semibold {{ $sudahHadir ? 'text-green-700' : 'text-gray-500' }}">Hadir</p>
+                                <p class="font-semibold {{ $sudahHadir ? 'text-green-700' : 'text-gray-500' }}">
+                                    Hadir
+                                    @if($sudahHadir && $sudahHadir->shift_number)
+                                        <span class="ml-1 text-xs px-2 py-0.5 rounded-full {{ $sudahHadir->shift_number === 1 ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white' }}">
+                                            Shift {{ $sudahHadir->shift_number }}
+                                        </span>
+                                    @endif
+                                </p>
                                 @if($sudahHadir)
                                     <p class="text-sm text-green-600">
                                         {{ $sudahHadir->jam_masuk->format('H:i') }}
@@ -103,9 +110,47 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <span class="text-sm font-medium">Jam masuk: 09:00 WIB | Jam pulang: 20:00 WIB | Radius: 10
-                        meter</span>
+                    @php
+                        $user = auth()->user();
+                        if ($user->is_shift && $user->shift_partner_id) {
+                            $jamMasuk1 = $user->shift1_jam_masuk ? \Carbon\Carbon::parse($user->shift1_jam_masuk)->format('H:i') : '08:00';
+                            $jamKeluar1 = $user->shift1_jam_keluar ? \Carbon\Carbon::parse($user->shift1_jam_keluar)->format('H:i') : '14:00';
+                            $jamMasuk2 = $user->shift2_jam_masuk ? \Carbon\Carbon::parse($user->shift2_jam_masuk)->format('H:i') : '14:00';
+                            $jamKeluar2 = $user->shift2_jam_keluar ? \Carbon\Carbon::parse($user->shift2_jam_keluar)->format('H:i') : '20:00';
+                            $partner = $user->shiftPartner;
+                            $partnerName = $partner ? $partner->name : 'Tidak ada';
+                        } else {
+                            $jamMasuk = $user->jam_masuk ? \Carbon\Carbon::parse($user->jam_masuk)->format('H:i') : '09:00';
+                            $jamKeluar = $user->jam_keluar ? \Carbon\Carbon::parse($user->jam_keluar)->format('H:i') : '20:00';
+                        }
+                    @endphp
+
+                    @if($user->is_shift && $user->shift_partner_id)
+                        <span class="text-sm font-medium">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded bg-blue-100 text-blue-800 mr-2">SHIFT</span>
+                            Shift 1: {{ $jamMasuk1 }} - {{ $jamKeluar1 }} |
+                            Shift 2: {{ $jamMasuk2 }} - {{ $jamKeluar2 }} |
+                            Partner: {{ $partnerName }}
+                        </span>
+                    @else
+                        <span class="text-sm font-medium">Jam masuk: {{ $jamMasuk }} WIB | Jam pulang: {{ $jamKeluar }} WIB | Radius: 20 meter</span>
+                    @endif
                 </div>
+
+                @if($sudahHadir && $sudahHadir->shift_number)
+                    <div class="mt-2 flex items-center gap-2">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold
+                            {{ $sudahHadir->shift_number === 1 ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white' }}">
+                            Anda Shift {{ $sudahHadir->shift_number }}
+                        </span>
+                        @php
+                            $shiftJamKeluar = $sudahHadir->shift_number === 1
+                                ? \Carbon\Carbon::parse($user->shift1_jam_keluar)->format('H:i')
+                                : \Carbon\Carbon::parse($user->shift2_jam_keluar)->format('H:i');
+                        @endphp
+                        <span class="text-sm text-gray-600">Bisa pulang setelah {{ $shiftJamKeluar }} WIB</span>
+                    </div>
+                @endif
             </div>
 
             <!-- Total Jam Kerja Hari Ini -->
@@ -197,7 +242,19 @@
                         @elseif(!$sudahHadir)
                             Hadir Dulu
                         @else
-                            Absen Pulang (≥20:00)
+                            @php
+                                $user = auth()->user();
+                                if ($user->is_shift && $sudahHadir && $sudahHadir->shift_number) {
+                                    $jamPulangText = $sudahHadir->shift_number === 1
+                                        ? \Carbon\Carbon::parse($user->shift1_jam_keluar)->format('H:i')
+                                        : \Carbon\Carbon::parse($user->shift2_jam_keluar)->format('H:i');
+                                } else {
+                                    $jamPulangText = $user->jam_keluar
+                                        ? \Carbon\Carbon::parse($user->jam_keluar)->format('H:i')
+                                        : '20:00';
+                                }
+                            @endphp
+                            Absen Pulang (≥{{ $jamPulangText }})
                         @endif
                     </button>
                 </form>

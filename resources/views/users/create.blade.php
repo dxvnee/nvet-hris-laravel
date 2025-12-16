@@ -141,6 +141,147 @@
                     @enderror
                 </div>
 
+                <!-- Shift Toggle -->
+                <div x-data="{ isShift: {{ old('is_shift') ? 'true' : 'false' }} }">
+                    <div class="flex items-center gap-4 mb-4">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Sistem Shift
+                        </label>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="hidden" name="is_shift" value="0">
+                            <input type="checkbox" name="is_shift" value="1" x-model="isShift"
+                                class="sr-only peer"
+                                {{ old('is_shift') ? 'checked' : '' }}>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            <span class="ml-3 text-sm font-medium text-gray-700" x-text="isShift ? 'Aktif' : 'Tidak Aktif'"></span>
+                        </label>
+                    </div>
+
+                    <!-- Non-Shift: Jam Masuk & Keluar Normal -->
+                    <div x-show="!isShift" x-transition class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="jam_masuk" class="block text-sm font-medium text-gray-700 mb-2">
+                                Jam Masuk <span class="text-red-500">*</span>
+                            </label>
+                            <input id="jam_masuk" name="jam_masuk" type="time" 
+                                value="{{ old('jam_masuk', '08:00') }}"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all @error('jam_masuk') border-red-500 @enderror"
+                                :required="!isShift">
+                            @error('jam_masuk')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label for="jam_keluar" class="block text-sm font-medium text-gray-700 mb-2">
+                                Jam Keluar <span class="text-red-500">*</span>
+                            </label>
+                            <input id="jam_keluar" name="jam_keluar" type="time" 
+                                value="{{ old('jam_keluar', '17:00') }}"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all @error('jam_keluar') border-red-500 @enderror"
+                                :required="!isShift">
+                            @error('jam_keluar')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Shift: Partner & Jam Shift -->
+                    <div x-show="isShift" x-transition class="space-y-6">
+                        <!-- Shift Partner Selection -->
+                        <div>
+                            <label for="shift_partner_id" class="block text-sm font-medium text-gray-700 mb-2">
+                                Partner Shift <span class="text-red-500">*</span>
+                            </label>
+                            <select id="shift_partner_id" name="shift_partner_id"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all @error('shift_partner_id') border-red-500 @enderror"
+                                :required="isShift">
+                                <option value="">Pilih Partner Shift</option>
+                                @foreach($pegawaiList as $pegawai)
+                                    <option value="{{ $pegawai->id }}" {{ old('shift_partner_id') == $pegawai->id ? 'selected' : '' }}>
+                                        {{ $pegawai->name }} ({{ $pegawai->jabatan }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            <p class="mt-1 text-xs text-gray-500">Pegawai yang akan bergantian shift dengan pegawai ini. Siapa yang absen duluan = Shift 1.</p>
+                            @error('shift_partner_id')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Shift 1 Times -->
+                        <div class="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                            <h4 class="font-semibold text-blue-800 mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm">1</span>
+                                Shift 1 (Pagi)
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="shift1_jam_masuk" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Jam Masuk <span class="text-red-500">*</span>
+                                    </label>
+                                    <input id="shift1_jam_masuk" name="shift1_jam_masuk" type="time" 
+                                        value="{{ old('shift1_jam_masuk', '08:00') }}"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all @error('shift1_jam_masuk') border-red-500 @enderror"
+                                        :required="isShift">
+                                    @error('shift1_jam_masuk')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="shift1_jam_keluar" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Jam Keluar <span class="text-red-500">*</span>
+                                    </label>
+                                    <input id="shift1_jam_keluar" name="shift1_jam_keluar" type="time" 
+                                        value="{{ old('shift1_jam_keluar', '14:00') }}"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all @error('shift1_jam_keluar') border-red-500 @enderror"
+                                        :required="isShift">
+                                    @error('shift1_jam_keluar')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shift 2 Times -->
+                        <div class="p-4 bg-orange-50 rounded-xl border border-orange-200">
+                            <h4 class="font-semibold text-orange-800 mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm">2</span>
+                                Shift 2 (Sore)
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="shift2_jam_masuk" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Jam Masuk <span class="text-red-500">*</span>
+                                    </label>
+                                    <input id="shift2_jam_masuk" name="shift2_jam_masuk" type="time" 
+                                        value="{{ old('shift2_jam_masuk', '14:00') }}"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all @error('shift2_jam_masuk') border-red-500 @enderror"
+                                        :required="isShift">
+                                    @error('shift2_jam_masuk')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="shift2_jam_keluar" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Jam Keluar <span class="text-red-500">*</span>
+                                    </label>
+                                    <input id="shift2_jam_keluar" name="shift2_jam_keluar" type="time" 
+                                        value="{{ old('shift2_jam_keluar', '20:00') }}"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all @error('shift2_jam_keluar') border-red-500 @enderror"
+                                        :required="isShift">
+                                    @error('shift2_jam_keluar')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-sm text-gray-500 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                            <strong>💡 Catatan:</strong> Siapa yang absen masuk duluan pada hari itu akan otomatis menjadi Shift 1, dan partner-nya wajib menjadi Shift 2.
+                        </p>
+                    </div>
+                </div>
+
                 <!-- Hari Libur -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-3">

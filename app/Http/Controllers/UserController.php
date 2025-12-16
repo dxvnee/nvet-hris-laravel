@@ -46,7 +46,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        // Get all pegawai for shift partner selection
+        $pegawaiList = User::where('role', 'pegawai')->orderBy('name')->get();
+        return view('users.create', compact('pegawaiList'));
     }
 
     /**
@@ -54,7 +56,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -63,9 +65,24 @@ class UserController extends Controller
             'jam_kerja' => ['required', 'integer', 'min:1', 'max:24'],
             'hari_libur' => ['nullable', 'array'],
             'hari_libur.*' => ['integer', 'min:0', 'max:6'],
-        ]);
+            'is_shift' => ['nullable', 'boolean'],
+        ];
 
-        User::create([
+        // Validate based on shift or non-shift
+        if ($request->is_shift) {
+            $rules['shift_partner_id'] = ['required', 'exists:users,id'];
+            $rules['shift1_jam_masuk'] = ['required', 'date_format:H:i'];
+            $rules['shift1_jam_keluar'] = ['required', 'date_format:H:i'];
+            $rules['shift2_jam_masuk'] = ['required', 'date_format:H:i'];
+            $rules['shift2_jam_keluar'] = ['required', 'date_format:H:i'];
+        } else {
+            $rules['jam_masuk'] = ['required', 'date_format:H:i'];
+            $rules['jam_keluar'] = ['required', 'date_format:H:i'];
+        }
+
+        $request->validate($rules);
+
+        $data = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -74,7 +91,45 @@ class UserController extends Controller
             'jam_kerja' => $request->jam_kerja,
             'hari_libur' => $request->hari_libur ?? [],
             'role' => 'pegawai',
-        ]);
+            'is_shift' => $request->is_shift ?? false,
+        ];
+
+        if ($request->is_shift) {
+            $data['shift_partner_id'] = $request->shift_partner_id;
+            $data['shift1_jam_masuk'] = $request->shift1_jam_masuk;
+            $data['shift1_jam_keluar'] = $request->shift1_jam_keluar;
+            $data['shift2_jam_masuk'] = $request->shift2_jam_masuk;
+            $data['shift2_jam_keluar'] = $request->shift2_jam_keluar;
+            $data['jam_masuk'] = null;
+            $data['jam_keluar'] = null;
+        } else {
+            $data['jam_masuk'] = $request->jam_masuk;
+            $data['jam_keluar'] = $request->jam_keluar;
+            $data['shift_partner_id'] = null;
+            $data['shift1_jam_masuk'] = null;
+            $data['shift1_jam_keluar'] = null;
+            $data['shift2_jam_masuk'] = null;
+            $data['shift2_jam_keluar'] = null;
+        }
+
+        $user = User::create($data);
+
+        // If shift, update partner to also have same shift settings
+        if ($request->is_shift && $request->shift_partner_id) {
+            $partner = User::find($request->shift_partner_id);
+            if ($partner) {
+                $partner->update([
+                    'is_shift' => true,
+                    'shift_partner_id' => $user->id,
+                    'shift1_jam_masuk' => $request->shift1_jam_masuk,
+                    'shift1_jam_keluar' => $request->shift1_jam_keluar,
+                    'shift2_jam_masuk' => $request->shift2_jam_masuk,
+                    'shift2_jam_keluar' => $request->shift2_jam_keluar,
+                    'jam_masuk' => null,
+                    'jam_keluar' => null,
+                ]);
+            }
+        }
 
         return redirect()->route('users.index')->with('success', 'Pegawai berhasil ditambahkan!');
     }
@@ -84,7 +139,12 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        // Get all pegawai for shift partner selection (exclude current user)
+        $pegawaiList = User::where('role', 'pegawai')
+            ->where('id', '!=', $user->id)
+            ->orderBy('name')
+            ->get();
+        return view('users.edit', compact('user', 'pegawaiList'));
     }
 
     /**
@@ -100,6 +160,7 @@ class UserController extends Controller
             'jam_kerja' => ['required', 'integer', 'min:1', 'max:24'],
             'hari_libur' => ['nullable', 'array'],
             'hari_libur.*' => ['integer', 'min:0', 'max:6'],
+            'is_shift' => ['nullable', 'boolean'],
         ];
 
         // Only validate password if provided
@@ -107,7 +168,22 @@ class UserController extends Controller
             $rules['password'] = ['confirmed', Rules\Password::defaults()];
         }
 
+        // Validate based on shift or non-shift
+        if ($request->is_shift) {
+            $rules['shift_partner_id'] = ['required', 'exists:users,id'];
+            $rules['shift1_jam_masuk'] = ['required', 'date_format:H:i'];
+            $rules['shift1_jam_keluar'] = ['required', 'date_format:H:i'];
+            $rules['shift2_jam_masuk'] = ['required', 'date_format:H:i'];
+            $rules['shift2_jam_keluar'] = ['required', 'date_format:H:i'];
+        } else {
+            $rules['jam_masuk'] = ['required', 'date_format:H:i'];
+            $rules['jam_keluar'] = ['required', 'date_format:H:i'];
+        }
+
         $request->validate($rules);
+
+        // Get old partner if exists
+        $oldPartnerId = $user->shift_partner_id;
 
         $data = [
             'name' => $request->name,
@@ -116,13 +192,78 @@ class UserController extends Controller
             'gaji_pokok' => $request->gaji_pokok,
             'jam_kerja' => $request->jam_kerja,
             'hari_libur' => $request->hari_libur ?? [],
+            'is_shift' => $request->is_shift ?? false,
         ];
 
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
 
+        if ($request->is_shift) {
+            $data['shift_partner_id'] = $request->shift_partner_id;
+            $data['shift1_jam_masuk'] = $request->shift1_jam_masuk;
+            $data['shift1_jam_keluar'] = $request->shift1_jam_keluar;
+            $data['shift2_jam_masuk'] = $request->shift2_jam_masuk;
+            $data['shift2_jam_keluar'] = $request->shift2_jam_keluar;
+            $data['jam_masuk'] = null;
+            $data['jam_keluar'] = null;
+        } else {
+            $data['jam_masuk'] = $request->jam_masuk;
+            $data['jam_keluar'] = $request->jam_keluar;
+            $data['shift_partner_id'] = null;
+            $data['shift1_jam_masuk'] = null;
+            $data['shift1_jam_keluar'] = null;
+            $data['shift2_jam_masuk'] = null;
+            $data['shift2_jam_keluar'] = null;
+        }
+
         $user->update($data);
+
+        // Handle partner updates
+        if ($request->is_shift && $request->shift_partner_id) {
+            // Update new partner
+            $newPartner = User::find($request->shift_partner_id);
+            if ($newPartner) {
+                $newPartner->update([
+                    'is_shift' => true,
+                    'shift_partner_id' => $user->id,
+                    'shift1_jam_masuk' => $request->shift1_jam_masuk,
+                    'shift1_jam_keluar' => $request->shift1_jam_keluar,
+                    'shift2_jam_masuk' => $request->shift2_jam_masuk,
+                    'shift2_jam_keluar' => $request->shift2_jam_keluar,
+                    'jam_masuk' => null,
+                    'jam_keluar' => null,
+                ]);
+            }
+
+            // If old partner is different, reset their shift settings
+            if ($oldPartnerId && $oldPartnerId != $request->shift_partner_id) {
+                $oldPartner = User::find($oldPartnerId);
+                if ($oldPartner) {
+                    $oldPartner->update([
+                        'is_shift' => false,
+                        'shift_partner_id' => null,
+                        'shift1_jam_masuk' => null,
+                        'shift1_jam_keluar' => null,
+                        'shift2_jam_masuk' => null,
+                        'shift2_jam_keluar' => null,
+                    ]);
+                }
+            }
+        } else if (!$request->is_shift && $oldPartnerId) {
+            // Reset old partner if switching from shift to non-shift
+            $oldPartner = User::find($oldPartnerId);
+            if ($oldPartner) {
+                $oldPartner->update([
+                    'is_shift' => false,
+                    'shift_partner_id' => null,
+                    'shift1_jam_masuk' => null,
+                    'shift1_jam_keluar' => null,
+                    'shift2_jam_masuk' => null,
+                    'shift2_jam_keluar' => null,
+                ]);
+            }
+        }
 
         return redirect()->route('users.index')->with('success', 'Data pegawai berhasil diperbarui!');
     }
