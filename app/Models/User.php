@@ -23,6 +23,10 @@ class User extends Authenticatable
         'password',
         'jabatan',
         'avatar',
+        'gaji_pokok',
+        'jam_kerja',
+        'hari_libur',
+        'role',
     ];
 
     /**
@@ -45,6 +49,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'hari_libur' => 'array',
+            'gaji_pokok' => 'decimal:2',
         ];
     }
 

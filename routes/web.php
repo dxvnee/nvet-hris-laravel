@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,6 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/absen', [AbsenController::class, 'store'])->name('absen.store');
 
     Route::get('/riwayat', [AbsenController::class, 'riwayat'])->name('absen.riwayat');
+
+    // User Management Routes
+    Route::resource('users', UserController::class);
 });
 
 require __DIR__ . '/auth.php';
