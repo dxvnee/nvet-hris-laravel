@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbsenController;
+use App\Http\Controllers\PenggajianController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,10 @@ Route::middleware('auth')->group(function () {
 
     // User Management Routes
     Route::resource('users', UserController::class);
+
+    // Penggajian Routes
+    Route::get('/penggajian/{penggajian}/print', [PenggajianController::class, 'print'])->name('penggajian.print');
+    Route::resource('penggajian', PenggajianController::class);
 });
 
 require __DIR__ . '/auth.php';

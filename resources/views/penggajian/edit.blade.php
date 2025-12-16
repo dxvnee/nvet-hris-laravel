@@ -1,0 +1,531 @@
+<x-app-layout>
+    <x-slot name="header">Edit Penggajian</x-slot>
+    <x-slot name="subtle">{{ $user->name }} - Periode {{ \Carbon\Carbon::parse($periode)->format('F Y') }}</x-slot>
+
+    <div class="max-w-5xl mx-auto space-y-6">
+        <!-- Back Button -->
+        <a href="{{ route('penggajian.index', ['periode' => $periode]) }}"
+            class="inline-flex items-center gap-2 text-gray-600 hover:text-primary transition-colors animate-slide-up">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+                </path>
+            </svg>
+            Kembali ke Daftar Penggajian
+        </a>
+
+        <!-- Employee Info Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 animate-slide-up">
+            <div class="flex items-center gap-4">
+                <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&color=7F9CF5&background=EBF4FF&size=80' }}"
+                    alt="{{ $user->name }}" class="w-20 h-20 rounded-full border-4 border-primary shadow-lg">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">{{ $user->name }}</h3>
+                    <p class="text-gray-500">{{ $user->email }}</p>
+                    <span class="inline-flex items-center px-3 py-1 mt-2 rounded-full text-sm font-medium
+                        {{ $user->jabatan === 'Dokter' ? 'bg-purple-100 text-purple-700' : '' }}
+                        {{ $user->jabatan === 'Paramedis' ? 'bg-blue-100 text-blue-700' : '' }}
+                        {{ $user->jabatan === 'Tech' ? 'bg-green-100 text-green-700' : '' }}
+                        {{ $user->jabatan === 'FO' ? 'bg-orange-100 text-orange-700' : '' }}">
+                        {{ $user->jabatan }}
+                    </span>
+                </div>
+                <div class="ml-auto text-right">
+                    <p class="text-sm text-gray-500">Status</p>
+                    @if($penggajian->status === 'final')
+                        <span class="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">Final</span>
+                    @else
+                        <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-sm font-medium rounded-full">Draft</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        @php
+            $detail = $penggajian->insentif_detail ?? [];
+        @endphp
+
+        <!-- Form -->
+        <form method="POST" action="{{ route('penggajian.update', $penggajian) }}" class="space-y-6"
+            x-data="penggajianForm()">
+            @csrf
+            @method('PUT')
+
+            <!-- Gaji Pokok & Potongan -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 animate-slide-up-delay-1">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg">
+                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Gaji Pokok & Potongan</h2>
+                        <p class="text-gray-500 text-sm">Informasi gaji dasar dan potongan keterlambatan</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Gaji Pokok</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                            <input type="number" name="gaji_pokok" x-model="gajiPokok"
+                                value="{{ old('gaji_pokok', $penggajian->gaji_pokok) }}"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                                required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Total Menit Terlambat</label>
+                        <div class="relative">
+                            <input type="number" name="total_menit_telat" x-model="totalMenitTelat"
+                                value="{{ old('total_menit_telat', $totalMenitTelat) }}"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                                min="0" required>
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">menit</span>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">Diambil dari data absensi: {{ $totalMenitTelat }} menit
+                        </p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Potongan Per Menit</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                            <input type="number" name="potongan_per_menit" x-model="potonganPerMenit"
+                                value="{{ old('potongan_per_menit', $potonganPerMenit) }}"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                                min="0" step="1" required>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">Otomatis: Rp
+                            {{ number_format($potonganPerMenit, 0, ',', '.') }}/menit ({{ $user->gaji_pokok }} ÷
+                            {{ $user->jam_kerja }} jam × 26 hari ÷ 60 menit, dibulatkan)
+                        </p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Total Potongan Keterlambatan</label>
+                        <div class="bg-red-50 rounded-xl px-4 py-3 border border-red-200">
+                            <p class="text-red-700 font-bold text-lg">- Rp <span
+                                    x-text="formatNumber(totalMenitTelat * potonganPerMenit)"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insentif Section -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 animate-slide-up-delay-2">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg">
+                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7">
+                            </path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Insentif - {{ $user->jabatan }}</h2>
+                        <p class="text-gray-500 text-sm">Komponen insentif berdasarkan jabatan</p>
+                    </div>
+                </div>
+
+                @if($user->jabatan === 'Dokter')
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Total Transaksi</label>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                    <input type="number" name="insentif_detail[transaksi]" x-model="dokter.transaksi"
+                                        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Persentase Insentif (%)</label>
+                                <div class="relative">
+                                    <input type="number" name="insentif_detail[persenan]" x-model="dokter.persenan"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                                        step="0.1">
+                                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Pengurangan</label>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                    <input type="number" name="insentif_detail[pengurangan]" x-model="dokter.pengurangan"
+                                        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                                </div>
+                                <input type="text" name="insentif_detail[keterangan_pengurangan]"
+                                    value="{{ $detail['keterangan_pengurangan'] ?? '' }}"
+                                    placeholder="Keterangan pengurangan..."
+                                    class="w-full mt-2 px-4 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Penambahan</label>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                    <input type="number" name="insentif_detail[penambahan]" x-model="dokter.penambahan"
+                                        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                                </div>
+                                <input type="text" name="insentif_detail[keterangan_penambahan]"
+                                    value="{{ $detail['keterangan_penambahan'] ?? '' }}"
+                                    placeholder="Keterangan penambahan..."
+                                    class="w-full mt-2 px-4 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Lain-lain (Insentif)</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                <input type="number" name="insentif_detail[lain_lain_insentif]" x-model="dokter.lainLain"
+                                    class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                            </div>
+                        </div>
+                        <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+                            <p class="text-sm text-gray-600">Formula: Transaksi - (Pengurangan + Penambahan) × Persenan +
+                                Lain-lain</p>
+                            <p class="text-green-700 font-bold text-lg mt-2">Total Insentif: Rp <span
+                                    x-text="formatNumber(calculateDokterInsentif())"></span></p>
+                        </div>
+                    </div>
+
+                @elseif($user->jabatan === 'Paramedis')
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Antar Jemput</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="number" name="insentif_detail[antar_jemput_qty]"
+                                        x-model="paramedis.antarJemputQty" placeholder="Qty" min="0"
+                                        class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    <div class="relative">
+                                        <span
+                                            class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs">Rp</span>
+                                        <input type="number" name="insentif_detail[antar_jemput_harga]"
+                                            x-model="paramedis.antarJemputHarga" placeholder="Harga" min="0"
+                                            class="w-full pl-8 pr-2 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">= Rp <span
+                                        x-text="formatNumber(paramedis.antarJemputQty * paramedis.antarJemputHarga)"></span>
+                                </p>
+                            </div>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Rawat Inap</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="number" name="insentif_detail[rawat_inap_qty]"
+                                        x-model="paramedis.rawatInapQty" placeholder="Qty" min="0"
+                                        class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    <div class="relative">
+                                        <span
+                                            class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs">Rp</span>
+                                        <input type="number" name="insentif_detail[rawat_inap_harga]"
+                                            x-model="paramedis.rawatInapHarga" placeholder="Harga" min="0"
+                                            class="w-full pl-8 pr-2 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">= Rp <span
+                                        x-text="formatNumber(paramedis.rawatInapQty * paramedis.rawatInapHarga)"></span></p>
+                            </div>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Visit</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="number" name="insentif_detail[visit_qty]" x-model="paramedis.visitQty"
+                                        placeholder="Qty" min="0"
+                                        class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    <div class="relative">
+                                        <span
+                                            class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs">Rp</span>
+                                        <input type="number" name="insentif_detail[visit_harga]"
+                                            x-model="paramedis.visitHarga" placeholder="Harga" min="0"
+                                            class="w-full pl-8 pr-2 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">= Rp <span
+                                        x-text="formatNumber(paramedis.visitQty * paramedis.visitHarga)"></span></p>
+                            </div>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Grooming</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="number" name="insentif_detail[grooming_qty]"
+                                        x-model="paramedis.groomingQty" placeholder="Qty" min="0"
+                                        class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    <div class="relative">
+                                        <span
+                                            class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs">Rp</span>
+                                        <input type="number" name="insentif_detail[grooming_harga]"
+                                            x-model="paramedis.groomingHarga" placeholder="Harga" min="0"
+                                            class="w-full pl-8 pr-2 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">= Rp <span
+                                        x-text="formatNumber(paramedis.groomingQty * paramedis.groomingHarga)"></span></p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Lain-lain (Insentif)</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                <input type="number" name="insentif_detail[lain_lain_insentif]" x-model="paramedis.lainLain"
+                                    class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                            </div>
+                        </div>
+                        <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+                            <p class="text-green-700 font-bold text-lg">Total Insentif: Rp <span
+                                    x-text="formatNumber(calculateParamedisInsentif())"></span></p>
+                        </div>
+                    </div>
+
+                @elseif($user->jabatan === 'FO')
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Review</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="number" name="insentif_detail[review_qty]" x-model="fo.reviewQty"
+                                        placeholder="Qty" min="0"
+                                        class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    <div class="relative">
+                                        <span
+                                            class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs">Rp</span>
+                                        <input type="number" name="insentif_detail[review_harga]" x-model="fo.reviewHarga"
+                                            placeholder="Harga" min="0"
+                                            class="w-full pl-8 pr-2 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">= Rp <span
+                                        x-text="formatNumber(fo.reviewQty * fo.reviewHarga)"></span></p>
+                            </div>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Appointment</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="number" name="insentif_detail[appointment_qty]" x-model="fo.appointmentQty"
+                                        placeholder="Qty" min="0"
+                                        class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    <div class="relative">
+                                        <span
+                                            class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs">Rp</span>
+                                        <input type="number" name="insentif_detail[appointment_harga]"
+                                            x-model="fo.appointmentHarga" placeholder="Harga" min="0"
+                                            class="w-full pl-8 pr-2 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">= Rp <span
+                                        x-text="formatNumber(fo.appointmentQty * fo.appointmentHarga)"></span></p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Lain-lain (Insentif)</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                <input type="number" name="insentif_detail[lain_lain_insentif]" x-model="fo.lainLain"
+                                    class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                            </div>
+                        </div>
+                        <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+                            <p class="text-green-700 font-bold text-lg">Total Insentif: Rp <span
+                                    x-text="formatNumber(calculateFOInsentif())"></span></p>
+                        </div>
+                    </div>
+
+                @elseif($user->jabatan === 'Tech')
+                    <div class="space-y-4">
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Antar Konten</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="number" name="insentif_detail[antar_konten_qty]" x-model="tech.antarKontenQty"
+                                    placeholder="Qty" min="0"
+                                    class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                <div class="relative">
+                                    <span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs">Rp</span>
+                                    <input type="number" name="insentif_detail[antar_konten_harga]"
+                                        x-model="tech.antarKontenHarga" placeholder="Harga" min="0"
+                                        class="w-full pl-8 pr-2 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary">
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">= Rp <span
+                                    x-text="formatNumber(tech.antarKontenQty * tech.antarKontenHarga)"></span></p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Lain-lain (Insentif)</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                <input type="number" name="insentif_detail[lain_lain_insentif]" x-model="tech.lainLain"
+                                    class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                            </div>
+                        </div>
+                        <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+                            <p class="text-green-700 font-bold text-lg">Total Insentif: Rp <span
+                                    x-text="formatNumber(calculateTechInsentif())"></span></p>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Reimburse & Lain-lain -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 animate-slide-up-delay-2">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg">
+                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                            </path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Reimburse & Lain-lain</h2>
+                        <p class="text-gray-500 text-sm">Komponen tambahan penggajian</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Reimburse</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                            <input type="number" name="reimburse" x-model="reimburse"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                                min="0">
+                        </div>
+                        <textarea name="keterangan_reimburse" rows="2" placeholder="Keterangan reimburse..."
+                            class="w-full mt-2 px-4 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20">{{ $penggajian->keterangan_reimburse }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Lain-lain (+/-)</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                            <input type="number" name="lain_lain" x-model="lainLain"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                        </div>
+                        <textarea name="keterangan_lain" rows="2" placeholder="Keterangan lain-lain..."
+                            class="w-full mt-2 px-4 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20">{{ $penggajian->keterangan_lain }}</textarea>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Catatan</label>
+                    <textarea name="catatan" rows="3" placeholder="Catatan tambahan..."
+                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">{{ $penggajian->catatan }}</textarea>
+                </div>
+            </div>
+
+            <!-- Total & Submit -->
+            <div
+                class="bg-gradient-to-br from-primary to-primaryDark rounded-2xl shadow-xl p-8 text-white animate-slide-up-delay-2">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div>
+                        <p class="text-white/80 text-lg">Total Gaji yang Diterima</p>
+                        <p class="text-4xl font-bold">Rp <span x-text="formatNumber(calculateTotal())"></span></p>
+                    </div>
+                    <div class="flex gap-4">
+                        <button type="submit" name="status" value="draft"
+                            class="px-8 py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl transition-all duration-300 flex items-center gap-2">
+                            Simpan Draft
+                        </button>
+                        <button type="submit" name="status" value="final"
+                            class="px-8 py-3 bg-white text-primary font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                            Finalkan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function penggajianForm() {
+            return {
+                gajiPokok: {{ $penggajian->gaji_pokok }},
+                totalMenitTelat: {{ $totalMenitTelat }},
+                potonganPerMenit: {{ $potonganPerMenit }},
+                reimburse: {{ $penggajian->reimburse }},
+                lainLain: {{ $penggajian->lain_lain }},
+
+                dokter: {
+                    transaksi: {{ $detail['transaksi'] ?? 0 }},
+                    persenan: {{ $detail['persenan'] ?? 0 }},
+                    pengurangan: {{ $detail['pengurangan'] ?? 0 }},
+                    penambahan: {{ $detail['penambahan'] ?? 0 }},
+                    lainLain: {{ $detail['lain_lain_insentif'] ?? 0 }}
+                },
+
+                paramedis: {
+                    antarJemputQty: {{ $detail['antar_jemput_qty'] ?? 0 }}, antarJemputHarga: {{ $detail['antar_jemput_harga'] ?? 0 }},
+                    rawatInapQty: {{ $detail['rawat_inap_qty'] ?? 0 }}, rawatInapHarga: {{ $detail['rawat_inap_harga'] ?? 0 }},
+                    visitQty: {{ $detail['visit_qty'] ?? 0 }}, visitHarga: {{ $detail['visit_harga'] ?? 0 }},
+                    groomingQty: {{ $detail['grooming_qty'] ?? 0 }}, groomingHarga: {{ $detail['grooming_harga'] ?? 0 }},
+                    lainLain: {{ $detail['lain_lain_insentif'] ?? 0 }}
+                },
+
+                fo: {
+                    reviewQty: {{ $detail['review_qty'] ?? 0 }}, reviewHarga: {{ $detail['review_harga'] ?? 0 }},
+                    appointmentQty: {{ $detail['appointment_qty'] ?? 0 }}, appointmentHarga: {{ $detail['appointment_harga'] ?? 0 }},
+                    lainLain: {{ $detail['lain_lain_insentif'] ?? 0 }}
+                },
+
+                tech: {
+                    antarKontenQty: {{ $detail['antar_konten_qty'] ?? 0 }}, antarKontenHarga: {{ $detail['antar_konten_harga'] ?? 0 }},
+                    lainLain: {{ $detail['lain_lain_insentif'] ?? 0 }}
+                },
+
+                formatNumber(num) {
+                    return new Intl.NumberFormat('id-ID').format(num || 0);
+                },
+
+                calculateDokterInsentif() {
+                    const transaksi = parseFloat(this.dokter.transaksi) || 0;
+                    const pengurangan = parseFloat(this.dokter.pengurangan) || 0;
+                    const penambahan = parseFloat(this.dokter.penambahan) || 0;
+                    const persenan = (parseFloat(this.dokter.persenan) || 0) / 100;
+                    const lainLain = parseFloat(this.dokter.lainLain) || 0;
+                    return transaksi - ((pengurangan + penambahan) * persenan) + lainLain;
+                },
+
+                calculateParamedisInsentif() {
+                    const antarJemput = (parseInt(this.paramedis.antarJemputQty) || 0) * (parseFloat(this.paramedis.antarJemputHarga) || 0);
+                    const rawatInap = (parseInt(this.paramedis.rawatInapQty) || 0) * (parseFloat(this.paramedis.rawatInapHarga) || 0);
+                    const visit = (parseInt(this.paramedis.visitQty) || 0) * (parseFloat(this.paramedis.visitHarga) || 0);
+                    const grooming = (parseInt(this.paramedis.groomingQty) || 0) * (parseFloat(this.paramedis.groomingHarga) || 0);
+                    const lainLain = parseFloat(this.paramedis.lainLain) || 0;
+                    return antarJemput + rawatInap + visit + grooming + lainLain;
+                },
+
+                calculateFOInsentif() {
+                    const review = (parseInt(this.fo.reviewQty) || 0) * (parseFloat(this.fo.reviewHarga) || 0);
+                    const appointment = (parseInt(this.fo.appointmentQty) || 0) * (parseFloat(this.fo.appointmentHarga) || 0);
+                    const lainLain = parseFloat(this.fo.lainLain) || 0;
+                    return review + appointment + lainLain;
+                },
+
+                calculateTechInsentif() {
+                    const antarKonten = (parseInt(this.tech.antarKontenQty) || 0) * (parseFloat(this.tech.antarKontenHarga) || 0);
+                    const lainLain = parseFloat(this.tech.lainLain) || 0;
+                    return antarKonten + lainLain;
+                },
+
+                getInsentif() {
+                    const jabatan = '{{ $user->jabatan }}';
+                    switch (jabatan) {
+                        case 'Dokter': return this.calculateDokterInsentif();
+                        case 'Paramedis': return this.calculateParamedisInsentif();
+                        case 'FO': return this.calculateFOInsentif();
+                        case 'Tech': return this.calculateTechInsentif();
+                        default: return 0;
+                    }
+                },
+
+                calculateTotal() {
+                    const gaji = parseFloat(this.gajiPokok) || 0;
+                    const potongan = (parseInt(this.totalMenitTelat) || 0) * (parseFloat(this.potonganPerMenit) || 0);
+                    const insentif = this.getInsentif();
+                    const reimburse = parseFloat(this.reimburse) || 0;
+                    const lainLain = parseFloat(this.lainLain) || 0;
+                    return gaji - potongan + insentif - reimburse + lainLain;
+                }
+            }
+        }
+    </script>
+</x-app-layout>
