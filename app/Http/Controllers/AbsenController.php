@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absen;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -12,7 +13,7 @@ class AbsenController extends Controller
     // Koordinat kantor (bisa dicustom)
     private $officeLatitude = -6.189035762950233;
     private $officeLongitude = 106.61662426529043;
-    private $allowedRadius = 20; // meter
+    private $allowedRadius = 50; // meter
 
     public function index()
     {
@@ -313,6 +314,134 @@ class AbsenController extends Controller
         }
     }
 
+    public function kalender(Request $request)
+    {
+        $bulan = $request->get('bulan', Carbon::now()->month);
+        $tahun = $request->get('tahun', Carbon::now()->year);
+
+        // Ambil semua absensi dalam bulan tersebut
+        $startDate = Carbon::create($tahun, $bulan, 1)->startOfMonth();
+        $endDate = Carbon::create($tahun, $bulan, 1)->endOfMonth();
+
+        $absensiBulan = Absen::with('user')
+            ->whereBetween('tanggal', [$startDate, $endDate])
+            ->orderBy('tanggal')
+            ->get()
+            ->groupBy(function ($item) {
+                return $item->tanggal->format('Y-m-d');
+            });
+
+        // Hitung statistik per hari
+        $kalenderData = [];
+        for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
+            $tanggal = $date->format('Y-m-d');
+            $absensiHari = $absensiBulan->get($tanggal, collect());
+
+            $kalenderData[$tanggal] = [
+                'tanggal' => $date,
+                'total_absen' => $absensiHari->count(),
+                'hadir_tepat_waktu' => $absensiHari->where('status', 'tepat_waktu')->count(),
+                'hadir_terlambat' => $absensiHari->where('status', 'telat')->count(),
+                'izin' => $absensiHari->where('izin', true)->count(),
+                'absensi' => $absensiHari
+            ];
+        }
+
+        return view('absensi.kalender', compact('kalenderData', 'bulan', 'tahun'));
+    }
+
+    public function detailHari($tanggal)
+    {
+        $date = Carbon::parse($tanggal);
+
+        $absensiHari = Absen::with('user')
+            ->whereDate('tanggal', $date)
+            ->orderBy('jam_masuk')
+            ->get();
+
+        return view('absensi.detail-hari', compact('absensiHari', 'tanggal'));
+    }
+
+    public function absensiUser(Request $request)
+    {
+        $userId = $request->get('user_id');
+        $bulan = $request->get('bulan', Carbon::now()->month);
+        $tahun = $request->get('tahun', Carbon::now()->year);
+
+        $users = User::where('role', 'pegawai')->orderBy('name')->get();
+
+        $absensi = collect();
+        $user = null;
+
+        if ($userId) {
+            $user = User::find($userId);
+
+            $startDate = Carbon::create($tahun, $bulan, 1)->startOfMonth();
+            $endDate = Carbon::create($tahun, $bulan, 1)->endOfMonth();
+
+            $absensi = Absen::where('user_id', $userId)
+                ->whereBetween('tanggal', [$startDate, $endDate])
+                ->with('user')
+                ->orderBy('tanggal', 'desc')
+                ->get();
+        }
+
+        return view('absensi.user', compact('users', 'absensi', 'userId', 'user', 'bulan', 'tahun'));
+    }
+
+    public function edit(Absen $absen)
+    {
+        return view('absensi.edit', compact('absen'));
+    }
+
+    public function update(Request $request, Absen $absen)
+    {
+        $request->validate([
+            'jam_masuk' => 'nullable|date_format:H:i',
+            'jam_pulang' => 'nullable|date_format:H:i',
+            'izin' => 'nullable|boolean',
+            'izin_keterangan' => 'nullable|string|max:255',
+            'lat_masuk' => 'nullable|numeric',
+            'lng_masuk' => 'nullable|numeric',
+            'lat_pulang' => 'nullable|numeric',
+            'lng_pulang' => 'nullable|numeric',
+        ]);
+
+        $data = $request->only([
+            'jam_masuk',
+            'jam_pulang',
+            'izin',
+            'izin_keterangan',
+            'lat_masuk',
+            'lng_masuk',
+            'lat_pulang',
+            'lng_pulang'
+        ]);
+
+        // Recalculate status and minutes if times changed
+        if ($request->jam_masuk || $request->jam_pulang) {
+            $jamMasuk = $request->jam_masuk ? Carbon::createFromFormat('H:i', $request->jam_masuk)->setDateFrom($absen->tanggal) : null;
+            $jamPulang = $request->jam_pulang ? Carbon::createFromFormat('H:i', $request->jam_pulang)->setDateFrom($absen->tanggal) : null;
+
+            if ($jamMasuk && $jamPulang) {
+                $menitKerja = $jamMasuk->diffInMinutes($jamPulang, false);
+                $data['menit_kerja'] = $menitKerja;
+
+                // Determine status
+                $jamMasukExpected = $absen->user->jam_masuk ? Carbon::createFromFormat('H:i', $absen->user->jam_masuk)->setDateFrom($absen->tanggal) : null;
+                if ($jamMasukExpected) {
+                    $telat = $jamMasuk->gt($jamMasukExpected);
+                    $data['telat'] = $telat;
+                    $data['menit_telat'] = $telat ? $jamMasuk->diffInMinutes($jamMasukExpected) : 0;
+                    $data['status'] = $telat ? 'telat' : 'tepat_waktu';
+                }
+            }
+        }
+
+        $absen->update($data);
+
+        return redirect()->back()->with('success', 'Absensi berhasil diperbarui');
+    }
 
     /**
      * Calculate distance between two coordinates using Haversine formula

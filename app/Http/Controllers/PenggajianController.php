@@ -201,6 +201,11 @@ class PenggajianController extends Controller
      */
     public function print(Penggajian $penggajian)
     {
+        // Check if user is admin or the payroll belongs to the authenticated user
+        if (auth()->user()->role !== 'admin' && $penggajian->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
         return view('penggajian.print', compact('penggajian'));
     }
 
@@ -253,5 +258,20 @@ class PenggajianController extends Controller
         }
 
         return $total;
+    }
+
+    /**
+     * Display payroll history for the authenticated employee.
+     */
+    public function riwayatPegawai(Request $request)
+    {
+        $user = auth()->user();
+
+        $query = Penggajian::where('user_id', $user->id)
+            ->orderBy('periode', 'desc');
+
+        $penggajian = $query->paginate(12)->withQueryString();
+
+        return view('penggajian.riwayat-pegawai', compact('penggajian'));
     }
 }

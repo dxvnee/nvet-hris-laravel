@@ -26,7 +26,8 @@
         </div>
 
         <!-- Menu -->
-        <nav class="flex flex-col gap-3 animate-slide-in-left">
+        <nav class="flex flex-col gap-3 animate-slide-in-left"
+            x-data="{ absensiOpen: {{ request()->routeIs('absen.*') ? 'true' : 'false' }} }">
 
             <!-- Dashboard -->
             <a href="{{ route('dashboard') }}"
@@ -63,6 +64,16 @@
                     </svg>
                     Riwayat
                 </a>
+
+                <a href="{{ route('penggajian.riwayat') }}"
+                    class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('penggajian.riwayat') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet2"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5z" />
+                    </svg>
+                    Penggajian
+                </a>
             @endif
 
             @if(auth()->user()->role === 'admin')
@@ -85,9 +96,96 @@
                     </svg>
                     Penggajian
                 </a>
+
+                <!-- Absensi Submenu -->
+                <div>
+                    <button @click="absensiOpen = !absensiOpen"
+                        class="w-full btn-secondary flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium hover:bg-primary hover:text-white">
+                        <div class="flex items-center gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-calendar-check" viewBox="0 0 16 16">
+                                <path
+                                    d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
+                                <path
+                                    d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+                            </svg>
+                            Absensi
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-300" :class="absensiOpen ? 'rotate-180' : ''"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+
+                    <div x-show="absensiOpen" x-transition class="mt-2 ml-4 space-y-2">
+                        <a href="{{ route('absen.kalender') }}"
+                            class="btn-secondary flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('absen.kalender') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                class="bi bi-calendar" viewBox="0 0 16 16">
+                                <path
+                                    d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+                            </svg>
+                            Kalender
+                        </a>
+
+                        <a href="{{ route('absen.user') }}"
+                            class="btn-secondary flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('absen.user') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 0 0-1h-4a1.5 1.5 0 0 0-1.5 1.5v9a1.5 1.5 0 0 0 1.5 1.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 1-.5-.5z" />
+                                <path
+                                    d="M14.5 7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5z" />
+                            </svg>
+                            Per User
+                        </a>
+                    </div>
+                </div>
             @endif
 
         </nav>
+
+        <!-- Mobile Profile Section -->
+        <div class="lg:hidden mt-4 border-t border-gray-200 pt-4">
+            <x-dropdown align="right" width="48">
+                <x-slot name="trigger">
+                    <button
+                        class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium hover:bg-primary hover:text-white">
+                        <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&color=7F9CF5&background=EBF4FF&size=32' }}"
+                            alt="Avatar" class="w-8 h-8 rounded-full border-2 border-primary shadow-sm">
+                        <div class="flex-1 text-left">
+                            <div class="font-semibold text-sm">{{ Auth::user()->name }}</div>
+                            <div class="text-xs opacity-75">
+                                {{ Auth::user()->role === 'admin' ? 'Administrator' : 'Pegawai' }}</div>
+                        </div>
+                        <svg class="fill-current h-4 w-4 transition-transform duration-300 group-hover:rotate-180"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </x-slot>
+
+                <x-slot name="content">
+                    <div class="relative z-50 m-2">
+                        <x-dropdown-link :href="route('profile.show')"
+                            class="transition-all duration-300 hover:bg-primaryExtraLight font-semibold">
+                            {{ __('Profile') }}
+                        </x-dropdown-link>
+
+                        <form method="POST" action="{{ route('logout') }}" class="transition-all duration-300">
+                            @csrf
+                            <x-dropdown-link :href="route('logout')"
+                                onclick="event.preventDefault(); this.closest('form').submit();"
+                                class="transition-all duration-300 hover:bg-primaryExtraLight font-semibold">
+                                {{ __('Log Out') }}
+                            </x-dropdown-link>
+                        </form>
+                    </div>
+                </x-slot>
+            </x-dropdown>
+        </div>
 
     </div>
 </div>

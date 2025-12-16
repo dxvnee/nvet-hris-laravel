@@ -24,6 +24,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/absen', [AbsenController::class, 'index'])->name('absen.index');
         Route::post('/absen', [AbsenController::class, 'store'])->name('absen.store');
         Route::get('/riwayat', [AbsenController::class, 'riwayat'])->name('absen.riwayat');
+        Route::get('/penggajian-riwayat', [PenggajianController::class, 'riwayatPegawai'])->name('penggajian.riwayat');
+        Route::get('/penggajian/{penggajian}/print', [PenggajianController::class, 'print'])->name('penggajian.print');
     });
 
     // Routes untuk admin
@@ -34,6 +36,13 @@ Route::middleware('auth')->group(function () {
         // Penggajian Routes
         Route::get('/penggajian/{penggajian}/print', [PenggajianController::class, 'print'])->name('penggajian.print');
         Route::resource('penggajian', PenggajianController::class);
+
+        // Absensi Kalender Routes
+        Route::get('/absensi-kalender', [AbsenController::class, 'kalender'])->name('absen.kalender');
+        Route::get('/absensi-kalender/{tanggal}', [AbsenController::class, 'detailHari'])->name('absen.detailHari');
+        Route::get('/absensi/user', [AbsenController::class, 'absensiUser'])->name('absen.user');
+        Route::get('/absen/{absen}/edit', [AbsenController::class, 'edit'])->name('absen.edit');
+        Route::patch('/absen/{absen}', [AbsenController::class, 'update'])->name('absen.update');
     });
 });
 
