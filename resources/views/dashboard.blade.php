@@ -522,7 +522,7 @@
                                 <div class="flex items-center gap-4">
                                     <div class="w-10 h-10 rounded-full
                                                     @if($absen->izin) bg-blue-100
-                                                    @else bg-green-100
+
                                                     @endif flex items-center justify-center">
                                         @if($absen->izin)
                                             <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -551,14 +551,7 @@
                                         </p>
                                     </div>
                                 </div>
-                                <span class="px-3 py-1 text-sm rounded-full
-                                                @if($absen->izin) bg-blue-100 text-blue-700
-                                                @elseif(!$absen->telat) bg-green-100 text-green-700
-                                                @endif">
-                                    @if($absen->izin)
-                                        Izin
-                                    @endif
-                                </span>
+
                             </div>
                         @endforeach
                     </div>

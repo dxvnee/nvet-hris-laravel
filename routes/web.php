@@ -19,17 +19,22 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/absen', [AbsenController::class, 'index'])->name('absen.index');
-    Route::post('/absen', [AbsenController::class, 'store'])->name('absen.store');
+    // Routes untuk pegawai
+    Route::middleware('role:pegawai')->group(function () {
+        Route::get('/absen', [AbsenController::class, 'index'])->name('absen.index');
+        Route::post('/absen', [AbsenController::class, 'store'])->name('absen.store');
+        Route::get('/riwayat', [AbsenController::class, 'riwayat'])->name('absen.riwayat');
+    });
 
-    Route::get('/riwayat', [AbsenController::class, 'riwayat'])->name('absen.riwayat');
+    // Routes untuk admin
+    Route::middleware('role:admin')->group(function () {
+        // User Management Routes
+        Route::resource('users', UserController::class);
 
-    // User Management Routes
-    Route::resource('users', UserController::class);
-
-    // Penggajian Routes
-    Route::get('/penggajian/{penggajian}/print', [PenggajianController::class, 'print'])->name('penggajian.print');
-    Route::resource('penggajian', PenggajianController::class);
+        // Penggajian Routes
+        Route::get('/penggajian/{penggajian}/print', [PenggajianController::class, 'print'])->name('penggajian.print');
+        Route::resource('penggajian', PenggajianController::class);
+    });
 });
 
 require __DIR__ . '/auth.php';

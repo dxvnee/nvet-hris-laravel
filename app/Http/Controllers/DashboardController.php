@@ -62,8 +62,13 @@ class DashboardController extends Controller
 
             // Absensi hari ini (semua pegawai)
             $absensiHariIni = Absen::whereDate('tanggal', $today)->count();
-            $tepatWaktuHariIni = Absen::whereDate('tanggal', $today)->where('status', 'tepat_waktu')->count();
-            $telatHariIni = Absen::whereDate('tanggal', $today)->where('status', 'telat')->count();
+            $tepatWaktuHariIni = Absen::whereDate('tanggal', $today)
+                ->where('menit_telat', 0)
+                ->count();
+
+            $telatHariIni = Absen::whereDate('tanggal', $today)
+                ->where('menit_telat', '>', 0)
+                ->count();
 
             // Pegawai yang belum absen hari ini
             $sudahAbsen = Absen::whereDate('tanggal', $today)->pluck('user_id')->toArray();
@@ -86,14 +91,15 @@ class DashboardController extends Controller
                 ->get();
 
             // Top pegawai telat bulan ini
-            $topTelat = Absen::with('user')
+            $topTelat = Absen::selectRaw('user_id, COUNT(*) as total_telat, SUM(menit_telat) as total_menit')
                 ->whereBetween('tanggal', [$startOfMonth, $endOfMonth])
-                ->where('status', 'telat')
-                ->selectRaw('user_id, count(*) as total_telat, sum(menit_telat) as total_menit')
+                ->where('menit_telat', '>', 0)
                 ->groupBy('user_id')
-                ->orderByDesc('total_telat')
-                ->take(5)
+                ->orderByDesc('total_menit') // lebih adil dari sekadar jumlah
+                ->with('user')
+                ->limit(5)
                 ->get();
+
 
             // Grafik absensi 7 hari terakhir
             $grafikAbsensi = [];
@@ -102,7 +108,9 @@ class DashboardController extends Controller
                 $grafikAbsensi[] = [
                     'tanggal' => Carbon::parse($date)->format('d M'),
                     'hadir' => Absen::whereDate('tanggal', $date)->count(),
-                    'telat' => Absen::whereDate('tanggal', $date)->where('status', 'telat')->count(),
+                    'telat' => Absen::whereDate('tanggal', $date)
+                        ->where('menit_telat', '>', 0)
+                        ->count(),
                 ];
             }
 
