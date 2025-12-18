@@ -341,8 +341,11 @@ class AbsenController extends Controller
             $kalenderData[$tanggal] = [
                 'tanggal' => $date,
                 'total_absen' => $absensiHari->count(),
-                'hadir_tepat_waktu' => $absensiHari->where('status', 'tepat_waktu')->count(),
-                'hadir_terlambat' => $absensiHari->where('status', 'telat')->count(),
+                'hadir_tepat_waktu' => $absensiHari
+                    ->where('telat', 0)
+                    ->where('izin', 0)
+                    ->count(),
+                'hadir_terlambat' => $absensiHari->where('telat', 1)->count(),
                 'izin' => $absensiHari->where('izin', true)->count(),
                 'absensi' => $absensiHari
             ];
@@ -351,12 +354,12 @@ class AbsenController extends Controller
         return view('absensi.kalender', compact('kalenderData', 'bulan', 'tahun'));
     }
 
-    public function detailHari($tanggal)
+    public function detailHari(Request $request, $tanggal)
     {
         $date = Carbon::parse($tanggal);
 
         // Ambil semua pegawai
-        $employees = User::where('role', 'pegawai')->orderBy('name')->get();
+        $employees = User::where('role', 'pegawai')->get();
 
         // Ambil absensi hari itu
         $absensi = Absen::with('user')
@@ -375,6 +378,55 @@ class AbsenController extends Controller
             $emptyAbsen->user = $employee; // Set relation manually
             $emptyAbsen->user_id = $employee->id;
             return $emptyAbsen;
+        });
+
+        // Sorting Logic
+        $sortBy = $request->get('sort_by', 'name');
+        $sortDirection = $request->get('sort_direction', 'asc');
+
+        $absensiHari = $absensiHari->sort(function ($a, $b) use ($sortBy, $sortDirection) {
+            $valA = null;
+            $valB = null;
+
+            switch ($sortBy) {
+                case 'name':
+                    $valA = strtolower($a->user->name);
+                    $valB = strtolower($b->user->name);
+                    break;
+                case 'jam_masuk':
+                    // For time sorting, handle nulls.
+                    // If ASC, nulls last (max value). If DESC, nulls last (min value).
+                    $valA = $a->jam_masuk ? $a->jam_masuk->timestamp : ($sortDirection === 'asc' ? PHP_INT_MAX : -1);
+                    $valB = $b->jam_masuk ? $b->jam_masuk->timestamp : ($sortDirection === 'asc' ? PHP_INT_MAX : -1);
+                    break;
+                case 'jam_pulang':
+                    $valA = $a->jam_pulang ? $a->jam_pulang->timestamp : ($sortDirection === 'asc' ? PHP_INT_MAX : -1);
+                    $valB = $b->jam_pulang ? $b->jam_pulang->timestamp : ($sortDirection === 'asc' ? PHP_INT_MAX : -1);
+                    break;
+                case 'status':
+                    // Weight: Tepat Waktu (1), Telat (2), Izin (3), Belum Absen (4)
+                    $getStatusWeight = function ($absen) {
+                        if ($absen->izin) return 3;
+                        if ($absen->jam_masuk) {
+                            return $absen->status === 'tepat_waktu' ? 1 : 2;
+                        }
+                        return 4;
+                    };
+                    $valA = $getStatusWeight($a);
+                    $valB = $getStatusWeight($b);
+                    break;
+                default:
+                    $valA = strtolower($a->user->name);
+                    $valB = strtolower($b->user->name);
+            }
+
+            if ($valA == $valB) return 0;
+
+            if ($sortDirection === 'asc') {
+                return $valA < $valB ? -1 : 1;
+            } else {
+                return $valA > $valB ? -1 : 1;
+            }
         });
 
         return view('absensi.detail-hari', compact('absensiHari', 'tanggal'));

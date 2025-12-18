@@ -481,7 +481,7 @@
                     const penambahan = parseFloat(this.dokter.penambahan) || 0;
                     const persenan = (parseFloat(this.dokter.persenan) || 0) / 100;
                     const lainLain = parseFloat(this.dokter.lainLain) || 0;
-                    return transaksi - ((pengurangan + penambahan) * persenan) + lainLain;
+                    return (transaksi - pengurangan + penambahan) * persenan + lainLain;
                 },
 
                 calculateParamedisInsentif() {

@@ -98,8 +98,8 @@
                             </svg>
                         </div>
                         <select name="jabatan"
-                            class="px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
-                            <option value="">Semua Jabatan</option>
+                            class="px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all min-w-[140px]">
+                            <option value="">Jabatan</option>
                             <option value="Dokter" {{ request('jabatan') == 'Dokter' ? 'selected' : '' }}>Dokter</option>
                             <option value="Paramedis" {{ request('jabatan') == 'Paramedis' ? 'selected' : '' }}>Paramedis
                             </option>
@@ -126,69 +126,103 @@
         </div>
 
         <!-- Employees Table -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden animate-slide-up-delay-2">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gradient-to-r from-primary to-primaryDark text-white">
-                        <tr>
-                            <th class="px-6 py-4 text-left text-sm font-semibold">
+        <div class="bg-white rounded-2xl shadow-xl p-6 animate-slide-up-delay-2">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="p-3 bg-gradient-to-br from-primary to-primaryDark rounded-xl shadow-lg">
+                    <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800">Daftar Pegawai</h2>
+            </div>
+
+            @if($users->count() > 0)
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-200">
+                            <th class="text-left py-3 px-4 font-semibold text-gray-600">
                                 <a href="{{ route('users.index', array_merge(request()->query(), ['sort' => 'name', 'dir' => request('sort') == 'name' && request('dir') == 'asc' ? 'desc' : 'asc'])) }}"
-                                    class="flex items-center gap-2 hover:text-primaryUltraLight transition-colors">
-                                    Pegawai
+                                   class="flex items-center space-x-1 hover:text-primary transition-colors">
+                                    <span>Pegawai</span>
                                     @if(request('sort') == 'name')
-                                        <svg class="w-4 h-4 {{ request('dir') == 'desc' ? 'rotate-180' : '' }}" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 15l7-7 7 7"></path>
+                                        @if(request('dir') == 'asc')
+                                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 010-1.414l-4-4a1 1 0 01-1.414 0l-4 4a1 1 0 111.414 1.414z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z" clip-rule="evenodd"></path>
                                         </svg>
                                     @endif
                                 </a>
                             </th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold">
+                            <th class="text-left py-3 px-4 font-semibold text-gray-600">
                                 <a href="{{ route('users.index', array_merge(request()->query(), ['sort' => 'jabatan', 'dir' => request('sort') == 'jabatan' && request('dir') == 'asc' ? 'desc' : 'asc'])) }}"
-                                    class="flex items-center gap-2 hover:text-primaryUltraLight transition-colors">
-                                    Jabatan
+                                   class="flex items-center space-x-1 hover:text-primary transition-colors">
+                                    <span>Jabatan</span>
                                     @if(request('sort') == 'jabatan')
-                                        <svg class="w-4 h-4 {{ request('dir') == 'desc' ? 'rotate-180' : '' }}" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 15l7-7 7 7"></path>
+                                        @if(request('dir') == 'asc')
+                                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 010-1.414l-4-4a1 1 0 01-1.414 0l-4 4a1 1 0 111.414 1.414z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z" clip-rule="evenodd"></path>
                                         </svg>
                                     @endif
                                 </a>
                             </th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold">
+                            <th class="text-left py-3 px-4 font-semibold text-gray-600">
                                 <a href="{{ route('users.index', array_merge(request()->query(), ['sort' => 'gaji_pokok', 'dir' => request('sort') == 'gaji_pokok' && request('dir') == 'asc' ? 'desc' : 'asc'])) }}"
-                                    class="flex items-center gap-2 hover:text-primaryUltraLight transition-colors">
-                                    Gaji Pokok
+                                   class="flex items-center space-x-1 hover:text-primary transition-colors">
+                                    <span>Gaji Pokok</span>
                                     @if(request('sort') == 'gaji_pokok')
-                                        <svg class="w-4 h-4 {{ request('dir') == 'desc' ? 'rotate-180' : '' }}" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 15l7-7 7 7"></path>
+                                        @if(request('dir') == 'asc')
+                                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 010-1.414l-4-4a1 1 0 01-1.414 0l-4 4a1 1 0 111.414 1.414z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z" clip-rule="evenodd"></path>
                                         </svg>
                                     @endif
                                 </a>
                             </th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold">Jam Kerja</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold">Hari Libur</th>
-                            <th class="px-6 py-4 text-center text-sm font-semibold">Aksi</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-600">Jam Kerja</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-600">Hari Libur</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-600">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @forelse($users as $user)
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-4">
+                    <tbody>
+                        @foreach($users as $user)
+                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center gap-3">
                                         <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&color=7F9CF5&background=EBF4FF&size=40' }}"
-                                            alt="{{ $user->name }}" class="w-10 h-10 rounded-full border-2 border-gray-200">
+                                            alt="{{ $user->name }}" class="w-10 h-10 rounded-full">
                                         <div>
                                             <p class="font-semibold text-gray-900">{{ $user->name }}</p>
                                             <p class="text-sm text-gray-500">{{ $user->email }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="py-3 px-4">
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
                                                 {{ $user->jabatan === 'Dokter' ? 'bg-purple-100 text-purple-700' : '' }}
                                                 {{ $user->jabatan === 'Paramedis' ? 'bg-blue-100 text-blue-700' : '' }}
@@ -197,14 +231,13 @@
                                         {{ $user->jabatan ?? '-' }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <span class="font-semibold text-gray-900">Rp
-                                        {{ number_format($user->gaji_pokok ?? 0, 0, ',', '.') }}</span>
+                                <td class="py-3 px-4 text-gray-700">
+                                    Rp {{ number_format($user->gaji_pokok ?? 0, 0, ',', '.') }}
                                 </td>
-                                <td class="px-6 py-4">
-                                    <span class="text-gray-700">{{ $user->jam_kerja ?? '-' }} jam/hari</span>
+                                <td class="py-3 px-4 text-gray-700">
+                                    {{ $user->jam_kerja ?? '-' }} jam/hari
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="py-3 px-4">
                                     @php
                                         $hariNama = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
                                         $hariLibur = $user->hari_libur ?? [];
@@ -221,15 +254,15 @@
                                         <span class="text-gray-400">-</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center justify-center gap-2">
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center gap-2">
                                         <a href="{{ route('users.edit', $user) }}"
                                             class="p-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-colors"
                                             title="Edit">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                                </path>
+                                                    </path>
                                             </svg>
                                         </a>
                                         <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline"
@@ -249,31 +282,67 @@
                                     </div>
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="px-6 py-12 text-center">
-                                    <div class="flex flex-col items-center">
-                                        <svg class="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-                                            </path>
-                                        </svg>
-                                        <p class="text-gray-500 text-lg font-medium">Belum ada data pegawai</p>
-                                        <p class="text-gray-400 text-sm mt-1">Klik tombol "Tambah Pegawai" untuk menambahkan
-                                        </p>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
+            @else
+                <div class="text-center py-8 text-gray-500">
+                    <svg class="h-12 w-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    <p>Belum ada data pegawai</p>
+                </div>
+            @endif
 
-            <!-- Pagination -->
             @if($users->hasPages())
-                <div class="px-6 py-4 border-t border-gray-100">
-                    {{ $users->links() }}
+                <div class="mt-6">
+                    <div class="flex justify-center">
+                        <div class="flex space-x-1">
+                            {{-- Previous Page Link --}}
+                            @if ($users->onFirstPage())
+                                <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-l-xl">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            @else
+                                <a href="{{ $users->previousPageUrl() }}" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-l-xl hover:bg-primaryUltraLight hover:border-primary transition-colors duration-200">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </a>
+                            @endif
+
+                            {{-- Pagination Elements --}}
+                            @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
+                                @if ($page == $users->currentPage())
+                                    <span class="relative inline-flex items-center px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-primary to-primaryDark border border-primary leading-5 rounded-xl shadow-lg">
+                                        {{ $page }}
+                                    </span>
+                                @else
+                                    <a href="{{ $url }}" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:bg-primaryUltraLight hover:border-primary hover:text-primary transition-all duration-200 rounded-xl">
+                                        {{ $page }}
+                                    </a>
+                                @endif
+                            @endforeach
+
+                            {{-- Next Page Link --}}
+                            @if ($users->hasMorePages())
+                                <a href="{{ $users->nextPageUrl() }}" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-r-xl hover:bg-primaryUltraLight hover:border-primary transition-colors duration-200">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </a>
+                            @else
+                                <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-r-xl">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             @endif
         </div>

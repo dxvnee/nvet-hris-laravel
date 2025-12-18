@@ -281,7 +281,7 @@
             {{-- Quick Actions Admin --}}
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <a href="{{ route('users.index') }}"
-                    class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105 group">
+                    class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:transform group">
                     <div
                         class="p-3 bg-gradient-to-br from-primary to-primaryDark rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform">
                         <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -294,7 +294,7 @@
                     <p class="text-sm text-gray-500">Tambah, edit, hapus pegawai</p>
                 </a>
                 <a href="{{ route('penggajian.index') }}"
-                    class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105 group">
+                    class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:transform group">
                     <div
                         class="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform">
                         <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -307,7 +307,7 @@
                     <p class="text-sm text-gray-500">Kelola gaji pegawai</p>
                 </a>
                 <a href="{{ route('absen.riwayat') }}"
-                    class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105 group">
+                    class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:transform group">
                     <div
                         class="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform">
                         <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -320,7 +320,7 @@
                     <p class="text-sm text-gray-500">Lihat semua absensi</p>
                 </a>
                 <a href="{{ route('users.create') }}"
-                    class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105 group">
+                    class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:transform group">
                     <div
                         class="p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform">
                         <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -411,7 +411,7 @@
                             </div>
                             @if(!$userAbsensiToday->jam_pulang)
                                 <a href="{{ route('absen.index') }}"
-                                    class="px-6 py-3 bg-gradient-to-r from-primary to-primaryDark text-white font-bold rounded-xl hover:shadow-lg transition-all">
+                                    class="px-6 py-3 btn-primary  font-bold rounded-xl hover:shadow-lg transition-all">
                                     Absen Pulang
                                 </a>
                             @endif
@@ -428,7 +428,7 @@
                         <h4 class="text-xl font-bold text-yellow-600 mb-2">Belum Absen Hari Ini</h4>
                         <p class="text-gray-500 mb-4">Jangan lupa untuk melakukan absensi!</p>
                         <a href="{{ route('absen.index') }}"
-                            class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-primaryDark text-white font-bold rounded-xl hover:shadow-lg transition-all">
+                            class="inline-flex items-center gap-2 px-6 py-3 btn-primary font-bold rounded-xl hover:shadow-lg transition-all">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>

@@ -79,8 +79,8 @@
                     class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('lembur.index') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock"
                         viewBox="0 0 16 16">
-                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
-                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
                     </svg>
                     Lembur
                 </a>
@@ -111,8 +111,8 @@
                     class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('lembur.admin') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock"
                         viewBox="0 0 16 16">
-                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
-                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
                     </svg>
                     Lembur
                 </a>
@@ -120,7 +120,7 @@
                 <!-- Absensi Submenu -->
                 <div>
                     <button @click="absensiOpen = !absensiOpen"
-                        class="w-full btn-secondary flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium hover:bg-primary hover:text-white">
+                        class="btn-secondary flex w-full items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('lembur.index') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
                         <div class="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-calendar-check" viewBox="0 0 16 16">
@@ -131,10 +131,14 @@
                             </svg>
                             Absensi
                         </div>
-                        <svg class="w-4 h-4 transition-transform duration-300" :class="absensiOpen ? 'rotate-180' : ''"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
+                        <div class="w-full flex justify-end">
+                            <svg class="w-4 h-4 transition-transform duration-300" :class="absensiOpen ? 'rotate-180' : ''"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                                </path>
+                            </svg>
+                        </div>
+
                     </button>
 
                     <div x-show="absensiOpen" x-transition class="mt-2 ml-4 space-y-2">
@@ -176,7 +180,8 @@
                         <div class="flex-1 text-left">
                             <div class="font-semibold text-sm">{{ Auth::user()->name }}</div>
                             <div class="text-xs opacity-75">
-                                {{ Auth::user()->role === 'admin' ? 'Administrator' : 'Pegawai' }}</div>
+                                {{ Auth::user()->role === 'admin' ? 'Administrator' : 'Pegawai' }}
+                            </div>
                         </div>
                         <svg class="fill-current h-4 w-4 transition-transform duration-300 group-hover:rotate-180"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/penggajian/{penggajian}/print', [PenggajianController::class, 'print'])->name('penggajian.print');
 
     // Routes untuk pegawai
     Route::middleware('role:pegawai')->group(function () {
@@ -26,7 +27,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/absen', [AbsenController::class, 'store'])->name('absen.store');
         Route::get('/riwayat', [AbsenController::class, 'riwayat'])->name('absen.riwayat');
         Route::get('/penggajian-riwayat', [PenggajianController::class, 'riwayatPegawai'])->name('penggajian.riwayat');
-        Route::get('/penggajian/{penggajian}/print', [PenggajianController::class, 'print'])->name('penggajian.print');
 
         // Lembur Pegawai
         Route::get('/lembur', [LemburController::class, 'index'])->name('lembur.index');
@@ -40,7 +40,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', UserController::class);
 
         // Penggajian Routes
-        Route::get('/penggajian/{penggajian}/print', [PenggajianController::class, 'print'])->name('penggajian.print');
         Route::resource('penggajian', PenggajianController::class);
 
         // Lembur Admin
