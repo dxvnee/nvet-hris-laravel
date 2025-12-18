@@ -24,12 +24,15 @@ class Absen extends Model
         // LOKASI
         'lat_masuk',
         'lng_masuk',
+        'foto_masuk',
         'lat_pulang',
         'lng_pulang',
+        'foto_pulang',
 
         // IZIN
         'izin',
         'izin_keterangan',
+        'foto_izin',
 
         // SHIFT
         'shift_number',

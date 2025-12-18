@@ -3,12 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lembur;
+use App\Services\PhotoService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LemburController extends Controller
 {
+    protected PhotoService $photoService;
+
+    public function __construct(PhotoService $photoService)
+    {
+        $this->photoService = $photoService;
+    }
+
     public function index()
     {
         $user = Auth::user();
@@ -50,6 +58,13 @@ class LemburController extends Controller
         $user = Auth::user();
         $now = Carbon::now();
 
+        // Validate photo is required
+        $request->validate([
+            'foto' => 'required|string',
+        ], [
+            'foto.required' => 'Foto wajib diambil untuk memulai lembur.',
+        ]);
+
         // Validasi jam pulang
         $jamPulang = $user->jam_keluar ? Carbon::parse($user->jam_keluar) : Carbon::today()->setHour(17)->setMinute(0);
         $jamPulangToday = Carbon::parse($now->toDateString() . ' ' . $jamPulang->format('H:i:s'));
@@ -68,10 +83,14 @@ class LemburController extends Controller
             return back()->with('error', 'Anda sedang dalam sesi lembur.');
         }
 
+        // Process and save photo
+        $fotoPath = $this->photoService->processPhoto($request->foto, 'lembur_mulai', $user->id);
+
         Lembur::create([
             'user_id' => $user->id,
             'tanggal' => $now->toDateString(),
             'jam_mulai' => $now->toTimeString(),
+            'foto_mulai' => $fotoPath,
             'status' => 'pending'
         ]);
 
@@ -82,6 +101,9 @@ class LemburController extends Controller
     {
         $request->validate([
             'keterangan' => 'required|string|max:255',
+            'foto' => 'required|string',
+        ], [
+            'foto.required' => 'Foto wajib diambil untuk menyelesaikan lembur.',
         ]);
 
         if ($lembur->user_id !== Auth::id()) {
@@ -102,8 +124,12 @@ class LemburController extends Controller
 
         $durasi = $startDateTime->diffInMinutes($endDateTime);
 
+        // Process and save photo
+        $fotoPath = $this->photoService->processPhoto($request->foto, 'lembur_selesai', Auth::id());
+
         $lembur->update([
             'jam_selesai' => $now->toTimeString(),
+            'foto_selesai' => $fotoPath,
             'durasi_menit' => $durasi,
             'keterangan' => $request->keterangan,
         ]);

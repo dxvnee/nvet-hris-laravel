@@ -4,16 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Absen;
 use App\Models\User;
+use App\Services\PhotoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class AbsenController extends Controller
 {
+    protected PhotoService $photoService;
+
     // Koordinat kantor (bisa dicustom)
     private $officeLatitude = -6.189035762950233;
     private $officeLongitude = 106.61662426529043;
     private $allowedRadius = 50; // meter
+
+    public function __construct(PhotoService $photoService)
+    {
+        $this->photoService = $photoService;
+    }
 
     public function index()
     {
@@ -119,6 +127,13 @@ class AbsenController extends Controller
         $today = Carbon::today();
         $now = Carbon::now();
 
+        // Validate photo is required
+        $request->validate([
+            'foto' => 'required|string',
+        ], [
+            'foto.required' => 'Foto wajib diambil untuk absensi.',
+        ]);
+
         // Ambil / buat data absen hari ini
         $absen = Absen::firstOrCreate(
             [
@@ -194,12 +209,16 @@ class AbsenController extends Controller
             $jamMasukToday = Carbon::today()->setTime($jamMasukSetting->hour, $jamMasukSetting->minute);
             $telat = $now->gt($jamMasukToday);
 
+            // Process and save photo
+            $fotoPath = $this->photoService->processPhoto($request->foto, 'masuk', $user->id);
+
             $absen->update([
                 'jam_masuk'   => $now,
                 'telat'       => $telat,
                 'menit_telat' => $telat ? $jamMasukToday->diffInMinutes($now) : 0,
                 'lat_masuk'   => $request->latitude,
                 'lng_masuk'   => $request->longitude,
+                'foto_masuk'  => $fotoPath,
                 'shift_number' => $shiftNumber,
             ]);
 
@@ -259,10 +278,14 @@ class AbsenController extends Controller
 
             $menitKerja = $absen->jam_masuk->diffInMinutes($now);
 
+            // Process and save photo
+            $fotoPath = $this->photoService->processPhoto($request->foto, 'pulang', $user->id);
+
             $absen->update([
-                'jam_pulang' => $now,
-                'lat_pulang' => $request->latitude,
-                'lng_pulang' => $request->longitude,
+                'jam_pulang'  => $now,
+                'lat_pulang'  => $request->latitude,
+                'lng_pulang'  => $request->longitude,
+                'foto_pulang' => $fotoPath,
                 'menit_kerja' => $menitKerja,
             ]);
 
@@ -283,9 +306,13 @@ class AbsenController extends Controller
                     return back()->with('error', 'Anda sudah mengajukan izin hari ini.');
                 }
 
+                // Process and save photo
+                $fotoPath = $this->photoService->processPhoto($request->foto, 'izin', $user->id);
+
                 $absen->update([
                     'izin' => true,
                     'izin_keterangan' => $request->keterangan,
+                    'foto_izin' => $fotoPath,
                 ]);
 
                 return back()->with('success', 'Izin tidak masuk berhasil dicatat.');
@@ -302,9 +329,13 @@ class AbsenController extends Controller
 
             $menitKerja = $absen->jam_masuk->diffInMinutes($now);
 
+            // Process and save photo
+            $fotoPath = $this->photoService->processPhoto($request->foto, 'izin', $user->id);
+
             $absen->update([
                 'izin' => true,
                 'izin_keterangan' => $request->keterangan,
+                'foto_izin' => $fotoPath,
                 'jam_pulang' => $now,
                 'lat_pulang' => $request->latitude,
                 'lng_pulang' => $request->longitude,

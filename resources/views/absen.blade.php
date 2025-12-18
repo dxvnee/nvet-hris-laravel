@@ -60,7 +60,8 @@
                                 <p class="font-semibold {{ $sudahHadir ? 'text-green-700' : 'text-gray-500' }}">
                                     Hadir
                                     @if($sudahHadir && $sudahHadir->shift_number)
-                                        <span class="ml-1 text-xs px-2 py-0.5 rounded-full {{ $sudahHadir->shift_number === 1 ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white' }}">
+                                        <span
+                                            class="ml-1 text-xs px-2 py-0.5 rounded-full {{ $sudahHadir->shift_number === 1 ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white' }}">
                                             Shift {{ $sudahHadir->shift_number }}
                                         </span>
                                     @endif
@@ -127,20 +128,23 @@
 
                     @if($user->is_shift && $user->shift_partner_id)
                         <span class="text-sm font-medium">
-                            <span class="inline-flex items-center px-2 py-0.5 rounded bg-blue-100 text-blue-800 mr-2">SHIFT</span>
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded bg-blue-100 text-blue-800 mr-2">SHIFT</span>
                             Shift 1: {{ $jamMasuk1 }} - {{ $jamKeluar1 }} |
                             Shift 2: {{ $jamMasuk2 }} - {{ $jamKeluar2 }} |
                             Partner: {{ $partnerName }}
                         </span>
                     @else
-                        <span class="text-sm font-medium">Jam masuk: {{ $jamMasuk }} WIB | Jam pulang: {{ $jamKeluar }} WIB | Radius: 20 meter</span>
+                        <span class="text-sm font-medium">Jam masuk: {{ $jamMasuk }} WIB | Jam pulang: {{ $jamKeluar }} WIB
+                            | Radius: 20 meter</span>
                     @endif
                 </div>
 
                 @if($sudahHadir && $sudahHadir->shift_number)
                     <div class="mt-2 flex items-center gap-2">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold
-                            {{ $sudahHadir->shift_number === 1 ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white' }}">
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold
+                                            {{ $sudahHadir->shift_number === 1 ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white' }}">
                             Anda Shift {{ $sudahHadir->shift_number }}
                         </span>
                         @php
@@ -183,24 +187,18 @@
             <!-- Absen Buttons -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Tombol Hadir -->
-                <form id="form-hadir" action="{{ route('absen.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="tipe" value="hadir">
-                    <input type="hidden" name="latitude" id="lat-hadir">
-                    <input type="hidden" name="longitude" id="lng-hadir">
-                    <button type="submit" {{ $sudahHadir || $sudahIzin ? 'disabled' : '' }}
-                        class="w-full py-4 px-6 rounded-xl font-bold text-white transition-all duration-300 flex items-center justify-center gap-2
-                        {{ $sudahHadir || $sudahIzin ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-lg hover:shadow-xl transform hover:scale-105' }}">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>
-                        {{ $sudahHadir ? 'Sudah Hadir' : ($sudahIzin ? 'Sedang Izin' : 'Absen Hadir') }}
-                    </button>
-                </form>
+                <button type="button" onclick="openCameraModal('hadir')" {{ $sudahHadir || $sudahIzin ? 'disabled' : '' }}
+                    class="w-full py-4 px-6 rounded-xl font-bold text-white transition-all duration-300 flex items-center justify-center gap-2
+                    {{ $sudahHadir || $sudahIzin ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-lg hover:shadow-xl transform hover:scale-105' }}">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                        </path>
+                    </svg>
+                    {{ $sudahHadir ? 'Sudah Hadir' : ($sudahIzin ? 'Sedang Izin' : 'Absen Hadir') }}
+                </button>
 
                 <!-- Tombol Izin -->
-                <button type="button" onclick="openIzinModal()" {{ ($sudahIzin && !$sudahHadir) || $sudahPulang ? 'disabled' : '' }}
+                <button type="button" onclick="openCameraModal('izin')" {{ ($sudahIzin && !$sudahHadir) || $sudahPulang ? 'disabled' : '' }}
                     class="w-full py-4 px-6 rounded-xl font-bold text-white transition-all duration-300 flex items-center justify-center gap-2
                     {{ ($sudahIzin && !$sudahHadir) || $sudahPulang ? 'bg-gray-300 cursor-not-allowed' : ($sudahHadir ? 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-lg hover:shadow-xl transform hover:scale-105' : 'bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 shadow-lg hover:shadow-xl transform hover:scale-105') }}">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -222,92 +220,134 @@
                 </button>
 
                 <!-- Tombol Pulang -->
-                <form id="form-pulang" action="{{ route('absen.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="tipe" value="pulang">
-                    <input type="hidden" name="latitude" id="lat-pulang">
-                    <input type="hidden" name="longitude" id="lng-pulang">
-                    <button type="submit" {{ $sudahPulang || !$sudahHadir || $sudahIzin ? 'disabled' : '' }}
-                        class="w-full py-4 px-6 rounded-xl font-bold text-white transition-all duration-300 flex items-center justify-center gap-2
-                        {{ $sudahPulang || !$sudahHadir || $sudahIzin ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transform hover:scale-105' }}">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                            </path>
-                        </svg>
-                        @if($sudahPulang)
-                            Sudah Pulang
-                        @elseif($sudahIzin)
-                            Sudah Izin Pulang
-                        @elseif(!$sudahHadir)
-                            Hadir Dulu
-                        @else
-                            @php
-                                $user = auth()->user();
-                                if ($user->is_shift && $sudahHadir && $sudahHadir->shift_number) {
-                                    $jamPulangText = $sudahHadir->shift_number === 1
-                                        ? \Carbon\Carbon::parse($user->shift1_jam_keluar)->format('H:i')
-                                        : \Carbon\Carbon::parse($user->shift2_jam_keluar)->format('H:i');
-                                } else {
-                                    $jamPulangText = $user->jam_keluar
-                                        ? \Carbon\Carbon::parse($user->jam_keluar)->format('H:i')
-                                        : '20:00';
-                                }
-                            @endphp
-                            Absen Pulang (≥{{ $jamPulangText }})
-                        @endif
-                    </button>
-                </form>
+                <button type="button" onclick="openCameraModal('pulang')" {{ $sudahPulang || !$sudahHadir || $sudahIzin ? 'disabled' : '' }}
+                    class="w-full py-4 px-6 rounded-xl font-bold text-white transition-all duration-300 flex items-center justify-center gap-2
+                    {{ $sudahPulang || !$sudahHadir || $sudahIzin ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transform hover:scale-105' }}">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                        </path>
+                    </svg>
+                    @if($sudahPulang)
+                        Sudah Pulang
+                    @elseif($sudahIzin)
+                        Sudah Izin Pulang
+                    @elseif(!$sudahHadir)
+                        Hadir Dulu
+                    @else
+                        @php
+                            $user = auth()->user();
+                            if ($user->is_shift && $sudahHadir && $sudahHadir->shift_number) {
+                                $jamPulangText = $sudahHadir->shift_number === 1
+                                    ? \Carbon\Carbon::parse($user->shift1_jam_keluar)->format('H:i')
+                                    : \Carbon\Carbon::parse($user->shift2_jam_keluar)->format('H:i');
+                            } else {
+                                $jamPulangText = $user->jam_keluar
+                                    ? \Carbon\Carbon::parse($user->jam_keluar)->format('H:i')
+                                    : '20:00';
+                            }
+                        @endphp
+                        Absen Pulang (≥{{ $jamPulangText }})
+                    @endif
+                </button>
             </div>
         </div>
 
     </div>
 
-    <!-- Modal Izin -->
-    <div id="izin-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all">
+    <!-- Camera Modal -->
+    <div id="camera-modal"
+        class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg transform transition-all">
             <div class="p-6">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-gray-800">
-                        @if($sudahHadir)
-                            Form Izin Pulang Awal
-                        @else
-                            Form Izin Tidak Masuk
-                        @endif
-                    </h3>
-                    <button onclick="closeIzinModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 id="camera-title" class="text-xl font-bold text-gray-800">Ambil Foto</h3>
+                    <button onclick="closeCameraModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
-                <form action="{{ route('absen.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="tipe" value="izin">
-                    <input type="hidden" name="latitude" id="lat-izin">
-                    <input type="hidden" name="longitude" id="lng-izin">
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            @if($sudahHadir)
-                                Alasan Pulang Awal
-                            @else
-                                Alasan Izin
-                            @endif
-                        </label>
-                        <textarea name="keterangan" rows="4" required
-                            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
-                            placeholder="@if($sudahHadir)Masukkan alasan pulang awal...@else Masukkan alasan izin...@endif"></textarea>
+
+                <!-- Camera Preview -->
+                <div class="relative bg-black rounded-xl overflow-hidden mb-4">
+                    <video id="camera-preview" autoplay playsinline class="w-full h-64 object-cover"></video>
+                    <canvas id="camera-canvas" class="hidden"></canvas>
+                    <img id="photo-preview" class="w-full h-64 object-cover hidden">
+
+                    <!-- Timestamp Overlay -->
+                    <div id="timestamp-overlay"
+                        class="absolute bottom-2 right-2 bg-black/70 text-white px-3 py-1 rounded-lg text-sm font-mono">
                     </div>
-                    <button type="submit"
-                        class="w-full py-3 px-6 rounded-xl font-bold text-white {{ $sudahHadir ? 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700' : 'bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700' }} transition-all shadow-lg hover:shadow-xl">
-                        @if($sudahHadir)
-                            Kirim Izin Pulang Awal
-                        @else
-                            Kirim Izin
-                        @endif
+                </div>
+
+                <!-- Captured Photo Preview -->
+                <div id="photo-result" class="hidden mb-4">
+                    <p class="text-sm text-gray-600 mb-2">Foto yang diambil:</p>
+                    <div class="relative">
+                        <img id="captured-photo" class="w-full h-48 object-cover rounded-xl border-2 border-green-500">
+                        <div class="absolute top-2 right-2 bg-green-500 text-white p-1 rounded-full">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Camera Controls -->
+                <div class="flex gap-3">
+                    <button type="button" id="btn-capture" onclick="capturePhoto()"
+                        class="flex-1 py-3 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-primary to-primaryDark hover:from-primaryDark hover:to-primaryExtraDark transition-all shadow-lg flex items-center justify-center gap-2">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Ambil Foto
                     </button>
+                    <button type="button" id="btn-retake" onclick="retakePhoto()"
+                        class="hidden py-3 px-6 rounded-xl font-bold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all flex items-center justify-center gap-2">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                            </path>
+                        </svg>
+                        Ulangi
+                    </button>
+                </div>
+
+                <!-- Submit Form (hidden, submitted via JS) -->
+                <form id="camera-form" action="{{ route('absen.store') }}" method="POST" class="hidden">
+                    @csrf
+                    <input type="hidden" name="tipe" id="camera-tipe">
+                    <input type="hidden" name="latitude" id="camera-lat">
+                    <input type="hidden" name="longitude" id="camera-lng">
+                    <input type="hidden" name="foto" id="camera-foto">
+                    <input type="hidden" name="keterangan" id="camera-keterangan">
                 </form>
+
+                <!-- Submit Button -->
+                <button type="button" id="btn-submit" onclick="submitWithPhoto()"
+                    class="hidden w-full mt-3 py-3 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span id="btn-submit-text">Kirim Absen</span>
+                </button>
+
+                <!-- Keterangan for Izin -->
+                <div id="izin-keterangan-wrapper" class="hidden mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <span id="izin-label">Alasan Izin</span>
+                    </label>
+                    <textarea id="izin-keterangan-input" rows="3"
+                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                        placeholder="Masukkan alasan..."></textarea>
+                </div>
             </div>
         </div>
     </div>
@@ -315,6 +355,9 @@
     <script>
         let userLatitude = null;
         let userLongitude = null;
+        let cameraStream = null;
+        let capturedPhotoData = null;
+        let currentTipe = null;
 
         // Update current datetime
         function updateDateTime() {
@@ -329,11 +372,24 @@
                 second: '2-digit'
             };
             document.getElementById('current-datetime').textContent = now.toLocaleDateString('id-ID', options);
+
+            // Update timestamp overlay in camera modal
+            const timestampEl = document.getElementById('timestamp-overlay');
+            if (timestampEl) {
+                timestampEl.textContent = now.toLocaleString('id-ID', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                }) + ' WIB';
+            }
         }
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        // Get user location
+        // Get user location with fallback
         function getLocation() {
             const statusEl = document.getElementById('location-status');
 
@@ -354,20 +410,13 @@
                     userLatitude = position.coords.latitude;
                     userLongitude = position.coords.longitude;
 
-                    // Set coordinates to all forms
-                    document.getElementById('lat-hadir').value = userLatitude;
-                    document.getElementById('lng-hadir').value = userLongitude;
-                    document.getElementById('lat-pulang').value = userLatitude;
-                    document.getElementById('lng-pulang').value = userLongitude;
-                    document.getElementById('lat-izin').value = userLatitude;
-                    document.getElementById('lng-izin').value = userLongitude;
-
                     statusEl.innerHTML = `
                         <div class="flex items-center gap-3 text-green-600">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span>Lokasi berhasil diambil (${userLatitude.toFixed(6)}, ${userLongitude.toFixed(6)})</span>
+                            <span>Lokasi berhasil diambil</span>
+                            <button onclick="getLocation()" class="ml-auto text-sm bg-green-100 px-3 py-1 rounded-lg hover:bg-green-200 transition-colors">Refresh</button>
                         </div>
                     `;
                     statusEl.classList.remove('bg-gray-50', 'border-gray-200');
@@ -409,13 +458,163 @@
         // Get location on page load
         getLocation();
 
-        // Modal functions
-        function openIzinModal() {
-            document.getElementById('izin-modal').classList.remove('hidden');
+        // Camera functions
+        async function openCameraModal(tipe) {
+            currentTipe = tipe;
+            capturedPhotoData = null;
+
+            // Set modal title based on type
+            const titleEl = document.getElementById('camera-title');
+            const submitTextEl = document.getElementById('btn-submit-text');
+            const izinWrapper = document.getElementById('izin-keterangan-wrapper');
+            const izinLabel = document.getElementById('izin-label');
+
+            if (tipe === 'hadir') {
+                titleEl.textContent = 'Foto Absen Hadir';
+                submitTextEl.textContent = 'Kirim Absen Hadir';
+                izinWrapper.classList.add('hidden');
+            } else if (tipe === 'pulang') {
+                titleEl.textContent = 'Foto Absen Pulang';
+                submitTextEl.textContent = 'Kirim Absen Pulang';
+                izinWrapper.classList.add('hidden');
+            } else if (tipe === 'izin') {
+                @if($sudahHadir)
+                    titleEl.textContent = 'Foto Izin Pulang Awal';
+                    submitTextEl.textContent = 'Kirim Izin Pulang Awal';
+                    izinLabel.textContent = 'Alasan Pulang Awal';
+                @else
+                    titleEl.textContent = 'Foto Izin Tidak Masuk';
+                    submitTextEl.textContent = 'Kirim Izin';
+                    izinLabel.textContent = 'Alasan Izin';
+                @endif
+                izinWrapper.classList.remove('hidden');
+            }
+
+            // Reset UI
+            document.getElementById('camera-preview').classList.remove('hidden');
+            document.getElementById('photo-preview').classList.add('hidden');
+            document.getElementById('photo-result').classList.add('hidden');
+            document.getElementById('btn-capture').classList.remove('hidden');
+            document.getElementById('btn-retake').classList.add('hidden');
+            document.getElementById('btn-submit').classList.add('hidden');
+
+            // Show modal
+            document.getElementById('camera-modal').classList.remove('hidden');
+
+            // Start camera
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+                    audio: false
+                });
+                document.getElementById('camera-preview').srcObject = cameraStream;
+            } catch (error) {
+                alert('Tidak dapat mengakses kamera. Pastikan izin kamera telah diberikan.');
+                closeCameraModal();
+            }
         }
 
-        function closeIzinModal() {
-            document.getElementById('izin-modal').classList.add('hidden');
+        function closeCameraModal() {
+            // Stop camera stream
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+
+            document.getElementById('camera-modal').classList.add('hidden');
+            currentTipe = null;
+            capturedPhotoData = null;
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('camera-preview');
+            const canvas = document.getElementById('camera-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas size to video size
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Draw video frame to canvas
+            ctx.drawImage(video, 0, 0);
+
+            // Add timestamp watermark
+            const now = new Date();
+            const timestamp = now.toLocaleString('id-ID', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            }) + ' WIB';
+
+            ctx.font = 'bold 16px Arial';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(canvas.width - 200, canvas.height - 30, 195, 25);
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'right';
+            ctx.fillText(timestamp, canvas.width - 10, canvas.height - 12);
+
+            // Get image data
+            capturedPhotoData = canvas.toDataURL('image/jpeg', 0.7);
+
+            // Show captured photo
+            document.getElementById('captured-photo').src = capturedPhotoData;
+            document.getElementById('photo-result').classList.remove('hidden');
+
+            // Hide video, show controls
+            document.getElementById('camera-preview').classList.add('hidden');
+            document.getElementById('btn-capture').classList.add('hidden');
+            document.getElementById('btn-retake').classList.remove('hidden');
+            document.getElementById('btn-submit').classList.remove('hidden');
+        }
+
+        function retakePhoto() {
+            capturedPhotoData = null;
+
+            // Show video again
+            document.getElementById('camera-preview').classList.remove('hidden');
+            document.getElementById('photo-result').classList.add('hidden');
+            document.getElementById('btn-capture').classList.remove('hidden');
+            document.getElementById('btn-retake').classList.add('hidden');
+            document.getElementById('btn-submit').classList.add('hidden');
+        }
+
+        function submitWithPhoto() {
+            if (!capturedPhotoData) {
+                alert('Silakan ambil foto terlebih dahulu.');
+                return;
+            }
+
+            if (!userLatitude || !userLongitude) {
+                alert('Lokasi belum tersedia. Mohon tunggu atau aktifkan GPS.');
+                return;
+            }
+
+            // Set form values
+            document.getElementById('camera-tipe').value = currentTipe;
+            document.getElementById('camera-lat').value = userLatitude;
+            document.getElementById('camera-lng').value = userLongitude;
+            document.getElementById('camera-foto').value = capturedPhotoData;
+
+            // Get keterangan for izin
+            if (currentTipe === 'izin') {
+                const keterangan = document.getElementById('izin-keterangan-input').value;
+                if (!keterangan.trim()) {
+                    alert('Silakan masukkan alasan izin.');
+                    return;
+                }
+                document.getElementById('camera-keterangan').value = keterangan;
+            }
+
+            // Stop camera before submit
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+            }
+
+            // Submit form
+            document.getElementById('camera-form').submit();
         }
 
         // Update working hours every minute
@@ -426,7 +625,7 @@
         @endif
 
         function updateWorkingHours() {
-            if (!checkInTime) return;
+            if (typeof checkInTime === 'undefined') return;
 
             const now = new Date();
             const checkIn = new Date();
