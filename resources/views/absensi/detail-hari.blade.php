@@ -113,7 +113,8 @@
                                     </a>
                                 </th>
                                 <th class="text-center py-3 px-4 font-semibold text-gray-600">Lokasi</th>
-                                <th class="text-center py-3 px-4 font-semibold text-gray-600">Keterangan</th>
+                                <th class="text-center py-3 px-4 font-semibold text-gray-600">Foto</th>
+                                <th class="text-center py-3 px-4 font-semibold text-gray-600"></th>Keterangan</th>
                                 <th class="text-center py-3 px-4 font-semibold text-gray-600">Aksi</th>
                             </tr>
                         </thead>
@@ -183,6 +184,34 @@
                                             </div>
                                         @endif
                                     </td>
+                                    <td class="text-center py-3 px-4">
+                                        <div class="flex flex-wrap gap-1 justify-center">
+                                            @if($absen->foto_masuk)
+                                                <button onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_masuk) }}', '{{ $absen->user->name }} - Foto Masuk', '{{ $absen->jam_masuk ? $absen->jam_masuk->format('d/m/Y H:i') : '' }}')"
+                                                    class="px-2 py-1 bg-green-100 hover:bg-green-200 text-green-700 text-xs rounded transition-colors"
+                                                    title="Lihat Foto Masuk">
+                                                    📷 Masuk
+                                                </button>
+                                            @endif
+                                            @if($absen->foto_pulang)
+                                                <button onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_pulang) }}', '{{ $absen->user->name }} - Foto Pulang', '{{ $absen->jam_pulang ? $absen->jam_pulang->format('d/m/Y H:i') : '' }}')"
+                                                    class="px-2 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs rounded transition-colors"
+                                                    title="Lihat Foto Pulang">
+                                                    📷 Pulang
+                                                </button>
+                                            @endif
+                                            @if($absen->foto_izin)
+                                                <button onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_izin) }}', '{{ $absen->user->name }} - Foto Izin', '{{ $absen->tanggal->format('d/m/Y') }}')"
+                                                    class="px-2 py-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-700 text-xs rounded transition-colors"
+                                                    title="Lihat Foto Izin">
+                                                    📷 Izin
+                                                </button>
+                                            @endif
+                                            @if(!$absen->foto_masuk && !$absen->foto_pulang && !$absen->foto_izin)
+                                                <span class="text-xs text-gray-400">-</span>
+                                            @endif
+                                        </div>
+                                    </td>
                                     <td class="text-center py-3 px-4 text-gray-700">
                                         @if($absen->izin && $absen->izin_keterangan)
                                             {{ $absen->izin_keterangan }}
@@ -219,5 +248,109 @@
                 </div>
             @endif
         </div>
+
+        <!-- Photo Modal -->
+        <div id="photo-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden opacity-0 transition-all duration-300 ease-out">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden transform scale-95 transition-all duration-300 ease-out">
+                <div class="p-4 bg-gradient-to-r from-primary to-primaryDark text-white flex justify-between items-center">
+                    <div>
+                        <h3 id="photo-modal-title" class="text-lg font-bold">Foto Absensi</h3>
+                        <p id="photo-modal-subtitle" class="text-sm opacity-90"></p>
+                    </div>
+                    <button onclick="closePhotoModal()" class="p-1 hover:bg-white/20 rounded-lg transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="p-4">
+                    <div class="bg-gray-100 rounded-xl overflow-hidden">
+                        <img id="photo-modal-image" src="" alt="Foto Absensi" class="w-full h-auto max-h-96 object-contain opacity-0 transform scale-95 transition-all duration-500 ease-out delay-150">
+                    </div>
+
+                    <div class="mt-4 flex justify-end gap-3">
+                        <button onclick="closePhotoModal()"
+                            class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-bold rounded-lg transition-colors">
+                            Tutup
+                        </button>
+                        <a id="photo-download-link" href="" download
+                            class="px-4 py-2 bg-primary hover:bg-primaryDark text-white font-bold rounded-lg transition-colors">
+                            Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <script>
+        // Photo Modal Functions
+        function openPhotoModal(imageSrc, title, subtitle) {
+            const modal = document.getElementById('photo-modal');
+            const modalImage = document.getElementById('photo-modal-image');
+
+            // Set content first
+            modalImage.src = imageSrc;
+            document.getElementById('photo-modal-title').textContent = title;
+            document.getElementById('photo-modal-subtitle').textContent = subtitle;
+            document.getElementById('photo-download-link').href = imageSrc;
+
+            // Show modal with initial state
+            modal.classList.remove('hidden');
+
+            // Force reflow to ensure initial state is applied
+            modal.offsetHeight;
+
+            // Start modal animation
+            modal.classList.add('opacity-100');
+            modal.querySelector('.bg-white').classList.add('scale-100');
+
+            // Handle image animation after it's loaded
+            modalImage.onload = function() {
+                setTimeout(() => {
+                    modalImage.classList.add('opacity-100', 'scale-100');
+                }, 100);
+            };
+
+            // Fallback if image is already cached
+            if (modalImage.complete) {
+                setTimeout(() => {
+                    modalImage.classList.add('opacity-100', 'scale-100');
+                }, 100);
+            }
+        }
+
+        function closePhotoModal() {
+            const modal = document.getElementById('photo-modal');
+            const modalImage = document.getElementById('photo-modal-image');
+
+            // Start closing animations
+            modal.classList.remove('opacity-100');
+            modal.querySelector('.bg-white').classList.remove('scale-100');
+            modalImage.classList.remove('opacity-100', 'scale-100');
+
+            // Hide modal after animation completes
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                // Clear image src to free memory
+                modalImage.src = '';
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('photo-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePhotoModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !document.getElementById('photo-modal').classList.contains('hidden')) {
+                closePhotoModal();
+            }
+        });
+    </script>
 </x-app-layout>

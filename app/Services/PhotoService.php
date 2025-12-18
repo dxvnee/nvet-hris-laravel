@@ -48,32 +48,34 @@ class PhotoService
             $timestamp = Carbon::now()->format('d M Y H:i:s');
             $text = $timestamp . ' WIB';
 
-            // Add text watermark at bottom
+            // Add text watermark at bottom right
             $image->text($text, $image->width() - 10, $image->height() - 10, function ($font) {
                 $font->filename(public_path('fonts/arial.ttf'));
                 $font->size(16);
                 $font->color('#ffffff');
                 $font->align('right');
                 $font->valign('bottom');
-                $font->stroke('#000000', 2);
             });
 
-            // Generate filename
+            // Generate filename with proper folder structure
+            $year = Carbon::now()->format('Y');
+            $month = Carbon::now()->format('m');
             $filename = sprintf(
-                'absensi/%s/%s_%s_%s.jpg',
-                Carbon::now()->format('Y/m'),
+                '%s_%s_%s.jpg',
                 $type,
                 $userId,
                 Carbon::now()->format('YmdHis')
             );
 
+            $path = "absensi/{$year}/{$month}/{$filename}";
+
             // Encode as JPEG with 70% quality for compression
             $encoded = $image->toJpeg(70);
 
             // Save to storage
-            Storage::disk('public')->put($filename, (string) $encoded);
+            Storage::disk('public')->put($path, (string) $encoded);
 
-            return $filename;
+            return $path;
         } catch (\Exception $e) {
             \Log::error('Photo processing error: ' . $e->getMessage());
             return null;

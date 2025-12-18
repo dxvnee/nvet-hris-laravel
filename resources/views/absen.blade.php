@@ -276,10 +276,7 @@
                     <canvas id="camera-canvas" class="hidden"></canvas>
                     <img id="photo-preview" class="w-full h-64 object-cover hidden">
 
-                    <!-- Timestamp Overlay -->
-                    <div id="timestamp-overlay"
-                        class="absolute bottom-2 right-2 bg-black/70 text-white px-3 py-1 rounded-lg text-sm font-mono">
-                    </div>
+
                 </div>
 
                 <!-- Captured Photo Preview -->
@@ -332,7 +329,7 @@
 
                 <!-- Submit Button -->
                 <button type="button" id="btn-submit" onclick="submitWithPhoto()"
-                    class="hidden w-full mt-3 py-3 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
+                    class=" w-full mt-3 py-3 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
@@ -373,18 +370,6 @@
             };
             document.getElementById('current-datetime').textContent = now.toLocaleDateString('id-ID', options);
 
-            // Update timestamp overlay in camera modal
-            const timestampEl = document.getElementById('timestamp-overlay');
-            if (timestampEl) {
-                timestampEl.textContent = now.toLocaleString('id-ID', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                }) + ' WIB';
-            }
         }
         updateDateTime();
         setInterval(updateDateTime, 1000);
@@ -554,7 +539,6 @@
             ctx.fillRect(canvas.width - 200, canvas.height - 30, 195, 25);
             ctx.fillStyle = '#ffffff';
             ctx.textAlign = 'right';
-            ctx.fillText(timestamp, canvas.width - 10, canvas.height - 12);
 
             // Get image data
             capturedPhotoData = canvas.toDataURL('image/jpeg', 0.7);

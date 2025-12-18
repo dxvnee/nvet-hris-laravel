@@ -156,5 +156,193 @@
                 </div>
             </div>
         </div>
+
+        {{-- Photos Section --}}
+        <div class="bg-white rounded-2xl shadow-xl p-6">
+            <h4 class="text-lg font-semibold mb-4">Foto Absensi</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {{-- Foto Masuk --}}
+                <div class="text-center">
+                    <div class="text-sm text-gray-600 mb-2">Foto Masuk</div>
+                    @if($absen->foto_masuk)
+                        <div class="relative">
+                            <img src="{{ asset('storage/' . $absen->foto_masuk) }}"
+                                alt="Foto Masuk" class="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                                onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_masuk) }}', '{{ $absen->user->name }} - Foto Masuk', '{{ $absen->jam_masuk ? $absen->jam_masuk->format('d/m/Y H:i') : '' }}')">
+                            <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black bg-opacity-50 rounded-lg">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <button onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_masuk) }}', '{{ $absen->user->name }} - Foto Masuk', '{{ $absen->jam_masuk ? $absen->jam_masuk->format('d/m/Y H:i') : '' }}')"
+                            class="mt-2 px-3 py-1 bg-green-100 hover:bg-green-200 text-green-700 text-xs rounded transition-colors">
+                            📷 Lihat Foto Masuk
+                        </button>
+                    @else
+                        <div class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">Tidak ada foto masuk</p>
+                    @endif
+                </div>
+
+                {{-- Foto Pulang --}}
+                <div class="text-center">
+                    <div class="text-sm text-gray-600 mb-2">Foto Pulang</div>
+                    @if($absen->foto_pulang)
+                        <div class="relative">
+                            <img src="{{ asset('storage/' . $absen->foto_pulang) }}"
+                                alt="Foto Pulang" class="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                                onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_pulang) }}', '{{ $absen->user->name }} - Foto Pulang', '{{ $absen->jam_pulang ? $absen->jam_pulang->format('d/m/Y H:i') : '' }}')">
+                            <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black bg-opacity-50 rounded-lg">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <button onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_pulang) }}', '{{ $absen->user->name }} - Foto Pulang', '{{ $absen->jam_pulang ? $absen->jam_pulang->format('d/m/Y H:i') : '' }}')"
+                            class="mt-2 px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs rounded transition-colors">
+                            📷 Lihat Foto Pulang
+                        </button>
+                    @else
+                        <div class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">Tidak ada foto pulang</p>
+                    @endif
+                </div>
+
+                {{-- Foto Izin --}}
+                <div class="text-center">
+                    @if($absen->foto_izin)
+                    <div class="text-sm text-gray-600 mb-2">Foto Izin</div>
+                        <div class="relative">
+                            <img src="{{ asset('storage/' . $absen->foto_izin) }}"
+                                alt="Foto Izin" class="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                                onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_izin) }}', '{{ $absen->user->name }} - Foto Izin', '{{ $absen->tanggal->format('d/m/Y') }}')">
+                            <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black bg-opacity-50 rounded-lg">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <button onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_izin) }}', '{{ $absen->user->name }} - Foto Izin', '{{ $absen->tanggal->format('d/m/Y') }}')"
+                            class="mt-2 px-3 py-1 bg-orange-100 hover:bg-orange-200 text-orange-700 text-xs rounded transition-colors">
+                            📷 Lihat Foto Izin
+                        </button>
+
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        {{-- Photo Modal --}}
+        <div id="photo-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden opacity-0 transition-all duration-300 ease-out">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden transform scale-95 transition-all duration-300 ease-out">
+                <div class="p-4 bg-gradient-to-r from-primary to-primaryDark text-white flex justify-between items-center">
+                    <div>
+                        <h3 id="photo-modal-title" class="text-lg font-bold">Foto Absensi</h3>
+                        <p id="photo-modal-subtitle" class="text-sm opacity-90"></p>
+                    </div>
+                    <button onclick="closePhotoModal()" class="p-1 hover:bg-white/20 rounded-lg transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="p-4">
+                    <div class="bg-gray-100 rounded-xl overflow-hidden">
+                        <img id="photo-modal-image" src="" alt="Foto Absensi" class="w-full h-auto max-h-96 object-contain opacity-0 transform scale-95 transition-all duration-500 ease-out delay-150">
+                    </div>
+
+                    <div class="mt-4 flex justify-end gap-3">
+                        <button onclick="closePhotoModal()"
+                            class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-bold rounded-lg transition-colors">
+                            Tutup
+                        </button>
+                        <a id="photo-download-link" href="" download
+                            class="px-4 py-2 bg-primary hover:bg-primaryDark text-white font-bold rounded-lg transition-colors">
+                            Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <script>
+        // Photo Modal Functions
+        function openPhotoModal(imageSrc, title, subtitle) {
+            const modal = document.getElementById('photo-modal');
+            const modalImage = document.getElementById('photo-modal-image');
+
+            // Set content first
+            modalImage.src = imageSrc;
+            document.getElementById('photo-modal-title').textContent = title;
+            document.getElementById('photo-modal-subtitle').textContent = subtitle;
+            document.getElementById('photo-download-link').href = imageSrc;
+
+            // Show modal with initial state
+            modal.classList.remove('hidden');
+
+            // Force reflow to ensure initial state is applied
+            modal.offsetHeight;
+
+            // Start modal animation
+            modal.classList.add('opacity-100');
+            modal.querySelector('.bg-white').classList.add('scale-100');
+
+            // Handle image animation after it's loaded
+            modalImage.onload = function() {
+                setTimeout(() => {
+                    modalImage.classList.add('opacity-100', 'scale-100');
+                }, 100);
+            };
+
+            // Fallback if image is already cached
+            if (modalImage.complete) {
+                setTimeout(() => {
+                    modalImage.classList.add('opacity-100', 'scale-100');
+                }, 100);
+            }
+        }
+
+        function closePhotoModal() {
+            const modal = document.getElementById('photo-modal');
+            const modalImage = document.getElementById('photo-modal-image');
+
+            // Start closing animations
+            modal.classList.remove('opacity-100');
+            modal.querySelector('.bg-white').classList.remove('scale-100');
+            modalImage.classList.remove('opacity-100', 'scale-100');
+
+            // Hide modal after animation completes
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                // Clear image src to free memory
+                modalImage.src = '';
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('photo-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePhotoModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !document.getElementById('photo-modal').classList.contains('hidden')) {
+                closePhotoModal();
+            }
+        });
+    </script>
 </x-app-layout>
