@@ -114,6 +114,60 @@
                 </div>
             </div>
 
+            <!-- Lembur Section -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 animate-slide-up-delay-2">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl shadow-lg">
+                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Lembur</h2>
+                        <p class="text-gray-500 text-sm">Perhitungan upah lembur</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Total Durasi Lembur</label>
+                        <div class="relative">
+                            <input type="number" x-model="totalMenitLembur" readonly
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">menit</span>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">
+                            {{ floor($totalMenitLembur / 60) }} jam {{ $totalMenitLembur % 60 }} menit
+                        </p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Upah Lembur Per Menit</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                            <input type="number" x-model="upahLemburPerMenit"
+                                class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">Default: 1.5x upah per menit</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Total Upah Lembur</label>
+                        <div class="bg-yellow-50 rounded-xl px-4 py-3 border border-yellow-200">
+                            <p class="text-yellow-700 font-bold text-lg">+ Rp <span
+                                    x-text="formatNumber(totalMenitLembur * upahLemburPerMenit)"></span></p>
+                        </div>
+                        <!-- Hidden input to send total lembur value as part of 'lain_lain' or separate field if DB supports it. 
+                             For now, we'll add it to the calculation but maybe we should add a hidden field for it or merge with lain-lain.
+                             Let's add a hidden input for 'uang_lembur' and handle it in controller if needed, 
+                             or just let the user manually add it to 'lain_lain' if we don't want to change DB structure too much.
+                             BUT, the prompt asked for it to be calculated. 
+                             Let's assume we add it to 'lain_lain' automatically in the total calculation, 
+                             or better, add a specific field in the form that gets summed up.
+                        -->
+                        <input type="hidden" name="insentif_detail[uang_lembur]" :value="totalMenitLembur * upahLemburPerMenit">
+                    </div>
+                </div>
+            </div>
+
             <!-- Insentif Section -->
             <div class="bg-white rounded-2xl shadow-xl p-8 animate-slide-up-delay-2">
                 <div class="flex items-center gap-3 mb-6">
@@ -477,6 +531,8 @@
                 gajiPokok: {{ $user->gaji_pokok ?? 0 }},
                 totalMenitTelat: {{ $totalMenitTelat }},
                 potonganPerMenit: {{ $potonganPerMenit }},
+                totalMenitLembur: {{ $totalMenitLembur ?? 0 }},
+                upahLemburPerMenit: {{ floor($potonganPerMenit * 1.5) }},
                 reimburse: 0,
                 lainLain: 0,
 
@@ -560,10 +616,11 @@
                 calculateTotal() {
                     const gaji = parseFloat(this.gajiPokok) || 0;
                     const potongan = (parseInt(this.totalMenitTelat) || 0) * (parseFloat(this.potonganPerMenit) || 0);
+                    const lembur = (parseInt(this.totalMenitLembur) || 0) * (parseFloat(this.upahLemburPerMenit) || 0);
                     const insentif = this.getInsentif();
                     const reimburse = parseFloat(this.reimburse) || 0;
                     const lainLain = parseFloat(this.lainLain) || 0;
-                    return gaji - potongan + insentif - reimburse + lainLain;
+                    return gaji - potongan + lembur + insentif - reimburse + lainLain;
                 }
             }
         }

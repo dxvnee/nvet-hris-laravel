@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LemburController;
 use App\Http\Controllers\PenggajianController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -26,6 +27,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/riwayat', [AbsenController::class, 'riwayat'])->name('absen.riwayat');
         Route::get('/penggajian-riwayat', [PenggajianController::class, 'riwayatPegawai'])->name('penggajian.riwayat');
         Route::get('/penggajian/{penggajian}/print', [PenggajianController::class, 'print'])->name('penggajian.print');
+
+        // Lembur Pegawai
+        Route::get('/lembur', [LemburController::class, 'index'])->name('lembur.index');
+        Route::post('/lembur', [LemburController::class, 'store'])->name('lembur.store');
+        Route::patch('/lembur/{lembur}', [LemburController::class, 'update'])->name('lembur.update');
     });
 
     // Routes untuk admin
@@ -36,6 +42,11 @@ Route::middleware('auth')->group(function () {
         // Penggajian Routes
         Route::get('/penggajian/{penggajian}/print', [PenggajianController::class, 'print'])->name('penggajian.print');
         Route::resource('penggajian', PenggajianController::class);
+
+        // Lembur Admin
+        Route::get('/lembur-admin', [LemburController::class, 'adminIndex'])->name('lembur.admin');
+        Route::patch('/lembur/{lembur}/approve', [LemburController::class, 'approve'])->name('lembur.approve');
+        Route::patch('/lembur/{lembur}/reject', [LemburController::class, 'reject'])->name('lembur.reject');
 
         // Absensi Kalender Routes
         Route::get('/absensi-kalender', [AbsenController::class, 'kalender'])->name('absen.kalender');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absen;
+use App\Models\Lembur;
 use App\Models\Penggajian;
 use App\Models\User;
 use Carbon\Carbon;
@@ -18,8 +19,34 @@ class PenggajianController extends Controller
         $periode = $request->get('periode', now()->format('Y-m'));
 
         $query = Penggajian::with('user')
-            ->where('periode', $periode)
-            ->orderBy('created_at', 'desc');
+            ->where('periode', $periode);
+
+        // Handle sorting
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortDirection = $request->get('sort_direction', 'desc');
+
+        // Define allowed sort columns
+        $allowedSorts = [
+            'user_name' => 'users.name',
+            'jabatan' => 'users.jabatan',
+            'gaji_pokok' => 'penggajian.gaji_pokok',
+            'total_potongan_telat' => 'penggajian.total_potongan_telat',
+            'total_insentif' => 'penggajian.total_insentif',
+            'total_gaji' => 'penggajian.total_gaji',
+            'created_at' => 'penggajian.created_at',
+        ];
+
+        if (array_key_exists($sortBy, $allowedSorts)) {
+            if (in_array($sortBy, ['user_name', 'jabatan'])) {
+                $query->join('users', 'penggajian.user_id', '=', 'users.id')
+                    ->orderBy($allowedSorts[$sortBy], $sortDirection)
+                    ->select('penggajian.*');
+            } else {
+                $query->orderBy($allowedSorts[$sortBy], $sortDirection);
+            }
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
 
         $penggajian = $query->paginate(10)->withQueryString();
 
@@ -53,10 +80,18 @@ class PenggajianController extends Controller
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->get();
 
+        // Get approved overtime
+        $lembur = Lembur::where('user_id', $userId)
+            ->whereBetween('tanggal', [$startDate, $endDate])
+            ->where('status', 'approved')
+            ->get();
+
+        $totalMenitLembur = $lembur->sum('durasi_menit');
+
         $totalMenitTelat = $absensi->sum('menit_telat');
         $jamKerja = $user->jam_kerja ?? 8;
         $potonganPerMenit = round(($user->gaji_pokok / ($jamKerja * 26)) / 60);
-        return view('penggajian.create', compact('user', 'periode', 'potonganPerMenit', 'totalMenitTelat', 'absensi'));
+        return view('penggajian.create', compact('user', 'periode', 'potonganPerMenit', 'totalMenitTelat', 'absensi', 'totalMenitLembur'));
     }
 
     /**
@@ -267,8 +302,27 @@ class PenggajianController extends Controller
     {
         $user = auth()->user();
 
-        $query = Penggajian::where('user_id', $user->id)
-            ->orderBy('periode', 'desc');
+        $query = Penggajian::where('user_id', $user->id);
+
+        // Handle sorting
+        $sortBy = $request->get('sort_by', 'periode');
+        $sortDirection = $request->get('sort_direction', 'desc');
+
+        // Define allowed sort columns for employee view
+        $allowedSorts = [
+            'periode' => 'periode',
+            'gaji_pokok' => 'gaji_pokok',
+            'total_potongan_telat' => 'total_potongan_telat',
+            'total_insentif' => 'total_insentif',
+            'total_gaji' => 'total_gaji',
+            'created_at' => 'created_at',
+        ];
+
+        if (array_key_exists($sortBy, $allowedSorts)) {
+            $query->orderBy($allowedSorts[$sortBy], $sortDirection);
+        } else {
+            $query->orderBy('periode', 'desc');
+        }
 
         $penggajian = $query->paginate(12)->withQueryString();
 
