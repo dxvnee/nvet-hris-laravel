@@ -21,8 +21,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    <x-error-message
-    :message="
+    <x-error-message :message="
         session('success')
         ?? session('error')
         ?? session('warning')
@@ -31,8 +30,8 @@
     :type="
         session('success') ? 'success'
         : (session('error') ? 'error'
-        : (session('warning') ? 'warning'
-        : (session('info') ? 'info' : null)))
+            : (session('warning') ? 'warning'
+                : (session('info') ? 'info' : null)))
     "
 />
 
@@ -43,12 +42,13 @@
 
             @include('layouts.sidebar')
 
-            <div id="main-content" class="transform duration-300 ease-in-out h-full flex flex-col w-full overflow-y-auto">
+            <div id="main-content"
+                class="transform duration-300 ease-in-out h-full flex flex-col w-full overflow-y-auto">
 
 
                 @include('components.main-topbar', ['title' => $header, 'subtle' => $subtle])
 
-                <main class = "flex-1">
+                <main class="flex-1">
                     {{ $slot }}
                 </main>
 
