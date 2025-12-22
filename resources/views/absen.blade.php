@@ -257,7 +257,7 @@
 
     <!-- Camera Modal -->
     <div id="camera-modal"
-        class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+        class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg transform transition-all">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -275,8 +275,6 @@
                     <video id="camera-preview" autoplay playsinline class="w-full h-64 object-cover"></video>
                     <canvas id="camera-canvas" class="hidden"></canvas>
                     <img id="photo-preview" class="w-full h-64 object-cover hidden">
-
-
                 </div>
 
                 <!-- Captured Photo Preview -->
@@ -721,11 +719,11 @@
         }
 
         // Update working hours every minute
-       @if($sudahHadir && !$sudahIzin && !$sudahPulang)
-        let checkInTime = '{{ $sudahHadir->jam_masuk->format("H:i:s") }}';
-        setInterval(updateWorkingHours, 60000); // Update every minute
-            updateWorkingHours(); // Initial update
-    @endif
+        @if($sudahHadir && !$sudahIzin && !$sudahPulang)
+            let checkInTime = '{{ $sudahHadir->jam_masuk->format("H:i:s") }}';
+            setInterval(updateWorkingHours, 60000); // Update every minute
+                updateWorkingHours(); // Initial update
+        @endif
 
         function updateWorkingHours() {
             if (typeof checkInTime === 'undefined') return;

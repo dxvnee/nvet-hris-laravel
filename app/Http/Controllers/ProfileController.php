@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ProfileController extends Controller
 {
@@ -57,16 +59,80 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        // Handle avatar upload
-        if ($request->hasFile('avatar')) {
-            // Delete old avatar if exists
-            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-                Storage::disk('public')->delete($user->avatar);
-            }
+        // Handle avatar upload from camera (base64)
+        if ($request->filled('avatar_base64')) {
+            try {
+                $base64Image = $request->input('avatar_base64');
 
-            // Store new avatar
-            $avatarPath = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $avatarPath;
+                // Extract base64 data
+                if (preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type)) {
+                    $base64Image = substr($base64Image, strpos($base64Image, ',') + 1);
+                    $type = strtolower($type[1]);
+
+                    if (!in_array($type, ['jpg', 'jpeg', 'png', 'gif'])) {
+                        return Redirect::back()->withErrors(['avatar' => 'Format gambar tidak didukung.'])->withInput();
+                    }
+
+                    $imageData = base64_decode($base64Image);
+
+                    if ($imageData === false) {
+                        return Redirect::back()->withErrors(['avatar' => 'Gagal memproses gambar.'])->withInput();
+                    }
+
+                    // Process image with Intervention Image
+                    $manager = new ImageManager(new Driver());
+                    $image = $manager->read($imageData);
+
+                    // Resize to max 400px (for profile photo)
+                    $image->scale(width: 400);
+
+                    // Generate filename
+                    $filename = sprintf('avatars/%d_%s.jpg', $user->id, now()->format('YmdHis'));
+
+                    // Delete old avatar if exists
+                    if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                        Storage::disk('public')->delete($user->avatar);
+                    }
+
+                    // Save as JPEG 80% quality
+                    $encoded = $image->toJpeg(80);
+                    Storage::disk('public')->put($filename, (string) $encoded);
+
+                    $user->avatar = $filename;
+                }
+            } catch (\Exception $e) {
+                \Log::error('Avatar upload error: ' . $e->getMessage());
+                return Redirect::back()->withErrors(['avatar' => 'Terjadi kesalahan saat mengupload foto.'])->withInput();
+            }
+        }
+
+        // Handle avatar upload from file input (legacy support)
+        elseif ($request->hasFile('avatar')) {
+            try {
+                $file = $request->file('avatar');
+
+                // Validate file
+                if ($file->getSize() > 2048 * 1024) {
+                    return Redirect::back()->withErrors(['avatar' => 'Ukuran file foto terlalu besar. Maksimal 2MB.'])->withInput();
+                }
+
+                $allowedMimes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+                if (!in_array($file->getMimeType(), $allowedMimes)) {
+                    return Redirect::back()->withErrors(['avatar' => 'Format file tidak didukung.'])->withInput();
+                }
+
+                // Delete old avatar if exists
+                if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
+
+                // Store new avatar
+                $avatarPath = $file->store('avatars', 'public');
+                $user->avatar = $avatarPath;
+            } catch (\Exception $e) {
+                \Log::error('Avatar file upload error: ' . $e->getMessage());
+                return Redirect::back()->withErrors(['avatar' => 'Terjadi kesalahan saat mengupload foto.'])->withInput();
+            }
         }
 
         $user->fill($request->validated());
