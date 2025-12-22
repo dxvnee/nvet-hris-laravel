@@ -111,6 +111,58 @@
                                     x-text="formatNumber(totalMenitTelat * potonganPerMenit)"></span></p>
                         </div>
                     </div>
+
+                    <!-- Lupa Pulang -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Lupa Absen Pulang</label>
+                        <div class="bg-gray-50 rounded-xl px-4 py-3 border border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-700">{{ $totalLupaPulang }} kali</span>
+                                @if($totalLupaPulang > 3)
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">
+                                        Potong 1 Jam Kerja
+                                    </span>
+                                @else
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+                                        Aman
+                                    </span>
+                                @endif
+                            </div>
+                            @if($totalLupaPulang > 3)
+                                <p class="text-red-600 text-sm mt-2 font-medium">
+                                    - Rp <span x-text="formatNumber(potonganPerMenit * 60)"></span> (1 jam kerja)
+                                </p>
+                            @endif
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">Jika > 3x dalam sebulan, dipotong 1 jam kerja</p>
+                    </div>
+
+                    <!-- Tidak Hadir -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tidak Hadir</label>
+                        <div class="bg-gray-50 rounded-xl px-4 py-3 border border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-700">{{ $totalTidakHadir }} hari</span>
+                                @if($totalTidakHadir > 0)
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">
+                                        Potong {{ $totalTidakHadir }} Hari
+                                    </span>
+                                @else
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+                                        Tidak Ada
+                                    </span>
+                                @endif
+                            </div>
+                            @if($totalTidakHadir > 0)
+                                <p class="text-red-600 text-sm mt-2 font-medium">
+                                    - Rp <span x-text="formatNumber(totalTidakHadir * potonganPerTidakHadir)"></span>
+                                    ({{ $totalTidakHadir }} × Rp {{ number_format($potonganPerTidakHadir, 0, ',', '.') }})
+                                </p>
+                            @endif
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">Potongan per hari tidak hadir: Rp
+                            {{ number_format($potonganPerTidakHadir, 0, ',', '.') }}</p>
+                    </div>
                 </div>
             </div>
 
@@ -770,6 +822,8 @@
                 potonganPerMenit: {{ $potonganPerMenit }},
                 totalMenitLembur: {{ $totalMenitLembur ?? 0 }},
                 upahLemburPerMenit: {{ floor($potonganPerMenit) }},
+                totalTidakHadir: {{ $totalTidakHadir ?? 0 }},
+                potonganPerTidakHadir: {{ $potonganPerTidakHadir ?? 0 }},
                 lainLainItems: [],
 
                 // Dokter
@@ -864,10 +918,12 @@
                 calculateTotal() {
                     const gaji = parseFloat(this.gajiPokok) || 0;
                     const potongan = (parseInt(this.totalMenitTelat) || 0) * (parseFloat(this.potonganPerMenit) || 0);
+                    const potonganLupaPulang = {{ $totalLupaPulang }} > 3 ? (parseFloat(this.potonganPerMenit) || 0) * 60 : 0;
+                    const potonganTidakHadir = (parseInt(this.totalTidakHadir) || 0) * (parseFloat(this.potonganPerTidakHadir) || 0);
                     const lembur = (parseInt(this.totalMenitLembur) || 0) * (parseFloat(this.upahLemburPerMenit) || 0);
                     const insentif = this.getInsentif();
                     const lainLain = this.calculateLainLainTotal();
-                    return gaji - potongan + lembur + insentif + lainLain;
+                    return gaji - potongan - potonganLupaPulang - potonganTidakHadir + lembur + insentif + lainLain;
                 }
             }
         }

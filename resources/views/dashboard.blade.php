@@ -24,7 +24,7 @@
             </div>
 
             {{-- Stats Cards Admin --}}
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 lg:grid-cols-5 gap-6">
                 {{-- Total Pegawai --}}
                 <div
                     class="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all duration-300 animate-slide-up-delay-1 hover:transform hover:scale-105">
@@ -122,6 +122,28 @@
                             @endif
                         </div>
                     @endif
+                </div>
+
+                {{-- Lupa Pulang Bulan Ini --}}
+                <div
+                    class="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all duration-300 animate-slide-up-delay-4 hover:transform hover:scale-105">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl shadow-lg">
+                            <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-3xl font-bold text-gray-800">{{ $adminData['totalLupaPulangBulanIni'] }}</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Lupa Pulang</h3>
+                    <div class="mt-3">
+                        @if($adminData['totalLupaPulangBulanIni'] > 3)
+                            <span class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">Potong Gaji</span>
+                        @else
+                            <span class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">Perhatian</span>
+                        @endif
+                    </div>
                 </div>
             </div>
 
@@ -361,7 +383,7 @@
                     <h3 class="text-lg font-bold text-gray-800">Status Absensi Hari Ini</h3>
                 </div>
 
-                @if($userAbsensiToday->jam_masuk != null || $userAbsensiToday->izin != false || $userAbsensiToday->libur != false)
+                @if(isset($userAbsensiToday) && ($userAbsensiToday->jam_masuk != null || $userAbsensiToday->izin != false || $userAbsensiToday->libur != false))
                     @if($userAbsensiToday->libur)
                         {{-- Status Libur --}}
                         <div class="flex flex-col md:flex-row items-center gap-6">
@@ -457,7 +479,7 @@
             </div>
 
             {{-- Stats Pegawai --}}
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 lg:grid-cols-4  gap-4">
                 <div class="bg-white rounded-2xl shadow-lg p-5 animate-slide-up-delay-2">
                     <div class="flex items-center gap-3 mb-2">
                         <div class="p-2 bg-green-100 rounded-lg">
@@ -473,14 +495,13 @@
                 <div class="bg-white rounded-2xl shadow-lg p-5 animate-slide-up-delay-2">
                     <div class="flex items-center gap-3 mb-2">
                         <div class="p-2 bg-red-100 rounded-lg">
-                            <svg class="h-5 w-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x text-red-600" viewBox="0 0 16 16">
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
                             </svg>
                         </div>
-                        <span class="text-2xl font-bold text-gray-800">{{ $userTotalTelat }}</span>
+                        <span class="text-2xl font-bold text-gray-800">{{ $userTotalTidakHadir }}</span>
                     </div>
-                    <p class="text-sm text-gray-500">Terlambat</p>
+                    <p class="text-sm text-gray-500">Tidak Hadir</p>
                 </div>
                 <div class="bg-white rounded-2xl shadow-lg p-5 animate-slide-up-delay-3">
                     <div class="flex items-center gap-3 mb-2">
@@ -496,23 +517,22 @@
                 </div>
                 <div class="bg-white rounded-2xl shadow-lg p-5 animate-slide-up-delay-3">
                     <div class="flex items-center gap-3 mb-2">
-                        <div class="p-2 bg-blue-100 rounded-lg">
-                            <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-2 bg-orange-100 rounded-lg">
+                            <svg class="h-5 w-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1">
-                                </path>
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
-                        <span class="text-lg font-bold text-gray-800">
-                            @if($userPenggajianTerakhir)
-                                Rp {{ number_format($userPenggajianTerakhir->total_gaji, 0, ',', '.') }}
-                            @else
-                                -
-                            @endif
-                        </span>
+                        <span class="text-2xl font-bold {{ $userTotalLupaPulang > 2 ? 'text-red-600' : 'text-gray-800' }}">{{ $userTotalLupaPulang }}</span>
                     </div>
-                    <p class="text-sm text-gray-500">Gaji Terakhir</p>
+                    <p class="text-sm text-gray-500">Lupa Pulang</p>
+                    @if($userTotalLupaPulang > 2)
+                        <span class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full mt-1 inline-block">Potong Gaji</span>
+                    @elseif($userTotalLupaPulang > 0)
+                        <span class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full mt-1 inline-block">Perhatian</span>
+                    @endif
                 </div>
+
             </div>
 
             {{-- Riwayat Absensi Terakhir --}}

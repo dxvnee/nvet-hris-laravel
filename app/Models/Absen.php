@@ -37,6 +37,7 @@ class Absen extends Model
         // STATUS
         'tidak_hadir',
         'libur',
+        'lupa_pulang',
 
         // SHIFT
         'shift_number',
@@ -55,6 +56,7 @@ class Absen extends Model
         'izin' => 'boolean',
         'tidak_hadir' => 'boolean',
         'libur' => 'boolean',
+        'lupa_pulang' => 'boolean',
 
         'menit_telat' => 'integer',
         'menit_kerja' => 'integer',

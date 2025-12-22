@@ -454,6 +454,26 @@
                     <td class="sub-label">{{ $penggajian->total_menit_telat }} menit × Rp {{ number_format($penggajian->potongan_per_menit, 0, ',', '.') }}/menit</td>
                     <td></td>
                 </tr>
+                @if(($penggajian->total_lupa_pulang ?? 0) > 0)
+                <tr>
+                    <td class="label">Potongan Lupa Absen Pulang</td>
+                    <td class="value negative">- Rp {{ number_format($penggajian->potongan_lupa_pulang ?? 0, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td class="sub-label">{{ $penggajian->total_lupa_pulang }} kali (potong 1 jam jika > 3x)</td>
+                    <td></td>
+                </tr>
+                @endif
+                @if(($penggajian->total_tidak_hadir ?? 0) > 0)
+                <tr>
+                    <td class="label">Potongan Tidak Hadir</td>
+                    <td class="value negative">- Rp {{ number_format($penggajian->total_potongan_tidak_hadir ?? 0, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td class="sub-label">{{ $penggajian->total_tidak_hadir }} hari × Rp {{ number_format($penggajian->potongan_per_tidak_hadir ?? 0, 0, ',', '.') }}/hari</td>
+                    <td></td>
+                </tr>
+                @endif
             </table>
         </div>
 
@@ -636,12 +656,20 @@
                 <tr>
                     <td colspan="2" class="breakdown">
                         Gaji Pokok (Rp {{ number_format($penggajian->gaji_pokok, 0, ',', '.') }})
-                        - Potongan (Rp {{ number_format($penggajian->total_potongan_telat, 0, ',', '.') }})
+                        - Potongan Telat (Rp {{ number_format($penggajian->total_potongan_telat, 0, ',', '.') }})
+                        @if(($penggajian->potongan_lupa_pulang ?? 0) > 0)
+                        - Lupa Pulang (Rp {{ number_format($penggajian->potongan_lupa_pulang, 0, ',', '.') }})
+                        @endif
+                        @if(($penggajian->total_potongan_tidak_hadir ?? 0) > 0)
+                        - Tidak Hadir (Rp {{ number_format($penggajian->total_potongan_tidak_hadir, 0, ',', '.') }})
+                        @endif
                         + Insentif (Rp {{ number_format($penggajian->total_insentif, 0, ',', '.') }})
-                        @if($penggajian->total_upah_lembur ?? 0 > 0)
+                        @if(($penggajian->total_upah_lembur ?? 0) > 0)
                         + Lembur (Rp {{ number_format($penggajian->total_upah_lembur ?? 0, 0, ',', '.') }})
                         @endif
+                        @if($penggajian->lain_lain != 0)
                         {{ $penggajian->lain_lain >= 0 ? '+' : '' }} Lain-lain (Rp {{ number_format($penggajian->lain_lain, 0, ',', '.') }})
+                        @endif
                     </td>
                 </tr>
             </table>

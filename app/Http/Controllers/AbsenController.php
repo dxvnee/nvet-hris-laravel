@@ -233,7 +233,8 @@ class AbsenController extends Controller
             }
 
             $jamMasukToday = Carbon::today()->setTime($jamMasukSetting->hour, $jamMasukSetting->minute);
-            $telat = $now->gt($jamMasukToday);
+            $batasTelat = $jamMasukToday->copy()->addMinutes(10); // Toleransi 10 menit
+            $telat = $now->gt($batasTelat);
 
             // Process and save photo
             $fotoPath = $this->photoService->processPhoto($request->foto, 'masuk', $user->id);
@@ -241,7 +242,7 @@ class AbsenController extends Controller
             $absen->update([
                 'jam_masuk'   => $now,
                 'telat'       => $telat,
-                'menit_telat' => $telat ? $jamMasukToday->diffInMinutes($now) : 0,
+                'menit_telat' => $telat ? $batasTelat->diffInMinutes($now) : 0,
                 'lat_masuk'   => $request->latitude,
                 'lng_masuk'   => $request->longitude,
                 'foto_masuk'  => $fotoPath,

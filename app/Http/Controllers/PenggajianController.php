@@ -89,9 +89,12 @@ class PenggajianController extends Controller
         $totalMenitLembur = $lembur->sum('durasi_menit');
 
         $totalMenitTelat = $absensi->sum('menit_telat');
+        $totalLupaPulang = $absensi->where('lupa_pulang', true)->count();
+        $totalTidakHadir = $absensi->where('tidak_hadir', true)->count();
         $jamKerja = $user->jam_kerja ?? 8;
         $potonganPerMenit = round(($user->gaji_pokok / ($jamKerja * 26)) / 60);
-        return view('penggajian.create', compact('user', 'periode', 'potonganPerMenit', 'totalMenitTelat', 'absensi', 'totalMenitLembur'));
+        $potonganPerTidakHadir = round($user->gaji_pokok / 26); // 1 hari kerja
+        return view('penggajian.create', compact('user', 'periode', 'potonganPerMenit', 'totalMenitTelat', 'absensi', 'totalMenitLembur', 'totalLupaPulang', 'totalTidakHadir', 'potonganPerTidakHadir'));
     }
 
     /**
@@ -113,6 +116,17 @@ class PenggajianController extends Controller
 
         $user = User::findOrFail($request->user_id);
 
+        $periode = $request->get('periode', now()->format('Y-m'));
+
+        // Get attendance data for the period
+        $startDate = Carbon::parse($periode . '-01')->startOfMonth();
+        $endDate = Carbon::parse($periode . '-01')->endOfMonth();
+
+
+        $absensi = Absen::where('user_id', $user->id)
+            ->whereBetween('tanggal', [$startDate, $endDate])
+            ->get();
+
         // Get approved overtime for the period
         $startDate = Carbon::parse($request->periode . '-01')->startOfMonth();
         $endDate = Carbon::parse($request->periode . '-01')->endOfMonth();
@@ -127,6 +141,19 @@ class PenggajianController extends Controller
         $upahLemburPerMenit = round($request->potongan_per_menit);
         $totalUpahLembur = $totalMenitLembur * $upahLemburPerMenit;
 
+        // Calculate lupa pulang penalty (if > 3 times, deduct 1 working hour)
+        $totalLupaPulang = $absensi->where('lupa_pulang', true)->count();
+        $potonganLupaPulang = 0;
+        if ($totalLupaPulang > 3) {
+            $potonganLupaPulang = $request->potongan_per_menit * 60; // 1 jam = 60 menit
+        }
+
+        // Calculate tidak hadir penalty
+        $totalTidakHadir = $absensi->where('tidak_hadir', true)->count();
+        $jamKerja = $user->jam_kerja ?? 8;
+        $potonganPerTidakHadir = round($user->gaji_pokok / 26); // 1 hari kerja
+        $totalPotonganTidakHadir = $totalTidakHadir * $potonganPerTidakHadir;
+
         // Calculate totals
         $gajiPokok = $request->gaji_pokok;
         $totalPotonganTelat = $request->total_menit_telat * $request->potongan_per_menit;
@@ -136,7 +163,7 @@ class PenggajianController extends Controller
         $lainLainItems = $request->lain_lain_items ?? [];
         $lainLain = $this->calculateLainLain($lainLainItems);
 
-        $totalGaji = $gajiPokok - $totalPotonganTelat + $totalInsentif + $lainLain + $totalUpahLembur;
+        $totalGaji = $gajiPokok - $totalPotonganTelat - $potonganLupaPulang - $totalPotonganTidakHadir + $totalInsentif + $lainLain + $totalUpahLembur;
 
         Penggajian::create([
             'user_id' => $request->user_id,
@@ -145,6 +172,11 @@ class PenggajianController extends Controller
             'total_menit_telat' => $request->total_menit_telat,
             'potongan_per_menit' => $request->potongan_per_menit,
             'total_potongan_telat' => $totalPotonganTelat,
+            'total_tidak_hadir' => $totalTidakHadir,
+            'potongan_per_tidak_hadir' => $potonganPerTidakHadir,
+            'total_potongan_tidak_hadir' => $totalPotonganTidakHadir,
+            'total_lupa_pulang' => $totalLupaPulang,
+            'potongan_lupa_pulang' => $potonganLupaPulang,
             'total_menit_lembur' => $totalMenitLembur,
             'upah_lembur_per_menit' => $upahLemburPerMenit,
             'total_upah_lembur' => $totalUpahLembur,
@@ -183,10 +215,13 @@ class PenggajianController extends Controller
         $totalUpahLembur = $penggajian->total_upah_lembur ?? 0;
 
         $totalMenitTelat = $absensi->sum('menit_telat');
+        $totalLupaPulang = $absensi->where('lupa_pulang', true)->count();
+        $totalTidakHadir = $absensi->where('tidak_hadir', true)->count();
         $jamKerja = $user->jam_kerja ?? 8;
         $potonganPerMenit = round(($user->gaji_pokok / ($jamKerja * 26)) / 60);
+        $potonganPerTidakHadir = round($user->gaji_pokok / 26); // 1 hari kerja
 
-        return view('penggajian.edit', compact('penggajian', 'user', 'periode', 'absensi', 'totalMenitTelat', 'potonganPerMenit', 'totalMenitLembur', 'upahLemburPerMenit', 'totalUpahLembur'));
+        return view('penggajian.edit', compact('penggajian', 'user', 'periode', 'absensi', 'totalMenitTelat', 'potonganPerMenit', 'totalMenitLembur', 'upahLemburPerMenit', 'totalUpahLembur', 'totalLupaPulang', 'totalTidakHadir', 'potonganPerTidakHadir'));
     }
 
     /**
@@ -214,6 +249,24 @@ class PenggajianController extends Controller
         $upahLemburPerMenit = $request->upah_lembur_per_menit ?? round($request->potongan_per_menit * 1.5);
         $totalUpahLembur = $request->total_upah_lembur ?? ($totalMenitLembur * $upahLemburPerMenit);
 
+        // Calculate lupa pulang penalty (if > 3 times, deduct 1 working hour)
+        $startDate = Carbon::parse($penggajian->periode . '-01')->startOfMonth();
+        $endDate = Carbon::parse($penggajian->periode . '-01')->endOfMonth();
+        $absensi = Absen::where('user_id', $penggajian->user_id)
+            ->whereBetween('tanggal', [$startDate, $endDate])
+            ->get();
+        $totalLupaPulang = $absensi->where('lupa_pulang', true)->count();
+        $potonganLupaPulang = 0;
+        if ($totalLupaPulang > 3) {
+            $potonganLupaPulang = $request->potongan_per_menit * 60; // 1 jam = 60 menit
+        }
+
+        // Calculate tidak hadir penalty
+        $totalTidakHadir = $absensi->where('tidak_hadir', true)->count();
+        $jamKerja = $user->jam_kerja ?? 8;
+        $potonganPerTidakHadir = round($user->gaji_pokok / 26); // 1 hari kerja
+        $totalPotonganTidakHadir = $totalTidakHadir * $potonganPerTidakHadir;
+
         // Calculate totals
         $gajiPokok = $request->gaji_pokok;
         $totalPotonganTelat = $request->total_menit_telat * $request->potongan_per_menit;
@@ -223,13 +276,18 @@ class PenggajianController extends Controller
         $lainLainItems = $request->lain_lain_items ?? [];
         $lainLain = $this->calculateLainLain($lainLainItems);
 
-        $totalGaji = $gajiPokok - $totalPotonganTelat + $totalInsentif + $lainLain + $totalUpahLembur;
+        $totalGaji = $gajiPokok - $totalPotonganTelat - $potonganLupaPulang - $totalPotonganTidakHadir + $totalInsentif + $lainLain + $totalUpahLembur;
 
         $penggajian->update([
             'gaji_pokok' => $gajiPokok,
             'total_menit_telat' => $request->total_menit_telat,
             'potongan_per_menit' => $request->potongan_per_menit,
             'total_potongan_telat' => $totalPotonganTelat,
+            'total_tidak_hadir' => $totalTidakHadir,
+            'potongan_per_tidak_hadir' => $potonganPerTidakHadir,
+            'total_potongan_tidak_hadir' => $totalPotonganTidakHadir,
+            'total_lupa_pulang' => $totalLupaPulang,
+            'potongan_lupa_pulang' => $potonganLupaPulang,
             'total_menit_lembur' => $totalMenitLembur,
             'upah_lembur_per_menit' => $upahLemburPerMenit,
             'total_upah_lembur' => $totalUpahLembur,

@@ -33,8 +33,9 @@ class DashboardController extends Controller
             ->get();
 
         $userTotalHadir = $userAbsensiBulanIni->count();
-        $userTotalTelat = $userAbsensiBulanIni->where('status', 'telat')->count();
+        $userTotalTidakHadir = $userAbsensiBulanIni->where('tidak_hadir', true)->count();
         $userTotalMenitTelat = $userAbsensiBulanIni->sum('menit_telat');
+        $userTotalLupaPulang = $userAbsensiBulanIni->where('lupa_pulang', true)->count();
 
         // Penggajian terakhir user
         $userPenggajianTerakhir = Penggajian::where('user_id', $user->id)
@@ -95,6 +96,11 @@ class DashboardController extends Controller
             // Penggajian pending (draft)
             $penggajianDraft = Penggajian::where('status', 'draft')->count();
 
+            // Count lupa pulang bulan ini
+            $totalLupaPulangBulanIni = Absen::whereBetween('tanggal', [$startOfMonth, $endOfMonth])
+                ->where('lupa_pulang', true)
+                ->count();
+
             // Aktivitas absensi terbaru (10 terakhir)
             $aktivitasTerbaru = Absen::with('user')
                 ->orderBy('created_at', 'desc')
@@ -137,7 +143,8 @@ class DashboardController extends Controller
                 'penggajianDraft',
                 'aktivitasTerbaru',
                 'topTelat',
-                'grafikAbsensi'
+                'grafikAbsensi',
+                'totalLupaPulangBulanIni'
             );
         }
 
@@ -145,8 +152,9 @@ class DashboardController extends Controller
             'user',
             'userAbsensiToday',
             'userTotalHadir',
-            'userTotalTelat',
+            'userTotalTidakHadir',
             'userTotalMenitTelat',
+            'userTotalLupaPulang',
             'userPenggajianTerakhir',
             'userRiwayatAbsensi',
             'today',

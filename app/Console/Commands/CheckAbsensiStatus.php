@@ -21,15 +21,15 @@ class CheckAbsensiStatus extends Command
      *
      * @var string
      */
-    protected $description = 'Cek dan update status absensi (tidak hadir & libur) untuk semua pegawai';
+    protected $description = 'Cek dan update status absensi (tidak hadir, libur, lupa pulang) untuk semua pegawai - Dijalankan jam 6 pagi';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $date = $this->option('date') ? Carbon::parse($this->option('date')) : Carbon::today();
-        $hariIni = $date->isoWeekday(); // 1 = Monday, 7 = Sunday
+        $date = $this->option('date') ? Carbon::parse($this->option('date')) : Carbon::yesterday();
+        $hariIni = $date->dayOfWeek; // 1 = Monday, 7 = Sunday
 
         $this->info("Checking absensi status for: " . $date->format('Y-m-d') . " (Day: $hariIni)");
 
@@ -38,73 +38,75 @@ class CheckAbsensiStatus extends Command
 
         $liburCount = 0;
         $tidakHadirCount = 0;
+        $lupaPulangCount = 0;
 
         foreach ($pegawai as $user) {
-            // Check if today is user's holiday
+            // Check if this date is user's holiday
             $hariLibur = $user->hari_libur ?? [];
-            $isLibur = in_array($hariIni, $hariLibur);
+            $isLibur = in_array($hariIni, $hariLibur);// Sunday (7) is always holiday
 
-            // Get or create absen record for today
-            $absen = Absen::firstOrCreate(
-                [
-                    'user_id' => $user->id,
-                    'tanggal' => $date->toDateString(),
-                ],
-                [
-                    'izin' => false,
-                    'telat' => false,
-                    'tidak_hadir' => false,
-                    'libur' => false,
-                ]
-            );
+            $absen = Absen::where('user_id', $user->id)
+                ->where('tanggal', $date->toDateString())
+                ->first();
 
-            // If already has jam_masuk or izin or libur, skip
-            if ($absen->jam_masuk || $absen->izin || $absen->libur) {
+            // If absen record exists
+            if ($absen) {
+                // Skip if already processed (izin, libur, atau tidak_hadir)
+                if ($absen->izin || $absen->libur || $absen->tidak_hadir) {
+                    continue;
+                }
+
+                // Check if user forgot to check out (has jam_masuk but no jam_pulang)
+                if ($absen->jam_masuk && !$absen->jam_pulang && !$absen->lupa_pulang) {
+                    // Auto set jam_pulang based on user's jam_keluar
+                    $jamKeluar = $user->jam_keluar ? Carbon::parse($user->jam_keluar) : Carbon::createFromTime(20, 0);
+
+                    // Handle shift users
+                    if ($user->is_shift && $user->shift_partner_id) {
+                        $jamKeluar = $user->shift2_jam_keluar ? Carbon::parse($user->shift2_jam_keluar) : Carbon::createFromTime(20, 0);
+                    }
+
+                    $jamMasuk = Carbon::parse($date->toDateString() . ' ' . Carbon::parse($absen->jam_masuk)->format('H:i:s'));
+                    $jamKeluarToday = Carbon::parse($date->toDateString() . ' ' . $jamKeluar->format('H:i:s'));
+
+                    $menitKerja = $jamMasuk->diffInMinutes($jamKeluarToday);
+
+                    $absen->update([
+                        'jam_pulang' => $jamKeluarToday,
+                        'menit_kerja' => $menitKerja,
+                        'lupa_pulang' => true,
+                    ]);
+
+                    $lupaPulangCount++;
+                    $this->line("  - {$user->name}: AUTO CHECKOUT (LUPA PULANG) - Jam: {$jamKeluarToday->format('H:i')}");
+                }
                 continue;
             }
 
-            // Mark as libur if it's user's holiday
+            // No absen record exists - create one based on status
             if ($isLibur) {
-                $absen->update([
+                // User's scheduled holiday
+                Absen::create([
+                    'user_id' => $user->id,
+                    'tanggal' => $date->toDateString(),
                     'libur' => true,
                     'tidak_hadir' => false,
                 ]);
                 $liburCount++;
                 $this->line("  - {$user->name}: Marked as LIBUR");
-                continue;
-            }
-
-            // Check if current time is past user's jam_pulang (only for today)
-            if ($date->isToday()) {
-                $jamPulang = $user->jam_keluar ? Carbon::parse($user->jam_keluar) : Carbon::createFromTime(20, 0);
-                $jamPulangToday = Carbon::today()->setTime($jamPulang->hour, $jamPulang->minute);
-
-                // Handle shift users
-                if ($user->is_shift && $user->shift_partner_id) {
-                    // Use shift2 jam_keluar as the final deadline
-                    $jamPulang = $user->shift2_jam_keluar ? Carbon::parse($user->shift2_jam_keluar) : Carbon::createFromTime(20, 0);
-                    $jamPulangToday = Carbon::today()->setTime($jamPulang->hour, $jamPulang->minute);
-                }
-
-                // Only mark as tidak_hadir if it's past jam_pulang
-                if (Carbon::now()->gte($jamPulangToday)) {
-                    $absen->update([
-                        'tidak_hadir' => true,
-                    ]);
-                    $tidakHadirCount++;
-                    $this->line("  - {$user->name}: Marked as TIDAK HADIR");
-                }
             } else {
-                // For past dates, mark as tidak_hadir if no jam_masuk
-                $absen->update([
+                // User didn't show up at all
+                Absen::create([
+                    'user_id' => $user->id,
+                    'tanggal' => $date->toDateString(),
                     'tidak_hadir' => true,
                 ]);
                 $tidakHadirCount++;
-                $this->line("  - {$user->name}: Marked as TIDAK HADIR (past date)");
+                $this->line("  - {$user->name}: Marked as TIDAK HADIR");
             }
         }
 
-        $this->info("Completed! Libur: $liburCount, Tidak Hadir: $tidakHadirCount");
+        $this->info("Completed! Libur: $liburCount, Tidak Hadir: $tidakHadirCount, Lupa Pulang: $lupaPulangCount");
 
         return Command::SUCCESS;
     }
