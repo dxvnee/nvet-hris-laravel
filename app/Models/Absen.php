@@ -60,6 +60,7 @@ class Absen extends Model
 
         'menit_telat' => 'integer',
         'menit_kerja' => 'integer',
+        'shift_number' => 'integer',
 
         'lat_masuk' => 'decimal:8',
         'lng_masuk' => 'decimal:8',

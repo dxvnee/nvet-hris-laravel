@@ -278,12 +278,12 @@ class AbsenController extends Controller
 
             if ($user->is_shift && $user->shift_partner_id) {
                 // Use shift-specific jam keluar
-                if ($absen->shift_number === 1) {
+                if ((int) $absen->shift_number === 1) {
                     $jamPulangSetting = Carbon::today()->setTime(
                         Carbon::parse($user->shift1_jam_keluar)->hour,
                         Carbon::parse($user->shift1_jam_keluar)->minute
                     );
-                } elseif ($absen->shift_number === 2) {
+                } elseif ((int) $absen->shift_number === 2) {
                     $jamPulangSetting = Carbon::today()->setTime(
                         Carbon::parse($user->shift2_jam_keluar)->hour,
                         Carbon::parse($user->shift2_jam_keluar)->minute

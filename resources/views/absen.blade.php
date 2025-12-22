@@ -80,7 +80,7 @@
                                     Hadir
                                     @if($sudahHadir && $sudahHadir->shift_number)
                                         <span
-                                            class="ml-1 text-xs px-2 py-0.5 rounded-full {{ $sudahHadir->shift_number === 1 ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white' }}">
+                                            class="ml-1 text-xs px-2 py-0.5 rounded-full {{ (int) $sudahHadir->shift_number === 1 ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white' }}">
                                             Shift {{ $sudahHadir->shift_number }}
                                         </span>
                                     @endif
@@ -164,11 +164,11 @@
                     <div class="mt-2 flex items-center gap-2">
                         <span
                             class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold
-                                                {{ $sudahHadir->shift_number === 1 ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white' }}">
+                                                {{ (int) $sudahHadir->shift_number === 1 ? 'bg-blue-500 text-white' : 'bg-orange-500 text-white' }}">
                             Anda Shift {{ $sudahHadir->shift_number }}
                         </span>
                         @php
-                            $shiftJamKeluar = $sudahHadir->shift_number === 1
+                            $shiftJamKeluar = (int) $sudahHadir->shift_number === 1
                                 ? \Carbon\Carbon::parse($user->shift1_jam_keluar)->format('H:i')
                                 : \Carbon\Carbon::parse($user->shift2_jam_keluar)->format('H:i');
                         @endphp
@@ -265,7 +265,7 @@
                         @php
                             $user = auth()->user();
                             if ($user->is_shift && $sudahHadir && $sudahHadir->shift_number) {
-                                $jamPulangText = $sudahHadir->shift_number === 1
+                                $jamPulangText = (int) $sudahHadir->shift_number === 1
                                     ? \Carbon\Carbon::parse($user->shift1_jam_keluar)->format('H:i')
                                     : \Carbon\Carbon::parse($user->shift2_jam_keluar)->format('H:i');
                             } else {
@@ -696,7 +696,7 @@
                 @php
                     $user = auth()->user();
                     if ($user->is_shift && $sudahHadir && $sudahHadir->shift_number) {
-                        $jamPulangSetting = $sudahHadir->shift_number === 1
+                        $jamPulangSetting = (int) $sudahHadir->shift_number === 1
                             ? \Carbon\Carbon::parse($user->shift1_jam_keluar)
                             : \Carbon\Carbon::parse($user->shift2_jam_keluar);
                     } else {
