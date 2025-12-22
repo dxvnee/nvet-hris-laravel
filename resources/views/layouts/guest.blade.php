@@ -5,7 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ $title ?? 'Auth' }} - MyNVet</title>
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{{ asset('images/logo3.png') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/logo3.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
