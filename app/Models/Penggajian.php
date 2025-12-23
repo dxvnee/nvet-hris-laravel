@@ -59,6 +59,8 @@ class Penggajian extends Model
             'lain_lain' => 'decimal:2',
             'lain_lain_items' => 'array',
             'total_gaji' => 'decimal:2',
+            'status' => 'string',
+
         ];
     }
 

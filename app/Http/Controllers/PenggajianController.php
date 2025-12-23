@@ -7,6 +7,7 @@ use App\Models\Lembur;
 use App\Models\Penggajian;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 
 class PenggajianController extends Controller
@@ -404,9 +405,10 @@ class PenggajianController extends Controller
      */
     public function riwayatPegawai(Request $request)
     {
-        $user = auth()->user();
+        $user = $request->user();
 
-        $query = Penggajian::where('user_id', $user->id);
+        $query = Penggajian::where('user_id', $user->id)->where('status', 'final');
+
 
         // Handle sorting
         $sortBy = $request->get('sort_by', 'periode');
@@ -420,6 +422,7 @@ class PenggajianController extends Controller
             'total_insentif' => 'total_insentif',
             'total_gaji' => 'total_gaji',
             'created_at' => 'created_at',
+            'status' => 'status',
         ];
 
         if (array_key_exists($sortBy, $allowedSorts)) {

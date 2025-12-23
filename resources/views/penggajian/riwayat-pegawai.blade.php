@@ -152,11 +152,7 @@
                                         <span class="font-bold text-lg">Rp {{ number_format($gaji->total_gaji, 0, ',', '.') }}</span>
                                     </td>
                                     <td class="py-3 px-4">
-                                        @if($gaji->status === 'final')
-                                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Final</span>
-                                        @else
-                                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">Draft</span>
-                                        @endif
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Final</span>
                                     </td>
                                     <td class="py-3 px-4">
                                         <div class="flex items-center gap-2">
