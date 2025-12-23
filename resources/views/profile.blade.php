@@ -116,9 +116,9 @@
 
                         <!-- Status Terakhir -->
                         <div
-                            class="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200">
+                            class="bg-gradient-to-r from-red-50 to-red-100 rounded-xl p-4 border border-red-200">
                             <div class="flex items-center gap-3">
-                                <div class="p-2 bg-purple-500 rounded-lg">
+                                <div class="p-2 bg-red-500 rounded-lg">
                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -126,9 +126,9 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-medium text-purple-700">Status Terakhir</p>
-                                    <p class="text-lg font-bold text-purple-800">
-                                        {{ $stats['status_terakhir'] ?? 'Belum ada' }}
+                                    <p class="text-sm font-medium text-red-700">Tidak Hadir</p>
+                                    <p class="text-lg font-bold text-red-800">
+                                        {{ $stats['tidak_hadir'] ?? 0 }}
                                     </p>
                                 </div>
                             </div>

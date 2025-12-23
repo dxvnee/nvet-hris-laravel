@@ -34,18 +34,25 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
+        $startOfMonth = now()->startOfMonth();
+        $endOfMonth = now()->endOfMonth();
+
+        $userAbsensiBulanIni = Absen::where('user_id', $user->id)
+            ->whereBetween('tanggal', [$startOfMonth, $endOfMonth])
+            ->get();
+
         // Get attendance statistics
         $stats = [
             'bulan_ini' => Absen::where('user_id', $user->id)
                 ->whereMonth('tanggal', now()->month)
                 ->whereYear('tanggal', now()->year)
                 ->count(),
-            'total_jam' => Absen::where('user_id', $user->id)
+            'total_jam' => round(
+            Absen::where('user_id', $user->id)
                 ->whereNotNull('jam_pulang')
-                ->sum('menit_kerja') / 60, // Convert minutes to hours
-            'status_terakhir' => Absen::where('user_id', $user->id)
-                ->where('tanggal', now()->toDateString())
-                ->first()?->status ?? 'Belum ada'
+                ->sum('menit_kerja') / 60
+            ),
+            'tidak_hadir' => $userAbsensiBulanIni->where('tidak_hadir', true)->count()
         ];
 
         return view('profile', [
