@@ -33,10 +33,45 @@
                         <div class="flex-1">
                             <p class="text-xl font-bold text-blue-700">Hari Libur</p>
                             <p class="text-sm text-blue-600 mt-1">
-                                Hari ini adalah hari libur Anda. Tidak perlu melakukan absensi.
+                                @if($sudahHadir)
+                                    Anda sedang lembur hari libur. Masuk: {{ $sudahHadir->jam_masuk->format('H:i') }}
+                                @else
+                                    Hari ini adalah hari libur Anda. Klik tombol di bawah jika ingin lembur.
+                                @endif
                             </p>
                         </div>
                     </div>
+                </div>
+
+                <!-- Lokasi Status untuk Hari Libur -->
+                <div id="location-status" class="mb-6 p-4 rounded-xl bg-gray-50 border border-gray-200">
+                    <div class="flex items-center gap-3">
+                        <div class="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full"></div>
+                        <span class="text-gray-600">Mengambil lokasi...</span>
+                    </div>
+                </div>
+
+                <!-- Tombol Lembur Hari Libur -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Tombol Masuk Lembur -->
+                    <button type="button" onclick="openLemburLiburModal('hadir')" {{ $sudahHadir ? 'disabled' : '' }}
+                        class="w-full py-4 px-6 rounded-xl font-bold text-white transition-all duration-300 flex items-center justify-center gap-2
+                        {{ $sudahHadir ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-lg hover:shadow-xl transform hover:scale-105' }}">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {{ $sudahHadir ? 'Sudah Masuk Lembur' : 'Masuk Lembur Hari Libur' }}
+                    </button>
+
+                    <!-- Tombol Pulang Lembur -->
+                    <button type="button" onclick="openCameraModal('pulang')" {{ !$sudahHadir || $sudahPulang ? 'disabled' : '' }}
+                        class="w-full py-4 px-6 rounded-xl font-bold text-white transition-all duration-300 flex items-center justify-center gap-2
+                        {{ !$sudahHadir || $sudahPulang ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transform hover:scale-105' }}">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        {{ $sudahPulang ? 'Sudah Pulang' : (!$sudahHadir ? 'Masuk Lembur Dulu' : 'Pulang Lembur') }}
+                    </button>
                 </div>
             @elseif($sudahIzin)
                 <!-- Status Izin - Full Width -->
@@ -447,6 +482,49 @@
         </div>
     </div>
 
+    <!-- Lembur Hari Libur Confirmation Modal -->
+    <div id="lembur-libur-modal"
+        class="fixed inset-0 bg-black bg-opacity-75 z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all">
+            <div class="p-6">
+                <div class="flex items-center justify-center mb-4">
+                    <div class="p-4 bg-blue-100 rounded-full">
+                        <svg class="h-12 w-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Konfirmasi Lembur Hari Libur</h3>
+                <p class="text-gray-600 text-center mb-4">
+                    Hari ini adalah <span class="font-bold text-blue-600">hari libur</span> Anda.
+                </p>
+                <p class="text-gray-600 text-center mb-6">
+                    Apakah Anda yakin ingin masuk untuk <span class="font-bold text-orange-600">lembur</span>?
+                </p>
+
+                <!-- Keterangan Lembur Hari Libur -->
+                <div id="lembur-libur-keterangan-wrapper" class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan Lembur <span class="text-red-500">*</span></label>
+                    <textarea id="lembur-libur-keterangan-input" rows="2"
+                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                        placeholder="Masukkan keterangan lembur..."></textarea>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeLemburLiburModal()"
+                        class="flex-1 py-3 px-6 rounded-xl font-bold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all">
+                        Batal
+                    </button>
+                    <button type="button" onclick="confirmLemburLibur()"
+                        class="flex-1 py-3 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg">
+                        Ya, Lembur
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         let userLatitude = null;
         let userLongitude = null;
@@ -750,14 +828,21 @@
             // Get alasan for diluar lokasi (hadir/pulang)
             if ((currentTipe === 'hadir' || currentTipe === 'pulang') && isOutsideLocation) {
                 const diluarLokasiAlasan = document.getElementById('diluar-lokasi-input').value;
-                if (!diluarLokasiAlasan.trim()) {
-                    alert('Silakan masukkan alasan absen di luar lokasi kantor.');
-                    return;
-                }
+
                 document.getElementById('camera-diluar-lokasi-alasan').value = diluarLokasiAlasan;
             }
 
-            // Check for lembur if pulang
+            // Handle lembur hari libur
+            if (isLemburLibur && currentTipe === 'hadir') {
+                document.getElementById('camera-is-lembur').value = '1';
+                document.getElementById('camera-lembur-keterangan').value = lemburKeteranganPrefilled;
+                // Reset lembur libur flags
+                isLemburLibur = false;
+                lemburKeteranganPrefilled = '';
+            }
+
+            // Check for lembur if pulang (only for non-libur days)
+            @if(!$liburOrNot)
             if (currentTipe === 'pulang') {
                 const lemburMenit = checkLemburEligibility();
                 if (lemburMenit > 0) {
@@ -767,6 +852,7 @@
                     return;
                 }
             }
+            @endif
 
             // Stop camera before submit
             if (cameraStream) {
@@ -832,6 +918,41 @@
             // Submit form
             document.getElementById('camera-form').submit();
         }
+
+        // ==================== Lembur Hari Libur Functions ====================
+        let lemburLiburType = 'hadir';
+
+        function openLemburLiburModal(type) {
+            lemburLiburType = type;
+            document.getElementById('lembur-libur-modal').classList.remove('hidden');
+            document.getElementById('lembur-libur-keterangan-input').value = '';
+        }
+
+        function closeLemburLiburModal() {
+            document.getElementById('lembur-libur-modal').classList.add('hidden');
+        }
+
+        function confirmLemburLibur() {
+            const keterangan = document.getElementById('lembur-libur-keterangan-input').value.trim();
+            if (!keterangan) {
+                alert('Mohon masukkan keterangan lembur');
+                return;
+            }
+
+            // Set lembur keterangan for the form
+            lemburKeteranganPrefilled = keterangan;
+            isLemburLibur = true;
+
+            // Close lembur libur modal
+            closeLemburLiburModal();
+
+            // Open camera modal for hadir
+            openCameraModal(lemburLiburType);
+        }
+
+        // Variable to track if this is lembur hari libur
+        let isLemburLibur = false;
+        let lemburKeteranganPrefilled = '';
 
         // Update working hours every minute
         @if($sudahHadir && !$sudahIzin && !$sudahPulang)

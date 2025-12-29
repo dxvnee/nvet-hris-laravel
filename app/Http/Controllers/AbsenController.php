@@ -262,10 +262,25 @@ class AbsenController extends Controller
                 'diluar_lokasi_alasan' => $request->diluar_lokasi_alasan,
             ]);
 
+            // Handle lembur hari libur
+            $lemburMessage = '';
+            if ($request->is_lembur == '1' && $absen->libur) {
+                // Create lembur record for holiday overtime (jam_mulai = now, jam_selesai will be filled on pulang)
+                Lembur::create([
+                    'user_id' => $user->id,
+                    'tanggal' => $today,
+                    'jam_mulai' => $now,
+                    'foto_mulai' => $fotoPath,
+                    'keterangan' => $request->lembur_keterangan ?? 'Lembur hari libur',
+                    'status' => 'pending',
+                ]);
+                $lemburMessage = ' (Lembur Hari Libur)';
+            }
+
             $shiftInfo = $shiftNumber ? " (Shift $shiftNumber)" : '';
             return back()->with(
                 'success',
-                'Absen masuk berhasil dicatat pukul ' . $now->format('H:i') . ($telat ? ' (TELAT)' : '') . $shiftInfo
+                'Absen masuk berhasil dicatat pukul ' . $now->format('H:i') . ($telat ? ' (TELAT)' : '') . $shiftInfo . $lemburMessage
             );
         }
 
@@ -312,7 +327,8 @@ class AbsenController extends Controller
                 }
             }
 
-            if ($now->lt($jamPulangSetting)) {
+            // Skip jam pulang check for holiday lembur
+            if (!$absen->libur && $now->lt($jamPulangSetting)) {
                 return back()->with('error', 'Absen pulang baru bisa dilakukan setelah jam ' . $jamPulangSetting->format('H:i') . ' WIB. Gunakan "Izin Pulang Awal" jika ingin pulang sebelum waktunya.');
             }
 
@@ -330,9 +346,30 @@ class AbsenController extends Controller
                 'diluar_lokasi_alasan' => $request->diluar_lokasi_alasan ?? $absen->diluar_lokasi_alasan,
             ]);
 
-            // Check if this is marked as lembur
+            // Check if this is lembur hari libur (update existing lembur record)
             $lemburMessage = '';
-            if ($request->is_lembur == '1') {
+            if ($absen->libur) {
+                // Find the lembur record created at masuk
+                $lemburLibur = Lembur::where('user_id', $user->id)
+                    ->whereDate('tanggal', $today)
+                    ->whereNull('jam_selesai')
+                    ->first();
+
+                if ($lemburLibur) {
+                    $menitLembur = $lemburLibur->jam_mulai->diffInMinutes($now);
+                    $lemburLibur->update([
+                        'jam_selesai' => $now,
+                        'foto_selesai' => $fotoPath,
+                        'durasi_menit' => $menitLembur,
+                    ]);
+
+                    $jam = floor($menitLembur / 60);
+                    $menit = $menitLembur % 60;
+                    $lemburMessage = ' + Lembur Hari Libur ' . ($jam > 0 ? $jam . ' jam ' : '') . $menit . ' menit (menunggu approval)';
+                }
+            }
+            // Check if this is marked as lembur (normal day overtime)
+            elseif ($request->is_lembur == '1') {
                 // Calculate lembur duration (from jam_keluar setting until now)
                 $menitLembur = $jamPulangSetting->diffInMinutes($now);
 
