@@ -118,7 +118,7 @@
                                             </span>
                                         @endif
                                         @if($dayData['tidak_hadir'] > 0)
-                                            <span class="px-1.5 py-0.5 bg-gray-700 text-white rounded-full" title="Tidak Hadir">
+                                            <span class="px-1.5 py-0.5 bg-gray-500 text-white rounded-full" title="Tidak Hadir">
                                                 ✗ {{ $dayData['tidak_hadir'] }}
                                             </span>
                                         @endif
@@ -140,7 +140,7 @@
                                         <div class="w-2 h-2 rounded-full bg-blue-500"></div>
                                     @endif
                                     @if($dayData['tidak_hadir'] > 0)
-                                        <div class="w-2 h-2 rounded-full bg-gray-700"></div>
+                                        <div class="w-2 h-2 rounded-full bg-gray-500"></div>
                                     @endif
                                 </div>
                             @else
