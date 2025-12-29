@@ -159,7 +159,7 @@
                                             <span class="text-gray-400">-</span>
                                         @endif
                                     </td>
-                                    <td class="text-center py-3 px-4">
+                                    <td class="text-center py-3 px-4 flex items-center md:text-left">
                                         @if($absen->libur)
                                             <span class="px-3 py-1 rounded-full text-sm font-medium bg-blue-500 text-white">Libur</span>
                                         @elseif($absen->tidak_hadir)

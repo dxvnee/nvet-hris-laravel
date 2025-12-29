@@ -129,12 +129,12 @@
                         <tbody>
                             @foreach($riwayat as $absen)
                                 <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                    <td class="py-3 px-4 text-gray-700">{{ $absen->tanggal->format('d M Y') }}</td>
-                                    <td class="py-3 px-4">
+                                    <td class="py-3 px-4 text-gray-500">{{ $absen->tanggal->format('d M Y') }}</td>
+                                    <td class="py-3 px-4 text-center flex items-center md:text-left">
                                         @if($absen->libur)
                                             <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">Libur</span>
                                         @elseif($absen->tidak_hadir)
-                                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-700 text-white">Tidak Hadir</span>
+                                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-500 text-white">Tidak Hadir</span>
                                         @elseif($absen->izin)
                                             <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">Izin</span>
                                         @elseif($absen->telat)
