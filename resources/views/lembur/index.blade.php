@@ -140,14 +140,6 @@
                 </div>
             @endif
 
-            @if($riwayatLembur->hasPages())
-                <div class="mt-6">
-                    <div class="flex justify-center">
-                        <div class="flex space-x-1">
-                            {{-- Previous Page Link --}}
-                            @if ($riwayatLembur->onFirstPage())
-                                <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-l-xl">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
 
     <!-- Camera Modal for Lembur -->
     <div id="camera-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
