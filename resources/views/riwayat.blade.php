@@ -34,7 +34,7 @@
                         <span class="text-xs text-white/70 uppercase tracking-wider">Total Data</span>
                         <span class="text-lg font-semibold">{{ $riwayat->total() }}</span>
                     </div>
-                    <a href="{{ route('absen.riwayatKalender') }}" 
+                    <a href="{{ route('absen.riwayatKalender') }}"
                        class="group flex items-center gap-2 px-4 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl transition-all duration-300">
                         <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -119,9 +119,9 @@
                 </div>
 
                 {{-- Riwayat Cards --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="space-y-4">
                     @foreach($riwayat as $absen)
-                        <div class="group bg-gradient-to-br from-white to-gray-50/50 rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-primary/20 transition-all duration-300 p-5 hover:transform hover:scale-[1.02]">
+                        <div class="group bg-gradient-to-br from-white to-gray-50/50 rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-primary/20 transition-all duration-300 p-5 hover:transform hover:scale-[1.01]">
                             {{-- Header --}}
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center gap-3">
@@ -160,8 +160,8 @@
                                         @endif
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-gray-800 text-lg">{{ $absen->tanggal->locale('id')->isoFormat('dddd') }}</h3>
-                                        <p class="text-sm text-gray-500">{{ $absen->tanggal->format('d M Y') }}</p>
+                                        <h3 class="font-bold text-gray-800 text-lg">{{ $absen->tanggal->format('d M Y') }}</h3>
+                                        <p class="text-sm text-gray-500">{{ $absen->tanggal->locale('id')->isoFormat('dddd') }}</p>
                                     </div>
                                 </div>
                                 <div class="text-right">
@@ -200,7 +200,7 @@
                             </div>
 
                             {{-- Content --}}
-                            <div class="space-y-3">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 {{-- Jam Masuk --}}
                                 <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-100">
                                     <div class="flex items-center gap-2">
@@ -246,21 +246,22 @@
                                     </span>
                                 </div>
 
-                                {{-- Keterangan --}}
-                                @if($absen->izin_keterangan)
-                                    <div class="p-3 bg-amber-50 rounded-xl border border-amber-100">
-                                        <div class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                                            </svg>
-                                            <div>
-                                                <p class="text-xs font-medium text-amber-700 uppercase tracking-wider mb-1">Keterangan</p>
-                                                <p class="text-sm text-amber-800">{{ $absen->izin_keterangan }}</p>
-                                            </div>
+                            </div>
+
+                            {{-- Keterangan --}}
+                            @if($absen->izin_keterangan)
+                                <div class="mt-3 p-3 bg-amber-50 rounded-xl border border-amber-100">
+                                    <div class="flex items-start gap-2">
+                                        <svg class="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                        </svg>
+                                        <div>
+                                            <p class="text-xs font-medium text-amber-700 uppercase tracking-wider mb-1">Keterangan</p>
+                                            <p class="text-sm text-amber-800">{{ $absen->izin_keterangan }}</p>
                                         </div>
                                     </div>
-                                @endif
-                            </div>
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
