@@ -724,7 +724,9 @@ class AbsenController extends Controller
         $date = Carbon::parse($tanggal);
 
         // Ambil semua pegawai
-        $employees = User::where('role', 'pegawai')->get();
+        $employees = User::where('role', 'pegawai')
+            ->where('is_inactive', false)
+            ->get();
 
         // Ambil absensi hari itu
         $absensi = Absen::with('user')
