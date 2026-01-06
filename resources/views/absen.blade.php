@@ -921,6 +921,7 @@
             document.getElementById('btn-submit').classList.add('hidden');
 
             // Show modal
+
             document.getElementById('camera-modal').classList.remove('hidden');
 
             // Start camera
