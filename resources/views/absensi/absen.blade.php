@@ -95,39 +95,43 @@
                 <x-absensi.special-day-info :hariKhusus="$hariKhususInfo" />
             @endif
 
-            {{-- Working Hours Info --}}
-            @if (!$liburOrNot)
-                <x-absensi.working-hours-info :user="auth()->user()" :sudahHadir="$sudahHadir" />
-            @endif
+            <div class="flex flex-col gap-4">
 
-            {{-- Total Working Hours Today --}}
-            @if ($sudahHadir && !$sudahIzin && !$liburOrNot)
-                <x-absensi.total-working-hours :totalJamKerjaText="$totalJamKerjaText" />
-            @endif
+                {{-- Working Hours Info --}}
+                @if (!$liburOrNot)
+                    <x-absensi.working-hours-info :user="auth()->user()" :sudahHadir="$sudahHadir" />
+                @endif
 
-            {{-- Location Status & Absen Buttons (not shown on holiday) --}}
-            @if (!$liburOrNot && !$isInactive && !$sudahIzin)
-                {{-- Location Status --}}
-                <x-absensi.location-status />
+                {{-- Total Working Hours Today --}}
+                @if ($sudahHadir && !$sudahIzin && !$liburOrNot)
+                    <x-absensi.total-working-hours :totalJamKerjaText="$totalJamKerjaText" />
+                @endif
 
-                {{-- Absen Buttons --}}
-                @php
-                    $user = auth()->user();
-                    if ($user->is_shift && $sudahHadir && $sudahHadir->shift_number) {
-                        $jamPulangText =
-                            (int) $sudahHadir->shift_number === 1
-                                ? \Carbon\Carbon::parse($user->shift1_jam_keluar)->format('H:i')
-                                : \Carbon\Carbon::parse($user->shift2_jam_keluar)->format('H:i');
-                    } else {
-                        $jamPulangText = $user->jam_keluar
-                            ? \Carbon\Carbon::parse($user->jam_keluar)->format('H:i')
-                            : '20:00';
-                    }
-                @endphp
+                {{-- Location Status & Absen Buttons (not shown on holiday) --}}
+                @if (!$liburOrNot && !$isInactive && !$sudahIzin)
+                    {{-- Location Status --}}
+                    <x-absensi.location-status />
 
-                <x-absensi.normal-buttons :sudahHadir="$sudahHadir" :sudahPulang="$sudahPulang" :sudahIzin="$sudahIzin" :liburOrNot="$liburOrNot"
-                    :isInactive="$isInactive ?? false" :jamPulangText="$jamPulangText" />
-            @endif
+                    {{-- Absen Buttons --}}
+                    @php
+                        $user = auth()->user();
+                        if ($user->is_shift && $sudahHadir && $sudahHadir->shift_number) {
+                            $jamPulangText =
+                                (int) $sudahHadir->shift_number === 1
+                                    ? \Carbon\Carbon::parse($user->shift1_jam_keluar)->format('H:i')
+                                    : \Carbon\Carbon::parse($user->shift2_jam_keluar)->format('H:i');
+                        } else {
+                            $jamPulangText = $user->jam_keluar
+                                ? \Carbon\Carbon::parse($user->jam_keluar)->format('H:i')
+                                : '20:00';
+                        }
+                    @endphp
+
+                    <x-absensi.normal-buttons :sudahHadir="$sudahHadir" :sudahPulang="$sudahPulang" :sudahIzin="$sudahIzin"
+                        :liburOrNot="$liburOrNot" :isInactive="$isInactive ?? false" :jamPulangText="$jamPulangText" />
+                @endif
+            </div>
+
         </x-ui.section-card>
     </div>
 
