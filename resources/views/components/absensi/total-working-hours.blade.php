@@ -1,5 +1,5 @@
 {{-- Absensi Total Working Hours Component --}}
-@props(['totalKerja', 'id' => 'working-hours'])
+@props(['totalJamKerjaText', 'id' => 'working-hours'])
 
 <div
     {{ $attributes->merge(['class' => 'bg-gradient-to-r from-indigo-50 via-blue-50 to-purple-50 rounded-2xl p-5 border border-blue-200 shadow-sm animate-slide-up-delay-1']) }}>
@@ -11,7 +11,7 @@
             <p class="text-sm font-medium text-blue-700">Total Jam Kerja Hari Ini</p>
             <p class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
                 id="{{ $id }}">
-                {{ $totalKerja }}
+                {{ $totalJamKerjaText }}
             </p>
         </div>
     </div>
