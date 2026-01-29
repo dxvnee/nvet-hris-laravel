@@ -55,7 +55,7 @@ class ProfileController extends Controller
             'tidak_hadir' => $userAbsensiBulanIni->where('tidak_hadir', true)->count()
         ];
 
-        return view('profile', [
+        return view('profile.profile', [
             'user' => $user,
             'stats' => $stats,
         ]);

@@ -12,7 +12,7 @@
                 <img src="{{ asset('images/logo3.png') }}" alt="logo"
                     class="h-12 transition-transform duration-300 hover:scale-105">
                 <p class="text-xl font-extrabold text-primaryDark transition-colors duration-300 hover:text-primary">
-                    NVet Clinic & Lab</p>
+                    MyNvetties</p>
             </div>
             <!-- Close button for mobile -->
             <button onclick="toggleSidebar()"

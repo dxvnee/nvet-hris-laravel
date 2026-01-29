@@ -73,15 +73,6 @@
                 <p class="{{ $variant === 'admin' ? 'text-3xl' : 'text-2xl' }} font-bold font-mono"
                     x-data="{ time: '' }" x-init="setInterval(() => time = new Date().toLocaleTimeString('id-ID'), 1000)" x-text="time"></p>
             </div>
-            @if ($variant === 'admin')
-                <div class="hidden lg:flex flex-col items-center bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-3">
-                    <span class="text-xs text-white/70 uppercase tracking-wider">Status</span>
-                    <span class="text-sm font-semibold flex items-center gap-1">
-                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                        Online
-                    </span>
-                </div>
-            @endif
         </div>
     </div>
 </div>
