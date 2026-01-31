@@ -17,7 +17,7 @@ class AdminDashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         // Pastikan user adalah admin
         if ($user->role !== 'admin') {
             return redirect()->route('dashboard.pegawai');
@@ -29,20 +29,26 @@ class AdminDashboardController extends Controller
         $endOfMonth = now()->endOfMonth();
 
         // Total pegawai
-        $totalPegawai = User::where('role', 'pegawai')->count();
+        $totalPegawai = User::where('role', 'pegawai')
+            ->where('is_inactive', false)
+            ->count();
 
         // Pegawai berdasarkan jabatan
         $pegawaiByJabatan = User::where('role', 'pegawai')
+            ->where('is_inactive', false)
             ->selectRaw('jabatan, count(*) as total')
             ->groupBy('jabatan')
             ->pluck('total', 'jabatan')
             ->toArray();
 
+        $pegawaiLibur = User::where('role', 'pegawai')
+            ->where('is_inactive', false)
+            ->where('hari_libur', $today);
         // Absensi hari ini (semua pegawai)
         $absensiHariIni = Absen::whereDate('tanggal', $today)
             ->whereNotNull('jam_masuk')
             ->count();
-            
+
         $tepatWaktuHariIni = Absen::whereDate('tanggal', $today)
             ->where('menit_telat', 0)
             ->whereNotNull('jam_masuk')
@@ -122,7 +128,7 @@ class AdminDashboardController extends Controller
     private function getGrafikAbsensi(): array
     {
         $grafikAbsensi = [];
-        
+
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i)->toDateString();
             $grafikAbsensi[] = [

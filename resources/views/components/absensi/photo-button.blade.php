@@ -30,7 +30,7 @@
 @endphp
 
 <button
-    onclick="openPhotoModal('{{ $photoUrl }}', '{{ $userName }} - Foto {{ $style['label'] }}', '{{ $timestamp }}', '{{ $modalId }}')"
+    onclick="openPhotoModal(@js($photoUrl), @js($userName . ' - Foto ' . $style['label']), @js($timestamp), @js($modalId))"
     {{ $attributes->merge(['class' => "px-2 py-1 {$style['bg']} {$style['text']} text-xs rounded transition-colors"]) }}
     title="Lihat Foto {{ $style['label'] }}">
     📷 {{ $style['label'] }}

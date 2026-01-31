@@ -227,7 +227,7 @@
             document.getElementById('rejectModal').classList.remove('hidden');
         }
 
-        function openPhotoModal(lemburId, fotoMulai, fotoSelesai, namaPegawai, tanggal) {
+        window.openPhotoModal = function(lemburId, fotoMulai, fotoSelesai, namaPegawai, tanggal) {
             const modal = document.getElementById('photo-modal');
             const modalImage = document.getElementById('photo-lembur');
 
