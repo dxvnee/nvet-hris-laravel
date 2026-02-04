@@ -19,219 +19,31 @@
                     <table class="w-full">
                         <thead>
                             <tr class="border-b border-gray-200">
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
-                                    <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'periode', 'sort_direction' => (request('sort_by') === 'periode' && request('sort_direction') === 'asc') ? 'desc' : 'asc']) }}"
-                                       class="flex items-center space-x-1 hover:text-primary transition-colors">
-                                        <span>Periode</span>
-                                        @if(request('sort_by') === 'periode')
-                                            @if(request('sort_direction') === 'asc')
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            @else
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 010-1.414l-4-4a1 1 0 01-1.414 0l-4 4a1 1 0 111.414 1.414z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            @endif
-                                        @else
-                                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        @endif
-                                    </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
-                                    <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'gaji_pokok', 'sort_direction' => (request('sort_by') === 'gaji_pokok' && request('sort_direction') === 'asc') ? 'desc' : 'asc']) }}"
-                                       class="flex items-center space-x-1 hover:text-primary transition-colors">
-                                        <span>Gaji Pokok</span>
-                                        @if(request('sort_by') === 'gaji_pokok')
-                                            @if(request('sort_direction') === 'asc')
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            @else
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 010-1.414l-4-4a1 1 0 01-1.414 0l-4 4a1 1 0 111.414 1.414z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            @endif
-                                        @else
-                                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        @endif
-                                    </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
-                                    <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'total_potongan_telat', 'sort_direction' => (request('sort_by') === 'total_potongan_telat' && request('sort_direction') === 'asc') ? 'desc' : 'asc']) }}"
-                                       class="flex items-center space-x-1 hover:text-primary transition-colors">
-                                        <span>Potongan Telat</span>
-                                        @if(request('sort_by') === 'total_potongan_telat')
-                                            @if(request('sort_direction') === 'asc')
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            @else
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 010-1.414l-4-4a1 1 0 01-1.414 0l-4 4a1 1 0 111.414 1.414z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            @endif
-                                        @else
-                                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        @endif
-                                    </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
-                                    <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'total_insentif', 'sort_direction' => (request('sort_by') === 'total_insentif' && request('sort_direction') === 'asc') ? 'desc' : 'asc']) }}"
-                                       class="flex items-center space-x-1 hover:text-primary transition-colors">
-                                        <span>Insentif</span>
-                                        @if(request('sort_by') === 'total_insentif')
-                                            @if(request('sort_direction') === 'asc')
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            @else
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 010-1.414l-4-4a1 1 0 01-1.414 0l-4 4a1 1 0 111.414 1.414z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            @endif
-                                        @else
-                                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        @endif
-                                    </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
-                                    <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'total_gaji', 'sort_direction' => (request('sort_by') === 'total_gaji' && request('sort_direction') === 'asc') ? 'desc' : 'asc']) }}"
-                                       class="flex items-center space-x-1 hover:text-primary transition-colors">
-                                        <span>Total Gaji</span>
-                                        @if(request('sort_by') === 'total_gaji')
-                                            @if(request('sort_direction') === 'asc')
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            @else
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 010-1.414l-4-4a1 1 0 01-1.414 0l-4 4a1 1 0 111.414 1.414z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            @endif
-                                        @else
-                                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        @endif
-                                    </a>
-                                </th>
+                                <x-penggajian.sortable-header column="periode" label="Periode" />
+                                <x-penggajian.sortable-header column="gaji_pokok" label="Gaji Pokok" />
+                                <x-penggajian.sortable-header column="total_potongan_telat" label="Potongan Telat" />
+                                <x-penggajian.sortable-header column="total_insentif" label="Insentif" />
+                                <x-penggajian.sortable-header column="total_gaji" label="Total Gaji" />
                                 <th class="text-left py-3 px-4 font-semibold text-gray-600">Status</th>
                                 <th class="text-left py-3 px-4 font-semibold text-gray-600">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($penggajian as $gaji)
-                                <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                    <td class="py-3 px-4">
-                                        <div class="font-semibold text-gray-900">
-                                            {{ \Carbon\Carbon::parse($gaji->periode)->format('F Y') }}
-                                        </div>
-                                        <div class="text-sm text-gray-500">
-                                            Dibuat: {{ $gaji->created_at->format('d/m/Y') }}
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700">
-                                        Rp {{ number_format($gaji->gaji_pokok, 0, ',', '.') }}
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700">
-                                        <span class="text-red-600">- Rp {{ number_format($gaji->total_potongan_telat, 0, ',', '.') }}</span>
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700">
-                                        <span class="text-green-600">+ Rp {{ number_format($gaji->total_insentif, 0, ',', '.') }}</span>
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700">
-                                        <span class="font-bold text-lg">Rp {{ number_format($gaji->total_gaji, 0, ',', '.') }}</span>
-                                    </td>
-                                    <td class="py-3 px-4">
-                                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Final</span>
-                                    </td>
-                                    <td class="py-3 px-4">
-                                        <div class="flex items-center gap-2">
-                                            <a href="{{ route('penggajian.print', $gaji) }}" target="_blank"
-                                                class="p-2 bg-green-100 hover:bg-green-200 text-green-600 rounded-lg transition-colors"
-                                                title="Cetak Slip Gaji">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
-                                                    </path>
-                                                </svg>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <x-penggajian.riwayat-row :gaji="$gaji" />
                             @endforeach
                         </tbody>
                     </table>
                 </div>
             @else
-                <div class="text-center py-8 text-gray-500">
-                    <svg class="h-12 w-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                    </svg>
-                    <p>Belum ada riwayat penggajian</p>
-                </div>
+                <x-penggajian.empty-state message="Belum ada riwayat penggajian" />
             @endif
 
             @if($penggajian->hasPages())
                 <div class="mt-6">
-                    <div class="flex justify-center">
-                        <div class="flex space-x-1">
-                            {{-- Previous Page Link --}}
-                            @if ($penggajian->onFirstPage())
-                                <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-l-xl">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </span>
-                            @else
-                                <a href="{{ $penggajian->previousPageUrl() }}" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-l-xl hover:bg-primaryUltraLight hover:border-primary transition-colors duration-200">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </a>
-                            @endif
-
-                            {{-- Pagination Elements --}}
-                            @foreach ($penggajian->getUrlRange(1, $penggajian->lastPage()) as $page => $url)
-                                @if ($page == $penggajian->currentPage())
-                                    <span class="relative inline-flex items-center px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-primary to-primaryDark border border-primary leading-5 rounded-xl shadow-lg">
-                                        {{ $page }}
-                                    </span>
-                                @else
-                                    <a href="{{ $url }}" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:bg-primaryUltraLight hover:border-primary hover:text-primary transition-all duration-200 rounded-xl">
-                                        {{ $page }}
-                                    </a>
-                                @endif
-                            @endforeach
-
-                            {{-- Next Page Link --}}
-                            @if ($penggajian->hasMorePages())
-                                <a href="{{ $penggajian->nextPageUrl() }}" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-r-xl hover:bg-primaryUltraLight hover:border-primary transition-colors duration-200">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </a>
-                            @else
-                                <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-r-xl">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </span>
-                            @endif
-                        </div>
-                    </div>
+                    <x-ui.pagination :paginator="$penggajian" />
                 </div>
             @endif
         </div>
     </div>
-
 </x-app-layout>
