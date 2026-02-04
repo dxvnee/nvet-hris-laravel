@@ -54,11 +54,11 @@
                 </x-slot>
                 <x-slot name="footer">
                     @if ($totalMenitTelat > 60)
-                        <x-dashboard.badge variant="danger">⚠️ Cukup tinggi</x-dashboard.badge>
+                        <x-ui.status-badge type="danger">⚠️ Cukup tinggi</x-ui.status-badge>
                     @elseif($totalMenitTelat > 30)
-                        <x-dashboard.badge variant="warning">⚡ Perhatian</x-dashboard.badge>
+                        <x-ui.status-badge type="warning">⚡ Perhatian</x-ui.status-badge>
                     @else
-                        <x-dashboard.badge variant="success">✓ Baik</x-dashboard.badge>
+                        <x-ui.status-badge type="success">✓ Baik</x-ui.status-badge>
                     @endif
                 </x-slot>
             </x-dashboard.stat-card>
@@ -71,11 +71,11 @@
                 </x-slot>
                 <x-slot name="footer">
                     @if ($totalLupaPulang > 3)
-                        <x-dashboard.badge variant="danger">⚠️ Potong Gaji</x-dashboard.badge>
+                        <x-ui.status-badge type="danger">⚠️ Potong Gaji</x-ui.status-badge>
                     @elseif($totalLupaPulang > 0)
-                        <x-dashboard.badge variant="warning">⚡ Perhatian</x-dashboard.badge>
+                        <x-ui.status-badge type="warning">⚡ Perhatian</x-ui.status-badge>
                     @else
-                        <x-dashboard.badge variant="success">✓ Baik</x-dashboard.badge>
+                        <x-ui.status-badge type="success">✓ Baik</x-ui.status-badge>
                     @endif
                 </x-slot>
             </x-dashboard.stat-card>
@@ -93,9 +93,8 @@
                 @forelse($riwayatAbsensi as $absen)
                     <x-dashboard.riwayat-item :absen="$absen" />
                 @empty
-                    <x-dashboard.empty-state title="Belum Ada Riwayat" subtitle="Belum ada data absensi">
-                        <x-icons.calendar class="w-8 h-8 text-gray-400" />
-                    </x-dashboard.empty-state>
+                    <x-ui.empty-state message="Belum ada data absensi" description="Belum ada riwayat absensi"
+                        icon="calendar" />
                 @endforelse
             </div>
         </x-card-content>

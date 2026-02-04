@@ -51,7 +51,8 @@
                     </table>
                 </div>
             @else
-                <x-hari-libur.empty-state />
+                <x-ui.empty-state message="Tidak ada data hari libur" icon="calendar" size="lg" :actionHref="route('hari-libur.create')"
+                    actionLabel="Tambah Hari Libur" />
             @endif
         </x-ui.section-card>
     </div>

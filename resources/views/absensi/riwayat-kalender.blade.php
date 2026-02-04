@@ -23,29 +23,10 @@
 
         {{-- Stats Summary --}}
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 animate-slide-up-delay-1">
-            <x-ui.summary-stat :value="$totalHadir" label="Hadir" color="success">
-                <x-slot:iconSlot>
-                    <x-icons.check class="w-6 h-6 text-white" />
-                </x-slot:iconSlot>
-            </x-ui.summary-stat>
-
-            <x-ui.summary-stat :value="$totalTelat" label="Terlambat" color="danger">
-                <x-slot:iconSlot>
-                    <x-icons.clock class="w-6 h-6 text-white" />
-                </x-slot:iconSlot>
-            </x-ui.summary-stat>
-
-            <x-ui.summary-stat :value="$totalIzin" label="Izin" color="warning">
-                <x-slot:iconSlot>
-                    <x-icons.document-text class="w-6 h-6 text-white" />
-                </x-slot:iconSlot>
-            </x-ui.summary-stat>
-
-            <x-ui.summary-stat :value="$totalJam . 'j ' . $sisaMenit . 'm'" label="Total Kerja" color="info">
-                <x-slot:iconSlot>
-                    <x-icons.clock class="w-6 h-6 text-white" />
-                </x-slot:iconSlot>
-            </x-ui.summary-stat>
+            <x-ui.stat-card :value="$totalHadir" label="Hadir" color="green" iconName="check" />
+            <x-ui.stat-card :value="$totalTelat" label="Terlambat" color="red" iconName="clock" />
+            <x-ui.stat-card :value="$totalIzin" label="Izin" color="yellow" iconName="calendar" />
+            <x-ui.stat-card :value="$totalJam . 'j ' . $sisaMenit . 'm'" label="Total Kerja" color="blue" iconName="clock" />
         </div>
 
         {{-- Calendar Section --}}

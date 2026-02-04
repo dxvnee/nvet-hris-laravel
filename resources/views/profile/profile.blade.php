@@ -16,12 +16,14 @@
 
                     {{-- Stats Cards --}}
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                        <x-profile.stat-card :value="$stats['bulan_ini'] ?? 0" label="Absen Bulan Ini" color="blue" icon="calendar" />
+                        <x-ui.stat-card :value="$stats['bulan_ini'] ?? 0" label="Absen Bulan Ini" color="blue" variant="compact"
+                            iconName="calendar" />
 
-                        <x-profile.stat-card :value="($stats['total_jam'] ?? 0) . ' jam'" label="Total Jam Kerja" color="green" icon="clock" />
+                        <x-ui.stat-card :value="($stats['total_jam'] ?? 0) . ' jam'" label="Total Jam Kerja" color="green" variant="compact"
+                            iconName="clock" />
 
-                        <x-profile.stat-card :value="$stats['lembur'] ?? 0" label="Lembur Bulan Ini" color="orange"
-                            icon="briefcase" />
+                        <x-ui.stat-card :value="$stats['lembur'] ?? 0" label="Lembur Bulan Ini" color="orange" variant="compact"
+                            iconName="briefcase" />
                     </div>
                 </div>
             </div>

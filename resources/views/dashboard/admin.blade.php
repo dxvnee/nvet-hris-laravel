@@ -25,8 +25,8 @@
                                     default => 'default',
                                 };
                             @endphp
-                            <x-dashboard.badge :variant="$variant">{{ $jabatan }}:
-                                {{ $total }}</x-dashboard.badge>
+                            <x-ui.status-badge :type="$variant">{{ $jabatan }}:
+                                {{ $total }}</x-ui.status-badge>
                         @endforeach
                     </div>
                 </x-slot>
@@ -42,18 +42,18 @@
                 </x-slot>
                 <x-slot name="footer">
                     <div class="flex flex-wrap gap-2">
-                        <x-dashboard.badge variant="success">
+                        <x-ui.status-badge type="success">
                             <x-slot name="icon">
                                 <x-icons.check-circle-solid class="w-3 h-3" />
                             </x-slot>
                             {{ $tepatWaktuHariIni }}
-                        </x-dashboard.badge>
-                        <x-dashboard.badge variant="danger">
+                        </x-ui.status-badge>
+                        <x-ui.status-badge type="danger">
                             <x-slot name="icon">
                                 <x-icons.x-circle-solid class="w-3 h-3" />
                             </x-slot>
                             {{ $telatHariIni }}
-                        </x-dashboard.badge>
+                        </x-ui.status-badge>
                     </div>
                 </x-slot>
             </x-dashboard.stat-card>
@@ -66,12 +66,12 @@
                 </x-slot>
                 <x-slot name="footer">
                     @if ($penggajianDraft > 0)
-                        <x-dashboard.badge variant="warning">
+                        <x-ui.status-badge type="warning">
                             <x-slot name="icon">
                                 <x-icons.exclamation-circle-solid class="w-3 h-3" />
                             </x-slot>
                             {{ $penggajianDraft }} Draft
-                        </x-dashboard.badge>
+                        </x-ui.status-badge>
                     @endif
                 </x-slot>
             </x-dashboard.stat-card>
@@ -109,11 +109,11 @@
                 </x-slot>
                 <x-slot name="footer">
                     @if ($totalLupaPulangBulanIni > 3)
-                        <x-dashboard.badge variant="danger">⚠️ Potong Gaji</x-dashboard.badge>
+                        <x-ui.status-badge type="danger">⚠️ Potong Gaji</x-ui.status-badge>
                     @elseif($totalLupaPulangBulanIni > 0)
-                        <x-dashboard.badge variant="warning">⚡ Perhatian</x-dashboard.badge>
+                        <x-ui.status-badge type="warning">⚡ Perhatian</x-ui.status-badge>
                     @else
-                        <x-dashboard.badge variant="success">✓ Baik</x-dashboard.badge>
+                        <x-ui.status-badge type="success">✓ Baik</x-ui.status-badge>
                     @endif
                 </x-slot>
             </x-dashboard.stat-card>
@@ -187,10 +187,8 @@
                         @endforeach
                     </div>
                 @else
-                    <x-dashboard.empty-state title="Luar Biasa! 🎉" subtitle="Tidak ada keterlambatan bulan ini"
-                        gradient="from-emerald-100 to-green-100">
-                        <x-icons.check class="w-10 h-10 text-emerald-500" />
-                    </x-dashboard.empty-state>
+                    <x-ui.empty-state message="Tidak ada keterlambatan bulan ini" description="Luar Biasa! 🎉"
+                        icon="check" />
                 @endif
             </div>
         </div>
@@ -208,47 +206,44 @@
                     <x-dashboard.activity-item :user="$aktivitas->user" :aktivitas="$aktivitas" />
                 @empty
                     <div class="col-span-2">
-                        <x-dashboard.empty-state title="Belum Ada Aktivitas"
-                            subtitle="Belum ada aktivitas absensi hari ini">
-                            <x-icons.clock class="w-8 h-8 text-gray-400" />
-                        </x-dashboard.empty-state>
+                        <x-ui.empty-state message="Belum ada aktivitas absensi hari ini" icon="clock" />
                     </div>
                 @endforelse
             </div>
-        </x-card-conte>
+            </x-card-conte>
 
-        {{-- Quick Actions Admin --}}
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <x-dashboard.quick-action href="{{ route('users.index') }}" title="Kelola Pegawai"
-                subtitle="Tambah, edit, hapus">
-                <x-slot name="icon">
-                    <x-icons.users class="h-6 w-6 text-white" />
-                </x-slot>
-            </x-dashboard.quick-action>
+            {{-- Quick Actions Admin --}}
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <x-dashboard.quick-action href="{{ route('users.index') }}" title="Kelola Pegawai"
+                    subtitle="Tambah, edit, hapus">
+                    <x-slot name="icon">
+                        <x-icons.users class="h-6 w-6 text-white" />
+                    </x-slot>
+                </x-dashboard.quick-action>
 
-            <x-dashboard.quick-action href="{{ route('penggajian.index') }}" title="Penggajian"
-                subtitle="Kelola gaji pegawai" gradient="from-emerald-500 to-green-600"
-                hoverBorder="hover:border-emerald-300" hoverText="group-hover:text-emerald-600">
-                <x-slot name="icon">
-                    <x-icons.wallet class="h-6 w-6 text-white" />
-                </x-slot>
-            </x-dashboard.quick-action>
+                <x-dashboard.quick-action href="{{ route('penggajian.index') }}" title="Penggajian"
+                    subtitle="Kelola gaji pegawai" gradient="from-emerald-500 to-green-600"
+                    hoverBorder="hover:border-emerald-300" hoverText="group-hover:text-emerald-600">
+                    <x-slot name="icon">
+                        <x-icons.wallet class="h-6 w-6 text-white" />
+                    </x-slot>
+                </x-dashboard.quick-action>
 
-            <x-dashboard.quick-action href="{{ route('absen.kalender') }}" title="Riwayat Absensi"
-                subtitle="Lihat semua absensi" gradient="from-blue-500 to-indigo-600"
-                hoverBorder="hover:border-blue-300" hoverText="group-hover:text-blue-600">
-                <x-slot name="icon">
-                    <x-icons.calendar class="h-6 w-6 text-white" />
-                </x-slot>
-            </x-dashboard.quick-action>
+                <x-dashboard.quick-action href="{{ route('absen.kalender') }}" title="Riwayat Absensi"
+                    subtitle="Lihat semua absensi" gradient="from-blue-500 to-indigo-600"
+                    hoverBorder="hover:border-blue-300" hoverText="group-hover:text-blue-600">
+                    <x-slot name="icon">
+                        <x-icons.calendar class="h-6 w-6 text-white" />
+                    </x-slot>
+                </x-dashboard.quick-action>
 
-            <x-dashboard.quick-action href="{{ route('users.create') }}" title="Tambah Pegawai"
-                subtitle="Daftarkan pegawai baru" gradient="from-purple-500 to-violet-600"
-                hoverBorder="hover:border-purple-300" hoverText="group-hover:text-purple-600">
-                <x-slot name="icon">
-                    <x-icons.user-plus class="h-6 w-6 text-white" />
-                </x-slot>
-            </x-dashboard.quick-action>
-        </div>
+                <x-dashboard.quick-action href="{{ route('users.create') }}" title="Tambah Pegawai"
+                    subtitle="Daftarkan pegawai baru" gradient="from-purple-500 to-violet-600"
+                    hoverBorder="hover:border-purple-300" hoverText="group-hover:text-purple-600">
+                    <x-slot name="icon">
+                        <x-icons.user-plus class="h-6 w-6 text-white" />
+                    </x-slot>
+                </x-dashboard.quick-action>
+            </div>
     </div>
 </x-app-layout>

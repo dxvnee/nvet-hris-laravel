@@ -6,26 +6,14 @@
     <div class="space-y-6">
         {{-- Statistics Cards --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 animate-slide-up-delay-1">
-            <x-lembur.stat-card :value="floor($totalLemburBulanIni / 60) . 'j ' . $totalLemburBulanIni % 60 . 'm'" label="Total Lembur Bulan Ini" gradient="from-emerald-50 to-green-100"
-                iconBg="bg-emerald-500" textColor="text-emerald-800">
-                <x-slot name="iconSlot">
-                    <x-icons.chart-bar class="w-6 h-6 text-white" />
-                </x-slot>
-            </x-lembur.stat-card>
+            <x-ui.stat-card :value="floor($totalLemburBulanIni / 60) . 'j ' . $totalLemburBulanIni % 60 . 'm'" label="Total Lembur Bulan Ini" color="green" variant="gradient"
+                iconName="chart" />
 
-            <x-lembur.stat-card :value="$menungguApproval" label="Menunggu Approval" gradient="from-yellow-50 to-amber-100"
-                iconBg="bg-yellow-500" textColor="text-yellow-800">
-                <x-slot name="iconSlot">
-                    <x-icons.clock class="w-6 h-6 text-white" />
-                </x-slot>
-            </x-lembur.stat-card>
+            <x-ui.stat-card :value="$menungguApproval" label="Menunggu Approval" color="yellow" variant="gradient"
+                iconName="clock" />
 
-            <x-lembur.stat-card :value="$lemburDisetujui" label="Lembur Disetujui" gradient="from-blue-50 to-indigo-100"
-                iconBg="bg-blue-500" textColor="text-blue-800">
-                <x-slot name="iconSlot">
-                    <x-icons.check-circle class="w-6 h-6 text-white" />
-                </x-slot>
-            </x-lembur.stat-card>
+            <x-ui.stat-card :value="$lemburDisetujui" label="Lembur Disetujui" color="blue" variant="gradient"
+                iconName="check" />
         </div>
 
         {{-- Riwayat Lembur --}}

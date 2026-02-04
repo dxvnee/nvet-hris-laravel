@@ -29,5 +29,5 @@
         </div>
     @endif
 @else
-    <x-lembur.empty-state message="Belum ada riwayat lembur" />
+    <x-ui.empty-state message="Belum ada riwayat lembur" icon="clock" />
 @endif

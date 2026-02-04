@@ -181,23 +181,15 @@
                         </table>
                     </div>
                 @else
-                    <x-dashboard.empty-state title="Tidak Ada Data"
-                        message="Tidak ada data absensi untuk pegawai ini pada periode yang dipilih.">
-                        <x-slot:icon>
-                            <x-icons.calendar class="w-12 h-12" />
-                        </x-slot:icon>
-                    </x-dashboard.empty-state>
+                    <x-ui.empty-state message="Tidak ada data absensi untuk pegawai ini pada periode yang dipilih."
+                        icon="calendar" size="lg" />
                 @endif
             </x-ui.section-card>
         @else
             {{-- No User Selected --}}
             <x-ui.section-card>
-                <x-dashboard.empty-state title="Pilih Pegawai"
-                    message="Silakan pilih pegawai terlebih dahulu untuk melihat riwayat absensi.">
-                    <x-slot:icon>
-                        <x-icons.users class="w-12 h-12" />
-                    </x-slot:icon>
-                </x-dashboard.empty-state>
+                <x-ui.empty-state message="Silakan pilih pegawai terlebih dahulu untuk melihat riwayat absensi."
+                    icon="users" size="lg" />
             </x-ui.section-card>
         @endif
     </div>

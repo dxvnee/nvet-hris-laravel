@@ -6,26 +6,12 @@
     <div class="space-y-6">
         {{-- Statistics Cards --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 animate-slide-up-delay-1">
-            <x-lembur.stat-card :value="$stats['total'] ?? 0" label="Total Lembur" gradient="from-emerald-50 to-green-100"
-                iconBg="bg-emerald-500" textColor="text-emerald-800">
-                <x-slot name="iconSlot">
-                    <x-icons.chart-bar class="w-6 h-6 text-white" />
-                </x-slot>
-            </x-lembur.stat-card>
+            <x-ui.stat-card :value="$stats['total'] ?? 0" label="Total Lembur" color="green" variant="gradient" iconName="chart" />
 
-            <x-lembur.stat-card :value="$stats['pending'] ?? 0" label="Menunggu Approval" gradient="from-yellow-50 to-amber-100"
-                iconBg="bg-yellow-500" textColor="text-yellow-800">
-                <x-slot name="iconSlot">
-                    <x-icons.clock class="w-6 h-6 text-white" />
-                </x-slot>
-            </x-lembur.stat-card>
+            <x-ui.stat-card :value="$stats['pending'] ?? 0" label="Menunggu Approval" color="yellow" variant="gradient"
+                iconName="clock" />
 
-            <x-lembur.stat-card :value="$stats['approved'] ?? 0" label="Disetujui" gradient="from-blue-50 to-indigo-100"
-                iconBg="bg-blue-500" textColor="text-blue-800">
-                <x-slot name="iconSlot">
-                    <x-icons.check-circle class="w-6 h-6 text-white" />
-                </x-slot>
-            </x-lembur.stat-card>
+            <x-ui.stat-card :value="$stats['approved'] ?? 0" label="Disetujui" color="blue" variant="gradient" iconName="check" />
         </div>
 
         {{-- Lembur List --}}
@@ -62,7 +48,7 @@
                     </div>
                 @endif
             @else
-                <x-lembur.empty-state message="Belum ada pengajuan lembur" />
+                <x-ui.empty-state message="Belum ada pengajuan lembur" icon="clock" size="lg" />
             @endif
         </x-ui.section-card>
     </div>

@@ -42,11 +42,7 @@
                     </table>
                 </div>
             @else
-                <x-dashboard.empty-state title="Belum Ada Data" message="Belum ada data absensi">
-                    <x-slot:icon>
-                        <x-icons.calendar class="w-12 h-12" />
-                    </x-slot:icon>
-                </x-dashboard.empty-state>
+                <x-ui.empty-state message="Belum ada data absensi" icon="calendar" size="lg" />
             @endif
         </x-ui.section-card>
 

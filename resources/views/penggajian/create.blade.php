@@ -4,7 +4,7 @@
 
     <div class="max-w-5xl mx-auto space-y-6">
         <!-- Back Button -->
-        <x-penggajian.back-button :href="route('penggajian.index', ['periode' => $periode])" />
+        <x-ui.back-button :href="route('penggajian.index', ['periode' => $periode])" />
 
         <!-- Employee Info Card -->
         <x-penggajian.employee-card :user="$user" show-gaji-pokok class="animate-slide-up" />
@@ -20,26 +20,14 @@
             <input type="hidden" name="periode" value="{{ $periode }}">
 
             <!-- Gaji Pokok & Potongan Section -->
-            <x-penggajian.gaji-potongan-section 
-                :user="$user"
-                :total-menit-telat="$totalMenitTelat"
-                :potongan-per-menit="$potonganPerMenit"
-                :total-lupa-pulang="$totalLupaPulang"
-                :total-tidak-hadir="$totalTidakHadir"
-                :potongan-per-tidak-hadir="$potonganPerTidakHadir"
-            />
+            <x-penggajian.gaji-potongan-section :user="$user" :total-menit-telat="$totalMenitTelat" :potongan-per-menit="$potonganPerMenit" :total-lupa-pulang="$totalLupaPulang"
+                :total-tidak-hadir="$totalTidakHadir" :potongan-per-tidak-hadir="$potonganPerTidakHadir" />
 
             <!-- Lembur Section -->
-            <x-penggajian.lembur-section 
-                :total-menit-lembur="$totalMenitLembur ?? 0"
-                :upah-lembur-per-menit="$upahLemburPerMenit ?? 0"
-            />
+            <x-penggajian.lembur-section :total-menit-lembur="$totalMenitLembur ?? 0" :upah-lembur-per-menit="$upahLemburPerMenit ?? 0" />
 
             <!-- Insentif Section -->
-            <x-penggajian.insentif-section 
-                :jabatan="$user->jabatan"
-                :detail="$detail"
-            />
+            <x-penggajian.insentif-section :jabatan="$user->jabatan" :detail="$detail" />
 
             <!-- Lain-lain Section -->
             <x-penggajian.lain-lain-section />
@@ -50,16 +38,7 @@
     </div>
 
     <!-- Form Script -->
-    <x-penggajian.form-script 
-        :user="$user"
-        :total-menit-telat="$totalMenitTelat"
-        :potongan-per-menit="$potonganPerMenit"
-        :total-menit-lembur="$totalMenitLembur ?? 0"
-        :upah-lembur-per-menit="$upahLemburPerMenit ?? 0"
-        :total-tidak-hadir="$totalTidakHadir"
-        :potongan-per-tidak-hadir="$potonganPerTidakHadir"
-        :total-lupa-pulang="$totalLupaPulang"
-        :detail="$detail"
-        :lain-lain-items="[]"
-    />
+    <x-penggajian.form-script :user="$user" :total-menit-telat="$totalMenitTelat" :potongan-per-menit="$potonganPerMenit" :total-menit-lembur="$totalMenitLembur ?? 0"
+        :upah-lembur-per-menit="$upahLemburPerMenit ?? 0" :total-tidak-hadir="$totalTidakHadir" :potongan-per-tidak-hadir="$potonganPerTidakHadir" :total-lupa-pulang="$totalLupaPulang" :detail="$detail"
+        :lain-lain-items="[]" />
 </x-app-layout>
