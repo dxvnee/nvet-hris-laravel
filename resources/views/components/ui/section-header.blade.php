@@ -1,3 +1,4 @@
+{{-- Universal Section Header Component --}}
 @props([
     'title',
     'subtitle' => null,
@@ -6,11 +7,13 @@
     'linkText' => 'Lihat Semua',
 ])
 
-<div class="flex items-center justify-between mb-6">
+<div {{ $attributes->merge(['class' => 'flex items-center justify-between mb-6']) }}>
     <div class="flex items-center gap-3">
-        <div class="p-2.5 bg-gradient-to-br {{ $gradient }} rounded-xl shadow-md">
-            {{ $icon ?? '' }}
-        </div>
+        @if (isset($icon))
+            <div class="p-2.5 bg-gradient-to-br {{ $gradient }} rounded-xl shadow-md">
+                {{ $icon }}
+            </div>
+        @endif
         <div>
             <h3 class="text-lg font-bold text-gray-800">{{ $title }}</h3>
             @if ($subtitle)

@@ -1,12 +1,18 @@
 {{-- Universal Stat Card Component --}}
 @props([
     'value',
-    'label',
+    'label' => null,
+    'title' => null, // alias for label (backward compatible)
     'color' => 'primary', // primary, blue, green, orange, purple, red, yellow
     'icon' => null, // SVG path string
     'iconName' => 'chart', // chart, calendar, clock, briefcase, users, wallet
     'variant' => 'default', // default, gradient, compact
     'animation' => null, // animate-slide-up-delay-1, etc.
+    'delay' => null, // 1-5 for animate-slide-up-delay-X
+    'gradient' => null, // custom gradient override
+    'hoverBorder' => null, // custom hover border
+    'valueColor' => null, // custom value color
+    'pulse' => false, // pulse animation
 ])
 
 @php
@@ -81,56 +87,76 @@
 
     $config = $colorConfig[$color] ?? $colorConfig['primary'];
     $iconPath = $icon ?? ($icons[$iconName] ?? $icons['chart']);
+
+    // Handle aliases and overrides
+    $displayLabel = $label ?? ($title ?? 'Stat');
+    $animationClass = $animation ?? ($delay ? "animate-slide-up-delay-{$delay}" : '');
+    $customGradient = $gradient ?? $config['gradient'];
+    $customHoverBorder = $hoverBorder ?? 'hover:border-primary/20';
+    $customValueColor = $valueColor ?? $config['value'];
 @endphp
 
 @if ($variant === 'gradient')
     {{-- Gradient variant (like lembur/stat-card) --}}
     <div
-        {{ $attributes->merge(['class' => "bg-gradient-to-br {$config['bg']} rounded-2xl p-6 shadow-sm border border-white/50 {$animation}"]) }}>
+        {{ $attributes->merge(['class' => "bg-gradient-to-br {$config['bg']} rounded-2xl p-6 shadow-sm border border-white/50 {$animationClass}"]) }}>
         <div class="flex items-center gap-4">
-            <div class="p-3 bg-gradient-to-br {{ $config['gradient'] }} rounded-xl shadow-lg">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {!! $iconPath !!}
-                </svg>
+            <div
+                class="p-3 bg-gradient-to-br {{ $customGradient }} rounded-xl shadow-lg {{ $pulse ? 'animate-pulse' : '' }}">
+                @if (isset($iconSlot))
+                    {{ $iconSlot }}
+                @else
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {!! $iconPath !!}
+                    </svg>
+                @endif
             </div>
             <div>
-                <p class="text-sm font-medium text-gray-600">{{ $label }}</p>
-                <p class="text-2xl font-bold {{ $config['value'] }}">{{ $value }}</p>
+                <p class="text-sm font-medium text-gray-600">{{ $displayLabel }}</p>
+                <p class="text-2xl font-bold {{ $customValueColor }}">{{ $value }}</p>
             </div>
         </div>
     </div>
 @elseif($variant === 'compact')
     {{-- Compact variant (like profile/stat-card) --}}
     <div
-        {{ $attributes->merge(['class' => "bg-gradient-to-r {$config['bg']} rounded-xl p-4 border {$config['border']} {$animation}"]) }}>
+        {{ $attributes->merge(['class' => "bg-gradient-to-r {$config['bg']} rounded-xl p-4 border {$config['border']} {$animationClass}"]) }}>
         <div class="flex items-center gap-3">
-            <div class="p-2 bg-gradient-to-br {{ $config['gradient'] }} rounded-lg">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {!! $iconPath !!}
-                </svg>
+            <div class="p-2 bg-gradient-to-br {{ $customGradient }} rounded-lg {{ $pulse ? 'animate-pulse' : '' }}">
+                @if (isset($iconSlot))
+                    {{ $iconSlot }}
+                @else
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {!! $iconPath !!}
+                    </svg>
+                @endif
             </div>
             <div>
-                <p class="text-sm font-medium {{ $config['text'] }}">{{ $label }}</p>
-                <p class="text-2xl font-bold {{ $config['value'] }}">{{ $value }}</p>
+                <p class="text-sm font-medium {{ $config['text'] }}">{{ $displayLabel }}</p>
+                <p class="text-2xl font-bold {{ $customValueColor }}">{{ $value }}</p>
             </div>
         </div>
     </div>
 @else
     {{-- Default variant (like dashboard/stat-card) --}}
     <div
-        {{ $attributes->merge(['class' => "group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-5 lg:p-6 border border-gray-100 hover:border-primary/20 {$animation}"]) }}>
+        {{ $attributes->merge(['class' => "group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-5 lg:p-6 border border-gray-100 {$customHoverBorder} {$animationClass}"]) }}>
         <div class="flex items-center justify-between mb-4">
             <div
-                class="p-3 bg-gradient-to-br {{ $config['gradient'] }} rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {!! $iconPath !!}
-                </svg>
+                class="p-3 bg-gradient-to-br {{ $customGradient }} rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300 {{ $pulse ? 'animate-pulse' : '' }}">
+                @if (isset($iconSlot))
+                    {{ $iconSlot }}
+                @else
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {!! $iconPath !!}
+                    </svg>
+                @endif
             </div>
             <div class="text-right">
-                <span class="text-3xl lg:text-4xl font-bold {{ $config['value'] }}">{{ $value }}</span>
+                <span class="text-3xl lg:text-4xl font-bold {{ $customValueColor }}">{{ $value }}</span>
             </div>
         </div>
-        <h3 class="text-xs lg:text-sm font-semibold text-gray-500 uppercase tracking-wider">{{ $label }}</h3>
+        <h3 class="text-xs lg:text-sm font-semibold text-gray-500 uppercase tracking-wider">{{ $displayLabel }}</h3>
         @if (isset($footer))
             <div class="mt-3">{{ $footer }}</div>
         @endif

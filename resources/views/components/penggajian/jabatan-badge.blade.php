@@ -1,17 +1,16 @@
-@props([
-    'jabatan',
-])
+{{-- Jabatan Badge - wrapper for ui/status-badge --}}
+@props(['jabatan'])
 
 @php
-    $classes = match($jabatan) {
-        'Dokter' => 'bg-purple-100 text-purple-700',
-        'Paramedis' => 'bg-blue-100 text-blue-700',
-        'Tech' => 'bg-green-100 text-green-700',
-        'FO' => 'bg-orange-100 text-orange-700',
-        default => 'bg-gray-100 text-gray-700',
-    };
+    $typeMap = [
+        'Dokter' => 'purple',
+        'Paramedis' => 'info',
+        'Tech' => 'green',
+        'FO' => 'orange',
+    ];
+    $badgeType = $typeMap[$jabatan] ?? 'default';
 @endphp
 
-<span {{ $attributes->merge(['class' => "inline-flex items-center px-3 py-1 rounded-full text-sm font-medium $classes"]) }}>
+<x-ui.status-badge :type="$badgeType" {{ $attributes }}>
     {{ $jabatan }}
-</span>
+</x-ui.status-badge>

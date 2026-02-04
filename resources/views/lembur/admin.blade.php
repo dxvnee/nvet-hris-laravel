@@ -54,7 +54,7 @@
     </div>
 
     {{-- Photo Modal --}}
-    <x-lembur.photo-modal />
+    <x-ui.photo-modal title="Foto Lembur" variant="simple" :showDownload="false" />
 
     {{-- Reject Modal --}}
     <x-lembur.reject-modal />

@@ -1,12 +1,6 @@
-{{-- Form Section Component --}}
+{{-- Form Section Component - wrapper for section-card --}}
 @props(['title', 'icon' => null, 'bordered' => false])
 
-<div {{ $attributes->merge(['class' => $bordered ? 'border-t pt-6' : '']) }}>
-    <h4 class="text-lg font-semibold mb-4 flex items-center gap-2">
-        @if ($icon)
-            {!! $icon !!}
-        @endif
-        {{ $title }}
-    </h4>
+<x-ui.section-card :title="$title" :icon="$icon" :variant="$bordered ? 'bordered' : 'simple'" {{ $attributes }}>
     {{ $slot }}
-</div>
+</x-ui.section-card>

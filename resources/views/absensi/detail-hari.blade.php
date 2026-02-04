@@ -47,6 +47,6 @@
         </x-ui.section-card>
 
         {{-- Photo Modal --}}
-        <x-absensi.photo-modal />
+        <x-ui.photo-modal title="Foto Absensi" />
     </div>
 </x-app-layout>

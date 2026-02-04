@@ -1,3 +1,4 @@
+{{-- Universal Quick Action Component --}}
 @props([
     'href',
     'title',
@@ -13,10 +14,12 @@
     <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br {{ $bgGradient }} to-transparent rounded-bl-full">
     </div>
     <div class="relative">
-        <div
-            class="p-3 bg-gradient-to-br {{ $gradient }} rounded-xl w-fit mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-            {{ $icon }}
-        </div>
+        @if (isset($icon))
+            <div
+                class="p-3 bg-gradient-to-br {{ $gradient }} rounded-xl w-fit mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                {{ $icon }}
+            </div>
+        @endif
         <h4 class="font-bold text-gray-800 {{ $hoverText }} transition-colors">{{ $title }}</h4>
         <p class="text-sm text-gray-500 mt-1">{{ $subtitle }}</p>
     </div>
