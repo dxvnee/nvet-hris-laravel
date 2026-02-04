@@ -2,85 +2,92 @@
     html {
         font-family: "Lexend", sans-serif;
     }
-    body{
+    body {
         @apply bg-primaryUltraLight;
     }
 }
-@layer components {
-  .btn {
-    @apply inline-flex items-center justify-center px-5 py-3 rounded-xl font-semibold uppercase tracking-wide
-           transition-all duration-300 transform cursor-pointer select-none;
-  }
 
-  .btn-primary {
-    @apply bg-gradient-to-br from-primary to-primaryDark text-white shadow-lg;
-  }
-
-  .btn-primary:hover {
-    @apply from-primaryDark to-primaryDark shadow-xl scale-[1.02];
-  }
-
-  .btn-primary:active {
-    @apply bg-gradient-to-br from-primaryLight to-primary  scale-[0.98] shadow-md;
-  }
+.no-transition *,
+.no-transition *::before,
+.no-transition *::after {
+    transition: none !important;
 }
 
 @layer components {
-  .btn {
-    @apply inline-flex items-center justify-center px-5 py-3 rounded-xl font-semibold uppercase tracking-wide
-           transition-all duration-300 transform cursor-pointer select-none;
-  }
+    .btn {
+        @apply inline-flex items-center justify-center px-5 py-3 rounded-xl font-semibold uppercase tracking-wide
+            transition-all duration-300 transform cursor-pointer select-none;
+    }
 
-  .btn-secondary {
-    @apply bg-white text-black;
-  }
+    .btn-primary {
+        @apply bg-gradient-to-br from-primary to-primaryDark text-white shadow-lg;
+    }
 
-  .btn-secondary:hover {
-    @apply bg-primaryExtraLight scale-[1.02];
-  }
+    .btn-primary:hover {
+        @apply from-primaryDark to-primaryDark shadow-xl scale-[1.02];
+    }
 
-  .btn-secondary:active {
-    @apply bg-primaryUltraLight scale-[0.98];
-  }
+    .btn-primary:active {
+        @apply bg-gradient-to-br from-primaryLight to-primary  scale-[0.98] shadow-md;
+    }
 }
 
-@layer components{
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-center px-5 py-3 rounded-xl font-semibold uppercase tracking-wide
+           transition-all duration-300 transform cursor-pointer select-none;
+    }
+
+    .btn-secondary {
+        @apply bg-white text-black;
+    }
+
+    .btn-secondary:hover {
+        @apply bg-primaryExtraLight scale-[1.02];
+    }
+
+    .btn-secondary:active {
+        @apply bg-primaryUltraLight scale-[0.98];
+    }
+}
+
+@layer components {
     .bg-gradient-primary {
         @apply bg-gradient-to-br from-primary to-primaryDark;
     }
 }
 
 @layer components {
-  .form-input {
-    @apply rounded-xl border-2 border-white
+    .form-input {
+        @apply rounded-xl border-2 border-white
            bg-gray-100 /* default abu-abu terang */
            placeholder:text-gray-400
            transition-all duration-300
            focus:bg-white /* saat aktif/klik berubah putih */
             focus:border-primary focus:ring-4 focus:ring-primary/20;
-  }
+    }
 
-  .form-input.error {
-    @apply border-red-500 ring-red-500/20;
-  }
+    .form-input.error {
+        @apply border-red-500 ring-red-500/20;
+    }
 
-  .form-label {
-    @apply block font-semibold text-primary mb-2 text-sm;
-  }
+    .form-label {
+        @apply block font-semibold text-primary mb-2 text-sm;
+    }
 }
 
 @layer components {
-  .form-checkbox {
-    @apply w-5 h-5 rounded border-2 border-gray-300 text-primary transition-all duration-200 cursor-pointer;
-  }
+    .form-checkbox {
+        @apply w-5 h-5 rounded border-2 border-gray-300 text-primary transition-all duration-200 cursor-pointer;
+    }
 
-  .form-checkbox:checked {
-    @apply bg-primary border-primary;
-  }
+    .form-checkbox:checked {
+        @apply bg-primary border-primary;
+    }
 
-  .form-checkbox-label {
-    @apply  text-gray-700 select-none;
-  }
+    .form-checkbox-label {
+        @apply text-gray-700 select-none;
+    }
 }
 
 @layer components {
@@ -98,119 +105,119 @@
     }
 }
 
-    .animate-fade-in {
-            animation: fadeIn 1s ease-out;
-        }
+.animate-fade-in {
+    animation: fadeIn 1s ease-out;
+}
 
-        .animate-slide-up {
-            animation: slideUp 0.8s ease-out;
-        }
+.animate-slide-up {
+    animation: slideUp 0.8s ease-out;
+}
 
-        .animate-slide-up-delay-1 {
-            animation: slideUp 0.8s ease-out 0.1s both;
-        }
+.animate-slide-up-delay-1 {
+    animation: slideUp 0.8s ease-out 0.1s both;
+}
 
-        .animate-slide-up-delay-2 {
-            animation: slideUp 0.8s ease-out 0.2s both;
-        }
+.animate-slide-up-delay-2 {
+    animation: slideUp 0.8s ease-out 0.2s both;
+}
 
-        .animate-slide-up-delay-3 {
-            animation: slideUp 0.8s ease-out 0.3s both;
-        }
+.animate-slide-up-delay-3 {
+    animation: slideUp 0.8s ease-out 0.3s both;
+}
 
-        .animate-slide-up-delay-4 {
-            animation: slideUp 0.8s ease-out 0.4s both;
-        }
+.animate-slide-up-delay-4 {
+    animation: slideUp 0.8s ease-out 0.4s both;
+}
 
-        .animate-slide-up-delay-5 {
-            animation: slideUp 0.8s ease-out 0.5s both;
-        }
+.animate-slide-up-delay-5 {
+    animation: slideUp 0.8s ease-out 0.5s both;
+}
 
-        .animate-fade-in-up-delay-1 {
-            animation: fadeInUp 0.6s ease-out 0.6s both;
-        }
+.animate-fade-in-up-delay-1 {
+    animation: fadeInUp 0.6s ease-out 0.6s both;
+}
 
-        .animate-fade-in-up-delay-2 {
-            animation: fadeInUp 0.6s ease-out 0.7s both;
-        }
+.animate-fade-in-up-delay-2 {
+    animation: fadeInUp 0.6s ease-out 0.7s both;
+}
 
-        .animate-fade-in-up-delay-3 {
-            animation: fadeInUp 0.6s ease-out 0.8s both;
-        }
+.animate-fade-in-up-delay-3 {
+    animation: fadeInUp 0.6s ease-out 0.8s both;
+}
 
-        .animate-pulse-slow {
-            animation: pulse 3s ease-in-out infinite;
-        }
+.animate-pulse-slow {
+    animation: pulse 3s ease-in-out infinite;
+}
 
-        .animate-bounce-slow {
-            animation: bounce 2s ease-in-out infinite;
-        }
+.animate-bounce-slow {
+    animation: bounce 2s ease-in-out infinite;
+}
 
-        .animate-count-up {
-            animation: countUp 2s ease-out forwards;
-        }
+.animate-count-up {
+    animation: countUp 2s ease-out forwards;
+}
 
-        .animate-progress {
-            animation: progressFill 1.5s ease-out forwards;
-        }
+.animate-progress {
+    animation: progressFill 1.5s ease-out forwards;
+}
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
 
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px) scale(0.95);
-            }
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
 
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        @keyframes countUp {
-            from {
-                transform: scale(0.5);
-                opacity: 0;
-            }
+@keyframes countUp {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
 
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
 
-        @keyframes progressFill {
-            from {
-                width: 0%;
-            }
+@keyframes progressFill {
+    from {
+        width: 0%;
+    }
 
-            to {
-                width: var(--progress-width, 85%);
-            }
-        }
+    to {
+        width: var(--progress-width, 85%);
+    }
+}
 
 @layer components {
     .shadow-2xl-lr {
@@ -219,7 +226,6 @@
 }
 
 @layer components {
-
     .main-content {
         transition: margin-left 0.3s ease;
         margin-left: 0; /* posisi default */
@@ -232,7 +238,6 @@
 }
 
 @layer components {
-
     .animate-fade-in {
         animation: fadeIn 0.8s ease-in-out;
     }
@@ -279,6 +284,3 @@
         }
     }
 }
-
-
-

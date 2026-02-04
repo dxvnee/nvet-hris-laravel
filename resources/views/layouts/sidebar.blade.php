@@ -2,7 +2,7 @@
 <div id="sidebar-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden" onclick="toggleSidebar()">
 </div>
 
-<div id="sidebar" class="sidebar mr-5 overflow-y-auto overflow-x-hidden  shadow-2xl-lr rounded-xl flex w-96 p-5 bg-white hover:shadow-3xl
+<div id="sidebar" class="sidebar m.   r-5 overflow-y-auto overflow-x-hidden  shadow-2xl-lr rounded-xl flex w-96 p-5 bg-white hover:shadow-3xl
     lg:relative fixed top-0 left-0 h-full z-50 lg:z-auto lg:h-auto lg:m-0 lg:mr-5">
     <div class="flex h-full w-full flex-col">
 
@@ -270,8 +270,10 @@
 
     // Initialize sidebar state on mobile
     document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+
         if (window.innerWidth < 1024) {
-            const sidebar = document.getElementById('sidebar');
             // Disable transition for initial load
             sidebar.style.transition = 'none';
             sidebar.classList.add('sidebar-hidden');
@@ -279,6 +281,12 @@
             setTimeout(() => {
                 sidebar.style.transition = '';
             }, 10);
+        } else {
+            sidebar.style.transition = 'none';
+
+            // DESKTOP MODE
+            sidebar.classList.add('sidebar-hidden');
+            mainContent.classList.add('content-shift');
         }
     });
 
@@ -295,7 +303,6 @@
             // DESKTOP MODE
             backdrop.classList.add('hidden');
 
-            // 🔥 PAKSA SIDEBAR SELALU TERBUKA
             sidebar.classList.remove('sidebar-hidden');
             mainContent.classList.remove('content-shift');
 
@@ -308,7 +315,5 @@
             backdrop.classList.add('hidden');
         }
     });
-
-
 
 </script>
