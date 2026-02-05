@@ -7,7 +7,11 @@
         <div>
             <h3 class="text-xl font-bold text-gray-800">{{ $user->name }}</h3>
             <p class="text-gray-500">{{ $user->email }}</p>
-            <x-penggajian.jabatan-badge :jabatan="$user->jabatan" class="mt-2" />
+            @php
+                $jabatanTypeMap = ['Dokter' => 'purple', 'Paramedis' => 'info', 'Tech' => 'green', 'FO' => 'orange'];
+                $jabatanBadgeType = $jabatanTypeMap[$user->jabatan] ?? 'default';
+            @endphp
+            <x-ui.status-badge :type="$jabatanBadgeType" class="mt-2">{{ $user->jabatan }}</x-ui.status-badge>
         </div>
         @if ($showGajiPokok || $showStatus)
             <div class="ml-auto text-right">

@@ -8,11 +8,29 @@
         <div class="bg-white rounded-2xl shadow-xl p-8 animate-slide-up">
             <div class="flex flex-col lg:flex-row gap-8">
                 {{-- Profile Photo Section --}}
-                <x-profile.avatar-card :user="auth()->user()" formId="profile-form" />
+                <x-ui.avatar-upload :user="auth()->user()" formId="profile-form" previewId="avatar-preview"
+                    onchange="handleFileSelection(event)" size="lg" />
 
                 {{-- Profile Info Section --}}
                 <div class="flex-1">
-                    <x-profile.info-grid :user="auth()->user()" />
+                    @php
+                        $user = auth()->user();
+                        $jabatanTypeMap = [
+                            'Dokter' => 'purple',
+                            'Paramedis' => 'info',
+                            'Tech' => 'green',
+                            'FO' => 'orange',
+                        ];
+                        $jabatanBadgeType = $jabatanTypeMap[$user->jabatan] ?? 'default';
+                    @endphp
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <x-ui.display-field label="Nama Lengkap" :value="$user->name" />
+                        <x-ui.display-field label="Email" :value="$user->email" />
+                        <x-ui.display-field label="Jabatan">
+                            <x-ui.status-badge :type="$jabatanBadgeType">{{ $user->jabatan }}</x-ui.status-badge>
+                        </x-ui.display-field>
+                        <x-ui.display-field label="Bergabung Sejak" :value="$user->created_at?->format('d M Y') ?? '-'" />
+                    </div>
 
                     {{-- Stats Cards --}}
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">

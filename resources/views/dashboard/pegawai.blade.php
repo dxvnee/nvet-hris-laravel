@@ -4,7 +4,21 @@
 
     <div class="space-y-6">
         {{-- Welcome Section Pegawai --}}
-        <x-dashboard.welcome-header variant="pegawai" :user="$user" :showAvatar="true" />
+        <x-ui.page-hero title="Halo, {{ $user->name }}! 👋" variant="pegawai" :user="$user" :showAvatar="true"
+            :showClock="true">
+            <x-slot name="badges">
+                <span
+                    class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm">
+                    <x-icons.briefcase class="w-4 h-4" />
+                    {{ $user->jabatan }}
+                </span>
+                <span
+                    class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm">
+                    <x-icons.calendar class="w-4 h-4" />
+                    {{ now()->locale('id')->isoFormat('dddd, D MMMM Y') }}
+                </span>
+            </x-slot>
+        </x-ui.page-hero>
 
         {{-- Status Absensi Hari Ini --}}
         <x-ui.section-card class="animate-slide-up-delay-1">
@@ -91,7 +105,28 @@
 
             <div class="space-y-3">
                 @forelse($riwayatAbsensi as $absen)
-                    <x-dashboard.riwayat-item :absen="$absen" />
+                    @php
+                        $historyStatus = $absen->izin
+                            ? 'izin'
+                            : ($absen->libur
+                                ? 'libur'
+                                : ($absen->telat
+                                    ? 'telat'
+                                    : 'hadir'));
+                    @endphp
+                    <x-ui.history-card :date="\Carbon\Carbon::parse($absen->tanggal)->locale('id')->isoFormat('dddd, D MMM Y')" :status="$historyStatus" :primaryTime="$absen->izin
+                        ? null
+                        : ($absen->libur
+                            ? null
+                            : ($absen->jam_masuk
+                                ? $absen->jam_masuk->format('H:i')
+                                : '-'))" :secondaryTime="$absen->jam_pulang ? $absen->jam_pulang->format('H:i') : null"
+                        :description="$absen->izin
+                            ? ($absen->izin_keterangan ?:
+                                'Tanpa keterangan')
+                            : ($absen->libur
+                                ? 'Libur'
+                                : null)" />
                 @empty
                     <x-ui.empty-state message="Belum ada data absensi" description="Belum ada riwayat absensi"
                         icon="calendar" />

@@ -124,28 +124,26 @@
         <td class="flex items-center justify-center py-3 px-4">
             <div class="flex items-center gap-2">
                 @if ($absen->exists)
-                    <a href="{{ route('absen.edit', $absen) }}"
-                        class="p-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-colors"
-                        title="Edit">
+                    <x-ui.action-button type="link" :href="route('absen.edit', $absen)" variant="icon-info" title="Edit">
                         <x-icons.pencil class="w-5 h-5" />
-                    </a>
+                    </x-ui.action-button>
                     <form method="POST" action="{{ route('absen.destroy', $absen) }}"
                         onsubmit="return confirm('Apakah Anda yakin ingin menghapus absensi {{ $absen->user->name }}? Tindakan ini tidak dapat dibatalkan.')"
                         class="inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit"
-                            class="p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
-                            title="Hapus">
+                        <x-ui.action-button type="submit" variant="icon-danger" title="Hapus">
                             <x-icons.trash class="w-5 h-5" />
-                        </button>
+                        </x-ui.action-button>
                     </form>
                 @else
-                    <a href="{{ route('absen.create', ['tanggal' => $tanggal ?? now()->format('Y-m-d'), 'user' => $absen->user_id]) }}"
-                        class="p-2 bg-green-100 hover:bg-green-200 text-green-600 rounded-lg transition-colors"
+                    <x-ui.action-button type="link" :href="route('absen.create', [
+                        'tanggal' => $tanggal ?? now()->format('Y-m-d'),
+                        'user' => $absen->user_id,
+                    ])" variant="icon-success"
                         title="Tambah Absen Manual">
                         <x-icons.plus class="w-5 h-5" />
-                    </a>
+                    </x-ui.action-button>
                 @endif
             </div>
         </td>

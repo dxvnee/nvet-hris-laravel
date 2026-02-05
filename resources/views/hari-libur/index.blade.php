@@ -7,7 +7,18 @@
         {{-- Actions --}}
         <div class="flex flex-col sm:flex-row justify-between gap-4">
             {{-- Year Filter --}}
-            <x-hari-libur.year-filter :currentYear="$tahun" routeName="hari-libur.index" />
+            @php
+                $startYear = 2024;
+                $endYear = date('Y') + 1;
+                $yearOptions = [];
+                for ($y = $startYear; $y <= $endYear; $y++) {
+                    $yearOptions[$y] = (string) $y;
+                }
+            @endphp
+            <form method="GET" action="{{ route('hari-libur.index') }}" class="flex items-center gap-3">
+                <x-ui.form-select name="tahun" label="Tahun:" :options="$yearOptions" :selected="$tahun" variant="inline"
+                    onchange="this.form.submit()" />
+            </form>
 
             {{-- Add Button --}}
             <a href="{{ route('hari-libur.create') }}"

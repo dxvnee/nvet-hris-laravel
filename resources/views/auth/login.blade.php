@@ -15,14 +15,15 @@
 
 <body class="min-h-screen flex items-center justify-center bg-primaryExtraLight font-sans">
 
-    <x-error-message />
+    <x-ui.error-message />
 
     <main class="w-full min-h-screen flex items-center justify-center  bg-primaryExtraLight">
-        <x-card>
+        <div
+            class="flex flex-col md:flex-row w-full max-w-[900px] m-4 bg-white rounded-2xl shadow-[0_20px_60px_rgba(133,94,65,0.15)] overflow-hidden animate-[slideUp_0.8s_ease-out]">
             <!-- LEFT -->
             <div
                 class="md:flex-1 bg-gradient-to-br bg-white md:p-10 md:pt-0 pt-10 flex flex-col justify-center items-center">
-                <x-logo :animated="true" />
+                <x-ui.logo :animated="true" />
             </div>
 
             <!-- RIGHT -->
@@ -61,11 +62,12 @@
                 </form>
 
             </div>
-        </x-card>
+        </div>
 
 
     </main>
 
 
 </body>
+
 </html>

@@ -1,96 +1,78 @@
-{{-- Universal Confirmation/Form Modal Component --}}
 @props([
-    'id',
-    'title',
-    'maxWidth' => 'md', // sm, md, lg, xl
-    'variant' => 'default', // default, danger, success
-    'showClose' => true,
+    'name',
+    'show' => false,
+    'maxWidth' => '2xl'
 ])
 
 @php
-    $widthClasses = [
-        'sm' => 'max-w-sm',
-        'md' => 'max-w-md',
-        'lg' => 'max-w-lg',
-        'xl' => 'max-w-xl',
-        '2xl' => 'max-w-2xl',
-    ];
-
-    $headerColors = [
-        'default' => 'border-b border-gray-200',
-        'danger' => 'bg-red-50 border-b border-red-100',
-        'success' => 'bg-green-50 border-b border-green-100',
-        'primary' => 'bg-gradient-to-r from-primary to-primaryDark text-white',
-    ];
+$maxWidth = [
+    'sm' => 'sm:max-w-sm',
+    'md' => 'sm:max-w-md',
+    'lg' => 'sm:max-w-lg',
+    'xl' => 'sm:max-w-xl',
+    '2xl' => 'sm:max-w-2xl',
+][$maxWidth];
 @endphp
 
-<div id="{{ $id }}" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm"
-    onclick="if(event.target === this) close{{ Str::studly($id) }}Modal()">
+<div
+    x-data="{
+        show: @js($show),
+        focusables() {
+            // All focusable element types...
+            let selector = 'a, button, input:not([type=\'hidden\']), textarea, select, details, [tabindex]:not([tabindex=\'-1\'])'
+            return [...$el.querySelectorAll(selector)]
+                // All non-disabled elements...
+                .filter(el => ! el.hasAttribute('disabled'))
+        },
+        firstFocusable() { return this.focusables()[0] },
+        lastFocusable() { return this.focusables().slice(-1)[0] },
+        nextFocusable() { return this.focusables()[this.nextFocusableIndex()] || this.firstFocusable() },
+        prevFocusable() { return this.focusables()[this.prevFocusableIndex()] || this.lastFocusable() },
+        nextFocusableIndex() { return (this.focusables().indexOf(document.activeElement) + 1) % (this.focusables().length + 1) },
+        prevFocusableIndex() { return Math.max(0, this.focusables().indexOf(document.activeElement)) -1 },
+    }"
+    x-init="$watch('show', value => {
+        if (value) {
+            document.body.classList.add('overflow-y-hidden');
+            {{ $attributes->has('focusable') ? 'setTimeout(() => firstFocusable().focus(), 100)' : '' }}
+        } else {
+            document.body.classList.remove('overflow-y-hidden');
+        }
+    })"
+    x-on:open-modal.window="$event.detail == '{{ $name }}' ? show = true : null"
+    x-on:close-modal.window="$event.detail == '{{ $name }}' ? show = false : null"
+    x-on:close.stop="show = false"
+    x-on:keydown.escape.window="show = false"
+    x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
+    x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
+    x-show="show"
+    class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50"
+    style="display: {{ $show ? 'block' : 'none' }};"
+>
     <div
-        class="bg-white rounded-2xl shadow-2xl {{ $widthClasses[$maxWidth] ?? $widthClasses['md'] }} w-full mx-4 overflow-hidden transform transition-all">
-        {{-- Header --}}
-        <div class="flex items-center justify-between p-4 {{ $headerColors[$variant] ?? $headerColors['default'] }}">
-            <h3 class="text-lg font-semibold {{ $variant === 'primary' ? 'text-white' : 'text-gray-900' }}">
-                {{ $title }}</h3>
-            @if ($showClose)
-                <button type="button" onclick="close{{ Str::studly($id) }}Modal()"
-                    class="p-2 rounded-lg transition-colors {{ $variant === 'primary' ? 'hover:bg-white/20 text-white' : 'hover:bg-gray-100 text-gray-500' }}">
-                    <x-icons.x-mark class="w-5 h-5" />
-                </button>
-            @endif
-        </div>
+        x-show="show"
+        class="fixed inset-0 transform transition-all"
+        x-on:click="show = false"
+        x-transition:enter="ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+    >
+        <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75"></div>
+    </div>
 
-        {{-- Content --}}
-        <div class="p-4">
-            {{ $slot }}
-        </div>
-
-        {{-- Footer/Actions --}}
-        @if (isset($footer))
-            <div class="p-4 border-t border-gray-100 flex justify-end gap-3">
-                {{ $footer }}
-            </div>
-        @endif
+    <div
+        x-show="show"
+        class="mb-6 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full {{ $maxWidth }} sm:mx-auto"
+        x-transition:enter="ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+        x-transition:leave="ease-in duration-200"
+        x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+        x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+    >
+        {{ $slot }}
     </div>
 </div>
-
-@once
-    @push('scripts')
-        <script>
-            // Generic modal functions
-            function openModal(modalId) {
-                const modal = document.getElementById(modalId);
-                if (modal) {
-                    modal.classList.remove('hidden');
-                    modal.classList.add('flex');
-                    document.body.style.overflow = 'hidden';
-                }
-            }
-
-            function closeModal(modalId) {
-                const modal = document.getElementById(modalId);
-                if (modal) {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                    document.body.style.overflow = '';
-                }
-            }
-        </script>
-    @endpush
-@endonce
-
-<script>
-    function open{{ Str::studly($id) }}Modal(data = {}) {
-        openModal('{{ $id }}');
-        // Dispatch custom event with data
-        document.getElementById('{{ $id }}').dispatchEvent(
-            new CustomEvent('modal-opened', {
-                detail: data
-            })
-        );
-    }
-
-    function close{{ Str::studly($id) }}Modal() {
-        closeModal('{{ $id }}');
-    }
-</script>

@@ -4,7 +4,11 @@
 
     <div class="space-y-6">
         {{-- Welcome Section Admin --}}
-        <x-dashboard.welcome-header variant="admin" />
+        <x-ui.page-hero title="NVet Clinic & Lab" variant="admin" :showClock="true" :showDate="true">
+            <x-slot name="icon">
+                <x-icons.building-office class="w-10 h-10 text-white" />
+            </x-slot>
+        </x-ui.page-hero>
 
         {{-- Stats Cards Admin --}}
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6">
@@ -182,7 +186,8 @@
                 @if (count($topTelat) > 0)
                     <div class="space-y-3">
                         @foreach ($topTelat as $index => $telat)
-                            <x-dashboard.top-telat-item :index="$index" :telat="$telat" />
+                            <x-ui.rank-item :rank="$index + 1" :user="$telat->user" :subtitle="$telat->total_telat . 'x terlambat'" :value="$telat->total_menit . 'm'"
+                                valueType="danger" />
                         @endforeach
                     </div>
                 @else
@@ -202,7 +207,16 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 @forelse($aktivitasTerbaru as $aktivitas)
-                    <x-dashboard.activity-item :user="$aktivitas->user" :aktivitas="$aktivitas" />
+                    @php
+                        $activityStatus = $aktivitas->izin ? 'izin' : (!$aktivitas->telat ? 'hadir' : 'telat');
+                        $activitySubtitle = $aktivitas->izin
+                            ? '<span class="text-blue-600">Izin hari ini</span>'
+                            : (!$aktivitas->telat
+                                ? '<span class="text-emerald-600">Tepat waktu</span>'
+                                : '<span class="text-rose-600">Terlambat ' . $aktivitas->menit_telat . ' menit</span>');
+                    @endphp
+                    <x-ui.activity-item :user="$aktivitas->user" :status="$activityStatus" :subtitle="$activitySubtitle" :time="$aktivitas->jam_masuk ? $aktivitas->jam_masuk->format('H:i') : '-'"
+                        :timeLabel="\Carbon\Carbon::parse($aktivitas->tanggal)->format('d M')" />
                 @empty
                     <div class="col-span-2">
                         <x-ui.empty-state message="Belum ada aktivitas absensi hari ini" icon="clock" />

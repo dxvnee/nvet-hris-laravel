@@ -21,7 +21,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    <x-error-message :message="session('success') ?? (session('error') ?? (session('warning') ?? session('info')))" :type="session('success')
+    <x-ui.error-message :message="session('success') ?? (session('error') ?? (session('warning') ?? session('info')))" :type="session('success')
         ? 'success'
         : (session('error')
             ? 'error'
@@ -42,22 +42,16 @@
                 class="transform duration-300 ease-in-out h-full flex flex-col w-full overflow-y-auto">
 
 
-                @include('components.main-topbar', ['title' => $header, 'subtle' => $subtle])
+                @include('components.ui.main-topbar', ['title' => $header, 'subtle' => $subtle])
 
-                <main class="flex-1">
-                    {{ $slot }}
-                </main>
-
-                <div class="mt-auto">
-
-                    @include('components.main-bottombar', ['title' => $header])
-                </div>
+                @include('components.ui.main-bottombar', ['title' => $header])
             </div>
-
         </div>
+
+    </div>
     </div>
 
-    <x-loading-screen />
+    <x-ui.loading-screen />
 
     @stack('scripts')
 

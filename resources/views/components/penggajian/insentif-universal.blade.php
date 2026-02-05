@@ -66,13 +66,13 @@
     <div class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             @foreach ($config['items'] as $item)
-                <x-penggajian.qty-price-input :label="$item['label']" :qty-name="'insentif_detail[' . $item['key'] . '_qty]'" :harga-name="'insentif_detail[' . $item['key'] . '_harga]'" :qty-model="$config['model'] . '.' . $item['qtyModel']"
-                    :harga-model="$config['model'] . '.' . $item['hargaModel']" :qty-value="$detail[$item['key'] . '_qty'] ?? 0" :harga-value="$detail[$item['key'] . '_harga'] ?? 0" />
+                <x-ui.qty-price-input :label="$item['label']" :qtyName="'insentif_detail[' . $item['key'] . '_qty]'" :priceName="'insentif_detail[' . $item['key'] . '_harga]'" :qtyModel="$config['model'] . '.' . $item['qtyModel']"
+                    :priceModel="$config['model'] . '.' . $item['hargaModel']" :qtyValue="$detail[$item['key'] . '_qty'] ?? 0" :priceValue="$detail[$item['key'] . '_harga'] ?? 0" />
             @endforeach
         </div>
 
         <x-penggajian.dynamic-insentif-items :model-name="$config['model'] . '.lainLainItems'" />
 
-        <x-penggajian.insentif-total :total-text="$config['calcFunc']" />
+        <x-ui.value-display label="Total Insentif" variant="green" :xText="'formatNumber(' . $config['calcFunc'] . ')'" showSign />
     </div>
 @endif

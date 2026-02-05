@@ -2,7 +2,8 @@
 <div id="sidebar-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden" onclick="toggleSidebar()">
 </div>
 
-<div id="sidebar" class="sidebar m.   r-5 overflow-y-auto overflow-x-hidden  shadow-2xl-lr rounded-xl flex w-96 p-5 bg-white hover:shadow-3xl
+<div id="sidebar"
+    class="sidebar m.   r-5 overflow-y-auto overflow-x-hidden  shadow-2xl-lr rounded-xl flex w-96 p-5 bg-white hover:shadow-3xl
     lg:relative fixed top-0 left-0 h-full z-50 lg:z-auto lg:h-auto lg:m-0 lg:mr-5">
     <div class="flex h-full w-full flex-col">
 
@@ -25,32 +26,31 @@
         </div>
 
         <!-- Menu -->
-        <nav class="flex flex-col gap-3 animate-slide-in-left"
-            x-data="{ absensiOpen: {{ request()->routeIs('absen.*') ? 'true' : 'false' }} }">
+        <nav class="flex flex-col gap-3 animate-slide-in-left" x-data="{ absensiOpen: {{ request()->routeIs('absen.*') ? 'true' : 'false' }} }">
 
             <!-- Dashboard -->
             <a href="{{ route('dashboard') }}"
                 class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('dashboard') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house"
-                    viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-house" viewBox="0 0 16 16">
                     <path
                         d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z" />
                 </svg>
                 Dashboard
             </a>
 
-            @if(auth()->user()->role === 'pegawai')
-                <a href="{{  route('absen.index') }}"
+            @if (auth()->user()->role === 'pegawai')
+                <a href="{{ route('absen.index') }}"
                     class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('absen.index') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock"
-                        viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-clock" viewBox="0 0 16 16">
                         <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
                     </svg>
                     Absen
                 </a>
 
-                <a href="{{  route('absen.riwayat') }}"
+                <a href="{{ route('absen.riwayat') }}"
                     class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('absen.riwayat') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-clipboard-check" viewBox="0 0 16 16">
@@ -68,16 +68,18 @@
                     class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('absen.riwayatKalender') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-calendar3" viewBox="0 0 16 16">
-                        <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
-                        <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                        <path
+                            d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z" />
+                        <path
+                            d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
                     </svg>
                     Kalender
                 </a>
 
                 <a href="{{ route('penggajian.riwayat') }}"
                     class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('penggajian.riwayat') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet2"
-                        viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-wallet2" viewBox="0 0 16 16">
                         <path
                             d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5z" />
                     </svg>
@@ -86,8 +88,8 @@
 
                 <a href="{{ route('lembur.index') }}"
                     class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('lembur.index') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock"
-                        viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-clock" viewBox="0 0 16 16">
                         <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
                     </svg>
@@ -95,11 +97,11 @@
                 </a>
             @endif
 
-            @if(auth()->user()->role === 'admin')
+            @if (auth()->user()->role === 'admin')
                 <a href="{{ route('users.index') }}"
                     class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('users.*') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people"
-                        viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-people" viewBox="0 0 16 16">
                         <path
                             d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
                     </svg>
@@ -108,8 +110,8 @@
 
                 <a href="{{ route('penggajian.index') }}"
                     class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('penggajian.*') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet2"
-                        viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-wallet2" viewBox="0 0 16 16">
                         <path
                             d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5z" />
                     </svg>
@@ -118,8 +120,8 @@
 
                 <a href="{{ route('lembur.admin') }}"
                     class="btn-secondary flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('lembur.admin') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock"
-                        viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-clock" viewBox="0 0 16 16">
                         <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
                     </svg>
@@ -131,8 +133,8 @@
                     <button @click="absensiOpen = !absensiOpen"
                         class="btn-secondary flex w-full items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('lembur.index') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
                         <div class="flex items-center gap-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-calendar-check" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
                                 <path
                                     d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
                                 <path
@@ -141,9 +143,11 @@
                             Absensi
                         </div>
                         <div class="w-full flex justify-end">
-                            <svg class="w-4 h-4 transition-transform duration-300" :class="absensiOpen ? 'rotate-180' : ''"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            <svg class="w-4 h-4 transition-transform duration-300"
+                                :class="absensiOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7">
                                 </path>
                             </svg>
                         </div>
@@ -153,8 +157,8 @@
                     <div x-show="absensiOpen" x-transition class="mt-2 ml-4 space-y-2">
                         <a href="{{ route('absen.kalender') }}"
                             class="btn-secondary flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('absen.kalender') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                                class="bi bi-calendar" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
                                 <path
                                     d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
                             </svg>
@@ -163,8 +167,8 @@
 
                         <a href="{{ route('absen.user') }}"
                             class="btn-secondary flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('absen.user') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                                class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
                                 <path
                                     d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 0 0-1h-4a1.5 1.5 0 0 0-1.5 1.5v9a1.5 1.5 0 0 0 1.5 1.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 1-.5-.5z" />
                                 <path
@@ -175,9 +179,10 @@
 
                         <a href="{{ route('hari-libur.index') }}"
                             class="btn-secondary flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 text-primaryDark font-medium {{ request()->routeIs('hari-libur.*') ? 'btn-primary text-white shadow-sm transform scale-105' : '' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                                class="bi bi-calendar-heart" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM1 14V4h14v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1m7-6.507c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                fill="currentColor" class="bi bi-calendar-heart" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM1 14V4h14v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1m7-6.507c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132" />
                             </svg>
                             Hari Libur
                         </a>
@@ -189,7 +194,7 @@
 
         <!-- Mobile Profile Section -->
         <div class="lg:hidden mt-4 border-t border-gray-200 pt-4">
-            <x-dropdown align="right" width="48">
+            <x-ui.dropdown align="right" width="48">
                 <x-slot name="trigger">
                     <button
                         class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-primaryDark font-medium hover:bg-primary hover:text-white">
@@ -212,22 +217,22 @@
 
                 <x-slot name="content">
                     <div class="relative z-50 m-2">
-                        <x-dropdown-link :href="route('profile.show')"
+                        <x-ui.dropdown-link :href="route('profile.show')"
                             class="transition-all duration-300 hover:bg-primaryExtraLight font-semibold">
                             {{ __('Profile') }}
-                        </x-dropdown-link>
+                        </x-ui.dropdown-link>
 
                         <form method="POST" action="{{ route('logout') }}" class="transition-all duration-300">
                             @csrf
-                            <x-dropdown-link :href="route('logout')"
+                            <x-ui.dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault(); this.closest('form').submit();"
                                 class="transition-all duration-300 hover:bg-primaryExtraLight font-semibold">
                                 {{ __('Log Out') }}
-                            </x-dropdown-link>
+                            </x-ui.dropdown-link>
                         </form>
                     </div>
                 </x-slot>
-            </x-dropdown>
+            </x-ui.dropdown>
         </div>
 
     </div>
@@ -269,7 +274,7 @@
     }
 
     // Initialize sidebar state on mobile
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('main-content');
 
@@ -290,7 +295,7 @@
         }
     });
 
-    window.addEventListener('resize', function () {
+    window.addEventListener('resize', function() {
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('main-content');
         const backdrop = document.getElementById('sidebar-backdrop');
@@ -315,5 +320,4 @@
             backdrop.classList.add('hidden');
         }
     });
-
 </script>

@@ -23,7 +23,7 @@
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
+                <x-ui.dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
                             class="inline-flex items-center px-4 py-2 text-base font-bold rounded-xl text-white bg-transparent  transition-all duration-500 transform hover:scale-[1.05] ">
@@ -31,7 +31,7 @@
                                 <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&color=7F9CF5&background=EBF4FF&size=32' }}"
                                     alt="Avatar" class="w-8 h-8 rounded-full border-2 border-white shadow-sm">
                                 <div class="text-white font-semibold">
-                                    @if(Auth::check())
+                                    @if (Auth::check())
                                         {{ Auth::user()->name }}
                                     @else
                                         Guest
@@ -51,31 +51,32 @@
 
                     <x-slot name="content">
                         <div class="relative z-50 m-2">
-                            @if(Auth::check())
-                                <x-dropdown-link :href="route('profile.show')"
+                            @if (Auth::check())
+                                <x-ui.dropdown-link :href="route('profile.show')"
                                     class="transition-all duration-500 hover:bg-primaryExtraLight font-semibold">
                                     {{ __('Profile') }}
-                                </x-dropdown-link>
+                                </x-ui.dropdown-link>
 
                                 <!-- Authentication -->
                                 <form method="POST" action="{{ route('logout') }}" class="transition-all duration-500">
                                     @csrf
 
-                                    <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
+                                    <x-ui.dropdown-link :href="route('logout')"
+                                        onclick="event.preventDefault();
                                                                                 this.closest('form').submit();"
                                         class="transition-all duration-500 hover:bg-primaryExtraLight font-semibold">
                                         {{ __('Log Out') }}
-                                    </x-dropdown-link>
+                                    </x-ui.dropdown-link>
                                 </form>
                             @else
-                                <x-dropdown-link :href="route('login')"
+                                <x-ui.dropdown-link :href="route('login')"
                                     class="transition-all duration-500 hover:bg-primary hover:text-white font-semibold">
                                     {{ __('Login') }}
-                                </x-dropdown-link>
+                                </x-ui.dropdown-link>
                             @endif
                         </div>
                     </x-slot>
-                </x-dropdown>
+                </x-ui.dropdown>
             </div>
         </div>
     </div>

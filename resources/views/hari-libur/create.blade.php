@@ -124,11 +124,11 @@
 
                         <div x-show="isShiftEnabled" x-transition
                             class="space-y-4 pt-4 border-t border-gray-200 mt-4">
-                            <x-hari-libur.shift-section :shiftNumber="1" jamMasukName="shift1_jam_masuk"
-                                jamKeluarName="shift1_jam_keluar" :jamMasukValue="old('shift1_jam_masuk')" :jamKeluarValue="old('shift1_jam_keluar')" />
+                            <x-ui.time-range-input badge="Shift 1" badgeType="success" startName="shift1_jam_masuk"
+                                endName="shift1_jam_keluar" :startValue="old('shift1_jam_masuk')" :endValue="old('shift1_jam_keluar')" />
 
-                            <x-hari-libur.shift-section :shiftNumber="2" jamMasukName="shift2_jam_masuk"
-                                jamKeluarName="shift2_jam_keluar" :jamMasukValue="old('shift2_jam_masuk')" :jamKeluarValue="old('shift2_jam_keluar')" />
+                            <x-ui.time-range-input badge="Shift 2" badgeType="orange" startName="shift2_jam_masuk"
+                                endName="shift2_jam_keluar" :startValue="old('shift2_jam_masuk')" :endValue="old('shift2_jam_keluar')" />
                         </div>
                     </x-ui.section-card variant="simple">
 
@@ -151,7 +151,8 @@
 
                         <div x-show="pegawaiMode === 'pilih'" x-transition class="space-y-3 max-h-60 overflow-y-auto">
                             @foreach ($pegawai as $p)
-                                <x-hari-libur.pegawai-item :pegawai="$p" :selected="in_array($p->id, old('pegawai_hadir', []))" />
+                                <x-ui.selectable-item name="pegawai_hadir[]" :value="$p->id" :user="$p"
+                                    :selected="in_array($p->id, old('pegawai_hadir', []))" />
                             @endforeach
                         </div>
                     </x-ui.section-card variant="simple">
