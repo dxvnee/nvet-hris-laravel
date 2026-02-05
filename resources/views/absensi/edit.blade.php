@@ -7,7 +7,16 @@
         <x-ui.back-button label="Kembali ke Halaman Sebelumnya" />
 
         {{-- User Info --}}
-        <x-absensi.user-info-card :user="$absen->user" :date="$absen->tanggal" />
+        <x-ui.section-card>
+            <div class="flex items-center gap-4">
+                <x-ui.user-avatar :user="$absen->user" size="lg" class="border-2 border-primary" />
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">{{ $absen->user->name }}</h3>
+                    <p class="text-gray-600">{{ $absen->user->jabatan }}</p>
+                    <p class="text-sm text-gray-500">Tanggal: {{ $absen->tanggal->format('d F Y') }}</p>
+                </div>
+            </div>
+        </x-ui.section-card>
 
         {{-- Edit Form --}}
         <x-ui.section-card>

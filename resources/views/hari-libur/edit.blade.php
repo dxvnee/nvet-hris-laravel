@@ -83,9 +83,9 @@
                     </div>
 
                     <div class="mt-4">
-                        <x-hari-libur.checkbox-option name="is_recurring" label="Berulang Setiap Tahun"
+                        <x-ui.form-checkbox name="is_recurring" label="Berulang Setiap Tahun"
                             description="Tanggal ini akan otomatis menjadi libur/hari khusus setiap tahunnya"
-                            :checked="old('is_recurring', $hariLibur->is_recurring)" />
+                            :checked="old('is_recurring', $hariLibur->is_recurring)" size="lg" variant="stacked" />
                     </div>
                 </x-ui.section-card variant="simple">
 
@@ -94,14 +94,14 @@
                     {{-- Kehadiran --}}
                     <x-ui.section-card variant="simple" title="Pengaturan Kehadiran">
                         <div class="space-y-4">
-                            <x-hari-libur.checkbox-option name="is_masuk" label="Pegawai Tetap Masuk"
+                            <x-ui.form-checkbox name="is_masuk" label="Pegawai Tetap Masuk"
                                 description="Pegawai tetap harus masuk kerja di hari ini" xModel="isMasuk"
-                                :checked="old('is_masuk', $hariLibur->is_masuk)" />
+                                :checked="old('is_masuk', $hariLibur->is_masuk)" size="lg" variant="stacked" />
 
                             <div x-show="isMasuk" x-transition class="ml-8">
-                                <x-hari-libur.checkbox-option name="is_lembur" label="Dihitung Sebagai Lembur"
+                                <x-ui.form-checkbox name="is_lembur" label="Dihitung Sebagai Lembur"
                                     description="Kehadiran di hari ini dihitung sebagai lembur" xModel="isLembur"
-                                    :checked="old('is_lembur', $hariLibur->is_lembur)" />
+                                    :checked="old('is_lembur', $hariLibur->is_lembur)" size="lg" variant="stacked" />
                             </div>
                         </div>
                     </x-ui.section-card variant="simple">
@@ -129,11 +129,12 @@
 
                     {{-- Shift Settings --}}
                     <x-ui.section-card variant="simple">
-                        <x-hari-libur.checkbox-option name="is_shift_enabled" label="Aktifkan Pengaturan Shift"
+                        <x-ui.form-checkbox name="is_shift_enabled" label="Aktifkan Pengaturan Shift"
                             description="Atur jam kerja berbeda untuk pegawai shift" xModel="isShiftEnabled"
-                            :checked="old('is_shift_enabled', $hariLibur->is_shift_enabled)" />
+                            :checked="old('is_shift_enabled', $hariLibur->is_shift_enabled)" size="lg" variant="stacked" />
 
-                        <div x-show="isShiftEnabled" x-transition class="space-y-4 pt-4 border-t border-gray-200 mt-4">
+                        <div x-show="isShiftEnabled" x-transition
+                            class="space-y-4 pt-4 border-t border-gray-200 mt-4">
                             <x-hari-libur.shift-section :shiftNumber="1" jamMasukName="shift1_jam_masuk"
                                 jamKeluarName="shift1_jam_keluar" :jamMasukValue="old(
                                     'shift1_jam_masuk',
@@ -193,13 +194,13 @@
                     {{-- Additional Options --}}
                     <x-ui.section-card variant="simple" title="Opsi Tambahan">
                         <div class="space-y-4">
-                            <x-hari-libur.checkbox-option name="libur_tetap_masuk"
-                                label="Yang Libur Hari Itu Tetap Masuk"
+                            <x-ui.form-checkbox name="libur_tetap_masuk" label="Yang Libur Hari Itu Tetap Masuk"
                                 description="Pegawai yang jadwalnya libur di hari ini tetap harus masuk"
-                                :checked="old('libur_tetap_masuk', $hariLibur->libur_tetap_masuk)" />
+                                :checked="old('libur_tetap_masuk', $hariLibur->libur_tetap_masuk)" size="lg" variant="stacked" />
 
-                            <x-hari-libur.checkbox-option name="is_wajib" label="Wajib Hadir"
-                                description="Jika tidak hadir akan dihitung sebagai alpha/absen" :checked="old('is_wajib', $hariLibur->is_wajib)" />
+                            <x-ui.form-checkbox name="is_wajib" label="Wajib Hadir"
+                                description="Jika tidak hadir akan dihitung sebagai alpha/absen" :checked="old('is_wajib', $hariLibur->is_wajib)"
+                                size="lg" variant="stacked" />
 
                             <div x-show="isLembur" x-transition>
                                 <label for="upah_multiplier" class="block text-sm font-medium text-gray-700 mb-2">

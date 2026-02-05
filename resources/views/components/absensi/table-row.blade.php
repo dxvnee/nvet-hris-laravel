@@ -70,13 +70,43 @@
     <td class="text-center py-3 px-4">
         <div class="flex flex-wrap gap-1 justify-center">
             @if ($absen->foto_masuk)
-                <x-absensi.photo-button type="masuk" :photoUrl="asset('storage/' . $absen->foto_masuk)" :userName="$absen->user->name" :timestamp="$absen->jam_masuk ? $absen->jam_masuk->format('d/m/Y H:i') : ''" />
+                <x-ui.action-button variant="icon-success" size="sm" :onclick="'openPhotoModal(' .
+                    json_encode(asset('storage/' . $absen->foto_masuk)) .
+                    ', ' .
+                    json_encode($absen->user->name . ' - Foto Masuk') .
+                    ', ' .
+                    json_encode($absen->jam_masuk ? $absen->jam_masuk->format('d/m/Y H:i') : '') .
+                    ', ' .
+                    json_encode('photo-modal') .
+                    ')'" title="Lihat Foto Masuk">
+                    📷 Masuk
+                </x-ui.action-button>
             @endif
             @if ($absen->foto_pulang)
-                <x-absensi.photo-button type="pulang" :photoUrl="asset('storage/' . $absen->foto_pulang)" :userName="$absen->user->name" :timestamp="$absen->jam_pulang ? $absen->jam_pulang->format('d/m/Y H:i') : ''" />
+                <x-ui.action-button variant="icon-info" size="sm" :onclick="'openPhotoModal(' .
+                    json_encode(asset('storage/' . $absen->foto_pulang)) .
+                    ', ' .
+                    json_encode($absen->user->name . ' - Foto Pulang') .
+                    ', ' .
+                    json_encode($absen->jam_pulang ? $absen->jam_pulang->format('d/m/Y H:i') : '') .
+                    ', ' .
+                    json_encode('photo-modal') .
+                    ')'" title="Lihat Foto Pulang">
+                    📷 Pulang
+                </x-ui.action-button>
             @endif
             @if ($absen->foto_izin)
-                <x-absensi.photo-button type="izin" :photoUrl="asset('storage/' . $absen->foto_izin)" :userName="$absen->user->name" :timestamp="$absen->tanggal->format('d/m/Y')" />
+                <x-ui.action-button variant="icon-warning" size="sm" :onclick="'openPhotoModal(' .
+                    json_encode(asset('storage/' . $absen->foto_izin)) .
+                    ', ' .
+                    json_encode($absen->user->name . ' - Foto Izin') .
+                    ', ' .
+                    json_encode($absen->tanggal->format('d/m/Y')) .
+                    ', ' .
+                    json_encode('photo-modal') .
+                    ')'" title="Lihat Foto Izin">
+                    📷 Izin
+                </x-ui.action-button>
             @endif
             @if (!$absen->foto_masuk && !$absen->foto_pulang && !$absen->foto_izin)
                 <span class="text-xs text-gray-400">-</span>

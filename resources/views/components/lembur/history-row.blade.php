@@ -2,24 +2,17 @@
 @props(['lembur'])
 
 @php
-    $statusConfig = [
-        'disetujui' => [
-            'bg' => 'bg-green-100',
-            'text' => 'text-green-700',
-            'label' => 'Disetujui',
-        ],
-        'ditolak' => [
-            'bg' => 'bg-red-100',
-            'text' => 'text-red-700',
-            'label' => 'Ditolak',
-        ],
-        'pending' => [
-            'bg' => 'bg-yellow-100',
-            'text' => 'text-yellow-700',
-            'label' => 'Pending',
-        ],
+    $statusMap = [
+        'disetujui' => 'success',
+        'ditolak' => 'danger',
+        'pending' => 'warning',
     ];
-    $config = $statusConfig[$lembur->status] ?? $statusConfig['pending'];
+    $statusType = $statusMap[$lembur->status] ?? 'warning';
+    $statusLabel = match ($lembur->status) {
+        'disetujui' => 'Disetujui',
+        'ditolak' => 'Ditolak',
+        default => 'Pending',
+    };
 
     $mulai = \Carbon\Carbon::parse($lembur->jam_mulai);
     $selesai = \Carbon\Carbon::parse($lembur->jam_selesai);
@@ -46,9 +39,6 @@
         <span class="text-sm text-gray-600">{{ $lembur->keterangan ?? '-' }}</span>
     </td>
     <td class="py-3 px-4">
-        <span
-            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $config['bg'] }} {{ $config['text'] }}">
-            {{ $config['label'] }}
-        </span>
+        <x-ui.status-badge :type="$statusType" size="md">{{ $statusLabel }}</x-ui.status-badge>
     </td>
 </tr>

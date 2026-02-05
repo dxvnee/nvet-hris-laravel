@@ -7,7 +7,7 @@
         <x-dashboard.welcome-header variant="pegawai" :user="$user" :showAvatar="true" />
 
         {{-- Status Absensi Hari Ini --}}
-        <x-card-content>
+        <x-ui.section-card class="animate-slide-up-delay-1">
             <x-ui.section-header title="Status Absensi Hari Ini" :subtitle="now()->locale('id')->isoFormat('dddd, D MMMM Y')">
                 <x-slot name="iconSlot">
                     <x-icons.clock class="h-6 w-6 text-white" />
@@ -16,7 +16,7 @@
 
             {{-- Status Absensi Component --}}
             <x-dashboard.absensi-status :absensi="$absensiToday ?? null" />
-        </x-card-content>
+        </x-ui.section-card>
 
         {{-- Stats Ringkasan Bulan Ini --}}
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
@@ -82,7 +82,7 @@
         </div>
 
         {{-- Riwayat Absensi 7 Hari --}}
-        <x-card-content>
+        <x-ui.section-card class="animate-slide-up-delay-1">
             <x-ui.section-header title="Riwayat Absensi" subtitle="7 hari terakhir" :linkHref="route('absen.riwayat')">
                 <x-slot name="iconSlot">
                     <x-icons.calendar class="h-5 w-5 text-white" />
@@ -97,7 +97,7 @@
                         icon="calendar" />
                 @endforelse
             </div>
-        </x-card-content>
+        </x-ui.section-card>
 
         {{-- Quick Actions Pegawai --}}
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -7,7 +7,16 @@
         <x-ui.back-button :href="route('absen.detailHari', $tanggal)" label="Kembali ke Detail Hari" />
 
         {{-- User Info --}}
-        <x-absensi.user-info-card :user="$user" :date="$tanggal" />
+        <x-ui.section-card>
+            <div class="flex items-center gap-4">
+                <x-ui.user-avatar :user="$user" size="lg" class="border-2 border-primary" />
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">{{ $user->name }}</h3>
+                    <p class="text-gray-600">{{ $user->jabatan }}</p>
+                    <p class="text-sm text-gray-500">Tanggal: {{ \Carbon\Carbon::parse($tanggal)->format('d F Y') }}</p>
+                </div>
+            </div>
+        </x-ui.section-card>
 
         {{-- Create Form --}}
         <x-ui.section-card>

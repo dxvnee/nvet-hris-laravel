@@ -12,6 +12,7 @@
     'gradient' => null, // custom gradient override
     'hoverBorder' => null, // custom hover border
     'valueColor' => null, // custom value color
+    'valueId' => null, // ID for value element (for JS updates)
     'pulse' => false, // pulse animation
 ])
 
@@ -113,7 +114,8 @@
             </div>
             <div>
                 <p class="text-sm font-medium text-gray-600">{{ $displayLabel }}</p>
-                <p class="text-2xl font-bold {{ $customValueColor }}">{{ $value }}</p>
+                <p class="text-2xl font-bold {{ $customValueColor }}"
+                    @if ($valueId) id="{{ $valueId }}" @endif>{{ $value }}</p>
             </div>
         </div>
     </div>

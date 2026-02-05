@@ -1,3 +1,4 @@
+7{{-- Dashboard Top Telat Item Component --}}
 @props(['index', 'telat'])
 
 @php
@@ -14,13 +15,10 @@
     <span class="w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold shadow-sm {{ $rankClass }}">
         {{ $index + 1 }}
     </span>
-    <img src="{{ $telat->user->avatar ? asset('storage/' . $telat->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($telat->user->name) . '&size=32&background=fee2e2&color=ef4444' }}"
-        class="w-9 h-9 rounded-xl border-2 border-white shadow-sm group-hover:scale-105 transition-transform">
+    <x-ui.user-avatar :user="$telat->user" size="sm" class="group-hover:scale-105 transition-transform" />
     <div class="flex-1 min-w-0">
         <p class="text-sm font-semibold text-gray-800 truncate">{{ $telat->user->name }}</p>
         <p class="text-xs text-gray-500">{{ $telat->total_telat }}x terlambat</p>
     </div>
-    <span class="text-xs px-2.5 py-1 bg-rose-50 text-rose-600 rounded-lg font-semibold ring-1 ring-rose-200">
-        {{ $telat->total_menit }}m
-    </span>
+    <x-ui.status-badge type="danger" size="sm">{{ $telat->total_menit }}m</x-ui.status-badge>
 </div>

@@ -1,8 +1,10 @@
+{{-- Dashboard Activity Item Component --}}
 @props(['user', 'aktivitas'])
 
 @php
     $isIzin = $aktivitas->izin;
     $isTelat = $aktivitas->telat;
+    $statusType = $isIzin ? 'izin' : (!$isTelat ? 'hadir' : 'telat');
     $borderColor = $isIzin ? 'border-blue-300' : (!$isTelat ? 'border-emerald-300' : 'border-rose-300');
     $badgeBg = $isIzin
         ? 'bg-blue-100 text-blue-600'
@@ -15,8 +17,8 @@
 <div
     class="flex items-center gap-4 p-4 bg-gradient-to-r from-gray-50 to-white rounded-xl border border-gray-100 hover:border-primary/30 hover:shadow-md transition-all group">
     <div class="relative">
-        <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&size=40' }}"
-            class="w-11 h-11 rounded-xl border-2 shadow-sm group-hover:scale-105 transition-transform {{ $borderColor }}">
+        <x-ui.user-avatar :user="$user" size="md" :borderColor="$borderColor"
+            class="group-hover:scale-105 transition-transform" />
         <span
             class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] shadow-sm {{ $badgeBg }}">
             {{ $badgeIcon }}

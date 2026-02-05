@@ -1,5 +1,5 @@
 {{-- Page Hero Component --}}
-@props(['title', 'subtitle' => null, 'animation' => 'animate-slide-up'])
+@props(['title', 'subtitle' => null, 'animation' => 'animate-slide-up', 'showClock' => false, 'showDate' => false])
 
 <div
     {{ $attributes->merge(['class' => "relative overflow-hidden bg-gradient-to-br from-primary via-primaryDark to-primary rounded-3xl shadow-2xl p-6 md:p-8 text-white {$animation}"]) }}>
@@ -18,15 +18,28 @@
                 </div>
             @endif
             <div>
-                <h2 class="text-2xl md:text-3xl font-bold mb-1">{{ $title }}</h2>
-                @if ($subtitle)
+                <h2 class="text-xl md:text-2xl font-bold mb-1">{{ $title }}</h2>
+                @if ($showDate)
+                    <p class="text-white/80 text-sm md:text-base flex items-center gap-2">
+                        <x-icons.calendar class="w-4 h-4" />
+                        <span id="current-datetime">{{ now()->locale('id')->isoFormat('dddd, D MMMM Y') }}</span>
+                    </p>
+                @elseif($subtitle)
                     <p class="text-white/80 text-sm md:text-base flex items-center gap-2">
                         {{ $subtitle }}
                     </p>
                 @endif
             </div>
         </div>
-        @if (isset($actions))
+        @if ($showClock)
+            <div class="flex items-center gap-4">
+                <div class="text-right bg-white/10 backdrop-blur-sm rounded-2xl px-4 md:px-6 py-3">
+                    <p class="text-white/70 text-xs uppercase tracking-wider mb-1">Waktu Sekarang</p>
+                    <p class="text-2xl md:text-3xl font-bold font-mono" x-data="{ time: '' }" x-init="setInterval(() => time = new Date().toLocaleTimeString('id-ID'), 1000)"
+                        x-text="time"></p>
+                </div>
+            </div>
+        @elseif(isset($actions))
             <div class="flex items-center gap-4">
                 {{ $actions }}
             </div>

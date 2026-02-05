@@ -173,8 +173,7 @@
 
             {{-- Top Telat --}}
             <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 animate-slide-up-delay-5">
-                <x-ui.section-header title="Top Keterlambatan" subtitle="Bulan ini"
-                    gradient="from-rose-500 to-red-600">
+                <x-ui.section-header title="Top Keterlambatan" subtitle="Bulan ini" gradient="from-rose-500 to-red-600">
                     <x-slot name="iconSlot">
                         <x-icons.clock class="h-5 w-5 text-white" />
                     </x-slot>
@@ -194,7 +193,7 @@
         </div>
 
         {{-- Aktivitas Terbaru --}}
-        <x-card-content>
+        <x-ui.section-card class="animate-slide-up-delay-1">
             <x-ui.section-header title="Aktivitas Terbaru" subtitle="Absensi hari ini" :linkHref="route('absen.detailHari', $today)">
                 <x-slot name="iconSlot">
                     <x-icons.clock class="h-5 w-5 text-white" />
@@ -210,40 +209,40 @@
                     </div>
                 @endforelse
             </div>
-            </x-card-conte>
+        </x-ui.section-card>
 
-            {{-- Quick Actions Admin --}}
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <x-ui.quick-action href="{{ route('users.index') }}" title="Kelola Pegawai"
-                    subtitle="Tambah, edit, hapus">
-                    <x-slot name="iconSlot">
-                        <x-icons.users class="h-6 w-6 text-white" />
-                    </x-slot>
-                </x-ui.quick-action>
+        {{-- Quick Actions Admin --}}
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <x-ui.quick-action href="{{ route('users.index') }}" title="Kelola Pegawai"
+                subtitle="Tambah, edit, hapus">
+                <x-slot name="iconSlot">
+                    <x-icons.users class="h-6 w-6 text-white" />
+                </x-slot>
+            </x-ui.quick-action>
 
-                <x-ui.quick-action href="{{ route('penggajian.index') }}" title="Penggajian"
-                    subtitle="Kelola gaji pegawai" gradient="from-emerald-500 to-green-600"
-                    hoverBorder="hover:border-emerald-300" hoverText="group-hover:text-emerald-600">
-                    <x-slot name="iconSlot">
-                        <x-icons.wallet class="h-6 w-6 text-white" />
-                    </x-slot>
-                </x-ui.quick-action>
+            <x-ui.quick-action href="{{ route('penggajian.index') }}" title="Penggajian"
+                subtitle="Kelola gaji pegawai" gradient="from-emerald-500 to-green-600"
+                hoverBorder="hover:border-emerald-300" hoverText="group-hover:text-emerald-600">
+                <x-slot name="iconSlot">
+                    <x-icons.wallet class="h-6 w-6 text-white" />
+                </x-slot>
+            </x-ui.quick-action>
 
-                <x-ui.quick-action href="{{ route('absen.kalender') }}" title="Riwayat Absensi"
-                    subtitle="Lihat semua absensi" gradient="from-blue-500 to-indigo-600"
-                    hoverBorder="hover:border-blue-300" hoverText="group-hover:text-blue-600">
-                    <x-slot name="iconSlot">
-                        <x-icons.calendar class="h-6 w-6 text-white" />
-                    </x-slot>
-                </x-ui.quick-action>
+            <x-ui.quick-action href="{{ route('absen.kalender') }}" title="Riwayat Absensi"
+                subtitle="Lihat semua absensi" gradient="from-blue-500 to-indigo-600"
+                hoverBorder="hover:border-blue-300" hoverText="group-hover:text-blue-600">
+                <x-slot name="iconSlot">
+                    <x-icons.calendar class="h-6 w-6 text-white" />
+                </x-slot>
+            </x-ui.quick-action>
 
-                <x-ui.quick-action href="{{ route('users.create') }}" title="Tambah Pegawai"
-                    subtitle="Daftarkan pegawai baru" gradient="from-purple-500 to-violet-600"
-                    hoverBorder="hover:border-purple-300" hoverText="group-hover:text-purple-600">
-                    <x-slot name="iconSlot">
-                        <x-icons.user-plus class="h-6 w-6 text-white" />
-                    </x-slot>
-                </x-ui.quick-action>
-            </div>
+            <x-ui.quick-action href="{{ route('users.create') }}" title="Tambah Pegawai"
+                subtitle="Daftarkan pegawai baru" gradient="from-purple-500 to-violet-600"
+                hoverBorder="hover:border-purple-300" hoverText="group-hover:text-purple-600">
+                <x-slot name="iconSlot">
+                    <x-icons.user-plus class="h-6 w-6 text-white" />
+                </x-slot>
+            </x-ui.quick-action>
+        </div>
     </div>
 </x-app-layout>

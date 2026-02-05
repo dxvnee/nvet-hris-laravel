@@ -71,7 +71,38 @@
                 {{-- Riwayat Cards --}}
                 <div class="space-y-4">
                     @foreach ($riwayat as $absen)
-                        <x-absensi.riwayat-card :absen="$absen" />
+                        @php
+                            $status = match (true) {
+                                $absen->libur => 'libur',
+                                $absen->tidak_hadir => 'tidak_hadir',
+                                $absen->izin => 'izin',
+                                $absen->telat => 'telat',
+                                $absen->jam_masuk != null => 'hadir',
+                                default => 'default',
+                            };
+                            $totalKerja = $absen->menit_kerja
+                                ? floor($absen->menit_kerja / 60) . 'j ' . $absen->menit_kerja % 60 . 'm'
+                                : null;
+                        @endphp
+                        <x-ui.history-card :date="$absen->tanggal->format('d M Y')" :dayName="$absen->tanggal->locale('id')->isoFormat('dddd')" :status="$status" :primaryTime="$absen->jam_masuk ? $absen->jam_masuk->format('H:i') : null"
+                            :secondaryTime="$absen->jam_pulang ? $absen->jam_pulang->format('H:i') : null" :tertiaryValue="$totalKerja" tertiaryLabel="Total Kerja" :description="$absen->izin_keterangan">
+                            <x-slot:badge>
+                                @if ($absen->libur)
+                                    <x-ui.status-badge type="libur">Libur</x-ui.status-badge>
+                                @elseif($absen->tidak_hadir)
+                                    <x-ui.status-badge type="tidak_hadir">Tidak Hadir</x-ui.status-badge>
+                                @elseif($absen->izin)
+                                    <x-ui.status-badge type="izin">Izin</x-ui.status-badge>
+                                @elseif($absen->telat)
+                                    <x-ui.status-badge type="telat">Telat
+                                        {{ $absen->menit_telat }}m</x-ui.status-badge>
+                                @elseif($absen->jam_masuk)
+                                    <x-ui.status-badge type="hadir">Tepat Waktu</x-ui.status-badge>
+                                @else
+                                    <x-ui.status-badge type="default">-</x-ui.status-badge>
+                                @endif
+                            </x-slot:badge>
+                        </x-ui.history-card>
                     @endforeach
                 </div>
 

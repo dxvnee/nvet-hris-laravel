@@ -1,3 +1,4 @@
+{{-- Dashboard Riwayat Item Component --}}
 @props(['absen'])
 
 @php
@@ -12,6 +13,7 @@
             : 'bg-gradient-to-br from-emerald-100 to-green-200');
 
     $iconColor = $isIzin ? 'text-blue-600' : ($isLibur ? 'text-indigo-600' : 'text-emerald-600');
+    $statusType = $isIzin ? 'izin' : ($isLibur ? 'libur' : ($isTelat ? 'telat' : 'hadir'));
 @endphp
 
 <div
@@ -46,20 +48,16 @@
         </div>
     </div>
     <div>
-        @if ($isIzin)
-            <span class="text-xs px-3 py-1 bg-blue-50 text-blue-600 rounded-lg font-medium ring-1 ring-blue-200">📝
-                Izin</span>
-        @elseif($isLibur)
-            <span
-                class="text-xs px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg font-medium ring-1 ring-indigo-200">🌴
-                Libur</span>
-        @elseif($isTelat)
-            <span class="text-xs px-3 py-1 bg-rose-50 text-rose-600 rounded-lg font-medium ring-1 ring-rose-200">⏰
-                Telat</span>
-        @else
-            <span
-                class="text-xs px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg font-medium ring-1 ring-emerald-200">✓
-                Tepat</span>
-        @endif
+        <x-ui.status-badge :type="$statusType">
+            @if ($isIzin)
+                📝 Izin
+            @elseif($isLibur)
+                🌴 Libur
+            @elseif($isTelat)
+                ⏰ Telat
+            @else
+                ✓ Tepat
+            @endif
+        </x-ui.status-badge>
     </div>
 </div>
