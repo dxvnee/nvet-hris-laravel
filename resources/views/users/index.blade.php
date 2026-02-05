@@ -129,10 +129,10 @@
 
             @if ($users->count() > 0)
                 <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
+                    <x-ui.table>
+                        <x-ui.table-head>
+                            <x-ui.table-row class="border-b border-gray-200">
+                                <x-ui.table-header-cell>
                                     <a href="{{ route('users.index', array_merge(request()->query(), ['sort' => 'name', 'dir' => request('sort') == 'name' && request('dir') == 'asc' ? 'desc' : 'asc'])) }}"
                                         class="flex items-center space-x-1 hover:text-primary transition-colors">
                                         <span>Pegawai</span>
@@ -153,16 +153,15 @@
                                                 </svg>
                                             @endif
                                         @else
-                                            <svg class="w-4 h-4 text-gray-400" fill="currentColor"
-                                                viewBox="0 0 20 20">
+                                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd"
                                                     d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z"
                                                     clip-rule="evenodd"></path>
                                             </svg>
                                         @endif
                                     </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
+                                </x-ui.table-header-cell>
+                                <x-ui.table-header-cell>
                                     <a href="{{ route('users.index', array_merge(request()->query(), ['sort' => 'jabatan', 'dir' => request('sort') == 'jabatan' && request('dir') == 'asc' ? 'desc' : 'asc'])) }}"
                                         class="flex items-center space-x-1 hover:text-primary transition-colors">
                                         <span>Jabatan</span>
@@ -191,8 +190,8 @@
                                             </svg>
                                         @endif
                                     </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
+                                </x-ui.table-header-cell>
+                                <x-ui.table-header-cell>
                                     <a href="{{ route('users.index', array_merge(request()->query(), ['sort' => 'gaji_pokok', 'dir' => request('sort') == 'gaji_pokok' && request('dir') == 'asc' ? 'desc' : 'asc'])) }}"
                                         class="flex items-center space-x-1 hover:text-primary transition-colors">
                                         <span>Gaji Pokok</span>
@@ -221,16 +220,16 @@
                                             </svg>
                                         @endif
                                     </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Jam Kerja</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Hari Libur</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                                </x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Jam Kerja</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Hari Libur</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Aksi</x-ui.table-header-cell>
+                            </x-ui.table-row>
+                        </x-ui.table-head>
+                        <x-ui.table-body>
                             @foreach ($users as $user)
-                                <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                    <td class="py-3 px-4">
+                                <x-ui.table-row class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                    <x-ui.table-cell>
                                         <div class="flex items-center gap-3">
                                             <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&color=7F9CF5&background=EBF4FF&size=40' }}"
                                                 alt="{{ $user->name }}" class="w-10 h-10 rounded-full">
@@ -239,8 +238,8 @@
                                                 <p class="text-sm text-gray-500">{{ $user->email }}</p>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td class="py-3 px-4">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <div class="flex flex-row gap-1">
                                             <span
                                                 class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
@@ -268,14 +267,14 @@
                                                 </span>
                                             @endif
                                         </div>
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         Rp {{ number_format($user->gaji_pokok ?? 0, 0, ',', '.') }}
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         {{ $user->jam_kerja ?? '-' }} jam/hari
-                                    </td>
-                                    <td class="py-3 px-4">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         @php
                                             $hariNama = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
                                             $hariLibur = $user->hari_libur ?? [];
@@ -292,8 +291,8 @@
                                         @else
                                             <span class="text-gray-400">-</span>
                                         @endif
-                                    </td>
-                                    <td class="py-3 px-4">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <div class="flex items-center gap-2">
                                             <x-ui.action-button type="link" :href="route('users.edit', $user)" variant="icon-info"
                                                 title="Edit" iconName="pencil" />
@@ -306,11 +305,11 @@
                                                     title="Hapus" iconName="trash" />
                                             </form>
                                         </div>
-                                    </td>
-                                </tr>
+                                    </x-ui.table-cell>
+                                </x-ui.table-row>
                             @endforeach
-                        </tbody>
-                    </table>
+                        </x-ui.table-body>
+                    </x-ui.table>
                 </div>
             @else
                 <x-ui.empty-state message="Belum ada data pegawai" icon="users" size="lg" />

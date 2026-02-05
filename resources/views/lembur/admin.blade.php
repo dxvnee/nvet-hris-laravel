@@ -22,23 +22,23 @@
 
             @if ($lemburs->count())
                 <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Pegawai</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Tanggal</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Waktu</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Durasi</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Status</th>
-                                <th class="text-center py-3 px-4 font-semibold text-gray-600">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <x-ui.table>
+                        <x-ui.table-head>
+                            <x-ui.table-row class="border-b border-gray-200">
+                                <x-ui.table-header-cell>Pegawai</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Tanggal</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Waktu</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Durasi</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Status</x-ui.table-header-cell>
+                                <x-ui.table-header-cell align="center">Aksi</x-ui.table-header-cell>
+                            </x-ui.table-row>
+                        </x-ui.table-head>
+                        <x-ui.table-body>
                             @foreach ($lemburs as $item)
                                 <x-lembur.admin-table-row :item="$item" />
                             @endforeach
-                        </tbody>
-                    </table>
+                        </x-ui.table-body>
+                    </x-ui.table>
                 </div>
 
                 {{-- Pagination --}}

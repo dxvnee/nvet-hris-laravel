@@ -69,44 +69,30 @@
 
                 @if ($absensi->count() > 0)
                     <div class="overflow-x-auto -mx-6">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Tanggal</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Jam Masuk</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Jam Pulang</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Lokasi</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Keterangan</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                        <x-ui.table>
+                            <x-ui.table-head>
+                                <x-ui.table-row class="border-b border-gray-200">
+                                    <x-ui.table-header-cell>Tanggal</x-ui.table-header-cell>
+                                    <x-ui.table-header-cell>Jam Masuk</x-ui.table-header-cell>
+                                    <x-ui.table-header-cell>Jam Pulang</x-ui.table-header-cell>
+                                    <x-ui.table-header-cell>Status</x-ui.table-header-cell>
+                                    <x-ui.table-header-cell>Lokasi</x-ui.table-header-cell>
+                                    <x-ui.table-header-cell>Keterangan</x-ui.table-header-cell>
+                                    <x-ui.table-header-cell>Aksi</x-ui.table-header-cell>
+                                </x-ui.table-row>
+                            </x-ui.table-head>
+                            <x-ui.table-body>
                                 @foreach ($absensi as $absen)
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                    <x-ui.table-row class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                        <x-ui.table-cell>
                                             <div class="text-sm font-medium text-gray-900">
                                                 {{ $absen->tanggal->format('d/m/Y') }}
                                             </div>
                                             <div class="text-sm text-gray-500">
                                                 {{ $absen->tanggal->format('l') }}
                                             </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        </x-ui.table-cell>
+                                        <x-ui.table-cell>
                                             @if ($absen->jam_masuk)
                                                 <div class="text-sm text-gray-900">
                                                     {{ $absen->jam_masuk->format('H:i') }}</div>
@@ -117,8 +103,8 @@
                                             @else
                                                 <span class="text-gray-400">-</span>
                                             @endif
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        </x-ui.table-cell>
+                                        <x-ui.table-cell>
                                             @if ($absen->jam_pulang)
                                                 <div class="text-sm text-gray-900">
                                                     {{ $absen->jam_pulang->format('H:i') }}</div>
@@ -130,8 +116,8 @@
                                             @else
                                                 <span class="text-gray-400">-</span>
                                             @endif
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        </x-ui.table-cell>
+                                        <x-ui.table-cell>
                                             @if ($absen->izin)
                                                 <x-ui.status-badge type="info">Izin</x-ui.status-badge>
                                             @elseif($absen->jam_masuk)
@@ -143,8 +129,8 @@
                                             @else
                                                 <x-ui.status-badge type="default">-</x-ui.status-badge>
                                             @endif
-                                        </td>
-                                        <td class="px-6 py-4">
+                                        </x-ui.table-cell>
+                                        <x-ui.table-cell>
                                             @if ($absen->lat_masuk && $absen->lng_masuk)
                                                 <div class="text-xs text-gray-600">Masuk:
                                                     {{ number_format($absen->lat_masuk, 4) }},
@@ -158,19 +144,18 @@
                                             @if (!$absen->lat_masuk && !$absen->lat_pulang)
                                                 <span class="text-gray-400">-</span>
                                             @endif
-                                        </td>
-                                        <td class="px-6 py-4">
+                                        </x-ui.table-cell>
+                                        <x-ui.table-cell>
                                             <span class="text-sm text-gray-700">
                                                 {{ $absen->izin_keterangan ?? '-' }}
                                             </span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        </x-ui.table-cell>
+                                        <x-ui.table-cell>
                                             <div class="flex items-center gap-2">
-                                                <a href="{{ route('absen.edit', $absen) }}"
-                                                    class="p-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-colors"
+                                                <x-ui.action-button type="link" :href="route('absen.edit', $absen)" variant="icon-info"
                                                     title="Edit">
                                                     <x-icons.pencil class="w-4 h-4" />
-                                                </a>
+                                                </x-ui.action-button>
                                                 <form method="POST" action="{{ route('absen.destroy', $absen) }}"
                                                     onsubmit="return confirm('Apakah Anda yakin ingin menghapus absensi ini?')"
                                                     class="inline">
@@ -180,11 +165,11 @@
                                                         title="Hapus" iconName="trash" />
                                                 </form>
                                             </div>
-                                        </td>
-                                    </tr>
+                                        </x-ui.table-cell>
+                                    </x-ui.table-row>
                                 @endforeach
-                            </tbody>
-                        </table>
+                            </x-ui.table-body>
+                        </x-ui.table>
                     </div>
                 @else
                     <x-ui.empty-state message="Tidak ada data absensi untuk pegawai ini pada periode yang dipilih."

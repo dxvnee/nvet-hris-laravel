@@ -19,40 +19,40 @@
     $durasi = $mulai->diff($selesai);
 @endphp
 
-<tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+<x-ui.table-row class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
     {{-- User Info --}}
-    <td class="py-3 px-4">
+    <x-ui.table-cell>
         <x-ui.user-avatar :user="$item->user" size="sm" :showInfo="true" />
-    </td>
+    </x-ui.table-cell>
 
     {{-- Date --}}
-    <td class="py-3 px-4">
+    <x-ui.table-cell>
         <span class="text-sm text-gray-900">
             {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
         </span>
-    </td>
+    </x-ui.table-cell>
 
     {{-- Time --}}
-    <td class="py-3 px-4">
+    <x-ui.table-cell>
         <span class="text-sm text-gray-600">
             {{ $mulai->format('H:i') }} - {{ $selesai->format('H:i') }}
         </span>
-    </td>
+    </x-ui.table-cell>
 
     {{-- Duration --}}
-    <td class="py-3 px-4">
+    <x-ui.table-cell>
         <span class="text-sm font-medium text-gray-900">
             {{ $durasi->h }}j {{ $durasi->i }}m
         </span>
-    </td>
+    </x-ui.table-cell>
 
     {{-- Status --}}
-    <td class="py-3 px-4">
+    <x-ui.table-cell>
         <x-ui.status-badge :type="$statusType" size="md">{{ $statusLabel }}</x-ui.status-badge>
-    </td>
+    </x-ui.table-cell>
 
     {{-- Actions --}}
-    <td class="py-3 px-4 text-center">
+    <x-ui.table-cell align="center">
         @if ($item->status === 'pending')
             <div class="flex items-center justify-center gap-2">
                 <form action="{{ route('lembur.approve', $item) }}" method="POST" class="inline">
@@ -69,5 +69,5 @@
         @else
             <span class="text-gray-400 text-sm">-</span>
         @endif
-    </td>
-</tr>
+    </x-ui.table-cell>
+</x-ui.table-row>

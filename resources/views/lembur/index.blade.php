@@ -24,17 +24,17 @@
 
             @if ($riwayatLembur->count() > 0)
                 <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Tanggal</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Waktu</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Durasi</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Keterangan</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <x-ui.table>
+                        <x-ui.table-head>
+                            <x-ui.table-row class="border-b border-gray-200">
+                                <x-ui.table-header-cell>Tanggal</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Waktu</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Durasi</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Keterangan</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Status</x-ui.table-header-cell>
+                            </x-ui.table-row>
+                        </x-ui.table-head>
+                        <x-ui.table-body>
                             @foreach ($riwayatLembur as $lembur)
                                 @php
                                     $statusMap = [
@@ -52,30 +52,30 @@
                                     $selesai = \Carbon\Carbon::parse($lembur->jam_selesai);
                                     $durasi = $mulai->diff($selesai);
                                 @endphp
-                                <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                    <td class="py-3 px-4">
+                                <x-ui.table-row class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                    <x-ui.table-cell>
                                         <span
                                             class="text-sm font-medium text-gray-900">{{ \Carbon\Carbon::parse($lembur->tanggal)->format('d M Y') }}</span>
-                                    </td>
-                                    <td class="py-3 px-4">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <span class="text-sm text-gray-600">{{ $mulai->format('H:i') }} -
                                             {{ $selesai->format('H:i') }}</span>
-                                    </td>
-                                    <td class="py-3 px-4">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <span class="text-sm font-medium text-gray-900">{{ $durasi->h }}j
                                             {{ $durasi->i }}m</span>
-                                    </td>
-                                    <td class="py-3 px-4">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <span class="text-sm text-gray-600">{{ $lembur->keterangan ?? '-' }}</span>
-                                    </td>
-                                    <td class="py-3 px-4">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <x-ui.status-badge :type="$statusType"
                                             size="md">{{ $statusLabel }}</x-ui.status-badge>
-                                    </td>
-                                </tr>
+                                    </x-ui.table-cell>
+                                </x-ui.table-row>
                             @endforeach
-                        </tbody>
-                    </table>
+                        </x-ui.table-body>
+                    </x-ui.table>
                 </div>
 
                 @if ($riwayatLembur->hasPages())

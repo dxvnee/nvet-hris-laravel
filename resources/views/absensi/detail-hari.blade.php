@@ -17,9 +17,9 @@
 
             @if ($absensiHari->count() > 0)
                 <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-gray-200">
+                    <x-ui.table>
+                        <x-ui.table-head>
+                            <x-ui.table-row class="border-b border-gray-200">
                                 <x-ui.sortable-header column="name" label="Pegawai" :currentSort="request('sort_by')" :currentDirection="request('sort_direction')"
                                     align="center" />
                                 <x-ui.sortable-header column="jam_masuk" label="Jam Masuk" :currentSort="request('sort_by')"
@@ -28,18 +28,18 @@
                                     :currentDirection="request('sort_direction')" align="center" />
                                 <x-ui.sortable-header column="status" label="Status" :currentSort="request('sort_by')" :currentDirection="request('sort_direction')"
                                     align="center" />
-                                <th class="text-center py-3 px-4 font-semibold text-gray-600">Lokasi</th>
-                                <th class="text-center py-3 px-4 font-semibold text-gray-600">Foto</th>
-                                <th class="text-center py-3 px-4 font-semibold text-gray-600">Keterangan</th>
-                                <th class="text-center py-3 px-4 font-semibold text-gray-600">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                                <x-ui.table-header-cell align="center">Lokasi</x-ui.table-header-cell>
+                                <x-ui.table-header-cell align="center">Foto</x-ui.table-header-cell>
+                                <x-ui.table-header-cell align="center">Keterangan</x-ui.table-header-cell>
+                                <x-ui.table-header-cell align="center">Aksi</x-ui.table-header-cell>
+                            </x-ui.table-row>
+                        </x-ui.table-head>
+                        <x-ui.table-body>
                             @foreach ($absensiHari as $absen)
                                 <x-absensi.table-row :absen="$absen" :tanggal="$tanggal" />
                             @endforeach
-                        </tbody>
-                    </table>
+                        </x-ui.table-body>
+                    </x-ui.table>
                 </div>
             @else
                 <x-ui.empty-state message="Belum ada data absensi" icon="calendar" size="lg" />

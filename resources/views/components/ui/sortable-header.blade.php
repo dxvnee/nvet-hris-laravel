@@ -18,7 +18,7 @@
     ];
 @endphp
 
-<th class="py-3 px-4 font-semibold text-gray-600">
+<x-ui.table-header-cell>
     <a href="{{ request()->fullUrlWithQuery(['sort_by' => $column, 'sort_direction' => $newDirection]) }}"
         class="flex items-center {{ $alignClasses[$align] }} space-x-1 hover:text-primary transition-colors">
         <span>{{ $label }}</span>
@@ -32,4 +32,4 @@
             <x-icons.chevron-up-down class="w-4 h-4 text-gray-400" />
         @endif
     </a>
-</th>
+</x-ui.table-header-cell>

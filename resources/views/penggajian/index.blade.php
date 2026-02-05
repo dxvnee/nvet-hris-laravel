@@ -76,10 +76,10 @@
 
             @if ($penggajian->count() > 0)
                 <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
+                    <x-ui.table>
+                        <x-ui.table-head>
+                            <x-ui.table-row class="border-b border-gray-200">
+                                <x-ui.table-header-cell>
                                     <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'user_name', 'sort_direction' => request('sort_by') === 'user_name' && request('sort_direction') === 'asc' ? 'desc' : 'asc']) }}"
                                         class="flex items-center space-x-1 hover:text-primary transition-colors">
                                         <span>Pegawai</span>
@@ -107,8 +107,8 @@
                                             </svg>
                                         @endif
                                     </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
+                                </x-ui.table-header-cell>
+                                <x-ui.table-header-cell>
                                     <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'jabatan', 'sort_direction' => request('sort_by') === 'jabatan' && request('sort_direction') === 'asc' ? 'desc' : 'asc']) }}"
                                         class="flex items-center space-x-1 hover:text-primary transition-colors">
                                         <span>Jabatan</span>
@@ -136,8 +136,8 @@
                                             </svg>
                                         @endif
                                     </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
+                                </x-ui.table-header-cell>
+                                <x-ui.table-header-cell>
                                     <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'gaji_pokok', 'sort_direction' => request('sort_by') === 'gaji_pokok' && request('sort_direction') === 'asc' ? 'desc' : 'asc']) }}"
                                         class="flex items-center space-x-1 hover:text-primary transition-colors">
                                         <span>Gaji Pokok</span>
@@ -158,46 +158,43 @@
                                                 </svg>
                                             @endif
                                         @else
-                                            <svg class="w-4 h-4 text-gray-400" fill="currentColor"
-                                                viewBox="0 0 20 20">
+                                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd"
                                                     d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z"
                                                     clip-rule="evenodd"></path>
                                             </svg>
                                         @endif
                                     </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
-                                    <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'total_potongan_telat', 'sort_direction' => request('sort_by') === 'total_potongan_telat' && request('sort_direction') === 'asc' ? 'desc' : 'asc']) }}"
-                                        class="flex items-center space-x-1 hover:text-primary transition-colors">
-                                        <span>Potongan</span>
-                                        @if (request('sort_by') === 'total_potongan_telat')
-                                            @if (request('sort_direction') === 'asc')
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor"
-                                                    viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd"
-                                                        d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                            @else
-                                                <svg class="w-4 h-4 text-primary" fill="currentColor"
-                                                    viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 010-1.414l-4-4a1 1 0 01-1.414 0l-4 4a1 1 0 111.414 1.414z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                            @endif
+                                    </a>
+                                </x-ui.table-header-cell>
+                                <x-ui.table-header-cell>
+                                    <span>Potongan</span>
+                                    @if (request('sort_by') === 'total_potongan_telat')
+                                        @if (request('sort_direction') === 'asc')
+                                            <svg class="w-4 h-4 text-primary" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
                                         @else
-                                            <svg class="w-4 h-4 text-gray-400" fill="currentColor"
+                                            <svg class="w-4 h-4 text-primary" fill="currentColor"
                                                 viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd"
-                                                    d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 010-1.414l-4-4a1 1 0 01-1.414 0l-4 4a1 1 0 111.414 1.414z"
                                                     clip-rule="evenodd"></path>
                                             </svg>
                                         @endif
+                                    @else
+                                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 01.707-1.707z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                    @endif
                                     </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
+                                </x-ui.table-header-cell>
+                                <x-ui.table-header-cell>
                                     <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'total_insentif', 'sort_direction' => request('sort_by') === 'total_insentif' && request('sort_direction') === 'asc' ? 'desc' : 'asc']) }}"
                                         class="flex items-center space-x-1 hover:text-primary transition-colors">
                                         <span>Insentif</span>
@@ -226,9 +223,9 @@
                                             </svg>
                                         @endif
                                     </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Lembur</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">
+                                </x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Lembur</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>
                                     <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'total_gaji', 'sort_direction' => request('sort_by') === 'total_gaji' && request('sort_direction') === 'asc' ? 'desc' : 'asc']) }}"
                                         class="flex items-center space-x-1 hover:text-primary transition-colors">
                                         <span>Total Gaji</span>
@@ -257,15 +254,15 @@
                                             </svg>
                                         @endif
                                     </a>
-                                </th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Status</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                                </x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Status</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Aksi</x-ui.table-header-cell>
+                            </x-ui.table-row>
+                        </x-ui.table-head>
+                        <x-ui.table-body>
                             @foreach ($penggajian as $gaji)
-                                <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                    <td class="py-3 px-4">
+                                <x-ui.table-row class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                    <x-ui.table-cell>
                                         <div class="flex items-center gap-3">
                                             <img src="{{ $gaji->user->avatar ? asset('storage/' . $gaji->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($gaji->user->name) . '&color=7F9CF5&background=EBF4FF&size=40' }}"
                                                 alt="{{ $gaji->user->name }}" class="w-10 h-10 rounded-full">
@@ -274,8 +271,8 @@
                                                 <p class="text-sm text-gray-500">{{ $gaji->user->email }}</p>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td class="py-3 px-4">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <span
                                             class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
                                                 {{ $gaji->user->jabatan === 'Dokter' ? 'bg-purple-100 text-purple-700' : '' }}
@@ -284,19 +281,19 @@
                                                 {{ $gaji->user->jabatan === 'FO' ? 'bg-orange-100 text-orange-700' : '' }}">
                                             {{ $gaji->user->jabatan }}
                                         </span>
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         Rp {{ number_format($gaji->gaji_pokok, 0, ',', '.') }}
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <span class="text-red-600">- Rp
                                             {{ number_format($gaji->total_potongan_telat, 0, ',', '.') }}</span>
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <span class="text-green-600">+ Rp
                                             {{ number_format($gaji->total_insentif, 0, ',', '.') }}</span>
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <span class="text-blue-600">+ Rp
                                             {{ number_format($gaji->total_upah_lembur ?? 0, 0, ',', '.') }}</span>
                                         @if ($gaji->total_menit_lembur ?? 0 > 0)
@@ -305,12 +302,12 @@
                                                 {{ ($gaji->total_menit_lembur ?? 0) % 60 }}m
                                             </div>
                                         @endif
-                                    </td>
-                                    <td class="py-3 px-4 text-gray-700">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <span class="font-bold text-lg">Rp
                                             {{ number_format($gaji->total_gaji, 0, ',', '.') }}</span>
-                                    </td>
-                                    <td class="py-3 px-4">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         @if ($gaji->status === 'final')
                                             <span
                                                 class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Final</span>
@@ -318,8 +315,8 @@
                                             <span
                                                 class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">Draft</span>
                                         @endif
-                                    </td>
-                                    <td class="py-3 px-4">
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <div class="flex items-center gap-2">
                                             <x-ui.action-button tag="a" :href="route('penggajian.print', $gaji)" target="_blank"
                                                 variant="icon-success" title="Cetak" iconName="printer" />
@@ -334,11 +331,11 @@
                                                     title="Hapus" iconName="trash" />
                                             </form>
                                         </div>
-                                    </td>
-                                </tr>
+                                    </x-ui.table-cell>
+                                </x-ui.table-row>
                             @endforeach
-                        </tbody>
-                    </table>
+                        </x-ui.table-body>
+                    </x-ui.table>
                 </div>
             @else
                 <x-ui.empty-state message="Belum ada data penggajian" icon="currency" size="lg" />

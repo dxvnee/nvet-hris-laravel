@@ -18,24 +18,24 @@
 
             @if ($penggajian->count() > 0)
                 <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-gray-200">
+                    <x-ui.table>
+                        <x-ui.table-head>
+                            <x-ui.table-row class="border-b border-gray-200">
                                 <x-ui.sortable-header column="periode" label="Periode" />
                                 <x-ui.sortable-header column="gaji_pokok" label="Gaji Pokok" />
                                 <x-ui.sortable-header column="total_potongan_telat" label="Potongan Telat" />
                                 <x-ui.sortable-header column="total_insentif" label="Insentif" />
                                 <x-ui.sortable-header column="total_gaji" label="Total Gaji" />
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Status</th>
-                                <th class="text-left py-3 px-4 font-semibold text-gray-600">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                                <x-ui.table-header-cell>Status</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Aksi</x-ui.table-header-cell>
+                            </x-ui.table-row>
+                        </x-ui.table-head>
+                        <x-ui.table-body>
                             @foreach ($penggajian as $gaji)
                                 <x-penggajian.riwayat-row :gaji="$gaji" />
                             @endforeach
-                        </tbody>
-                    </table>
+                        </x-ui.table-body>
+                    </x-ui.table>
                 </div>
             @else
                 <x-ui.empty-state message="Belum ada riwayat penggajian" icon="clipboard" />

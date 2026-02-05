@@ -1,14 +1,14 @@
 {{-- Absensi Table Row Component --}}
 @props(['absen', 'tanggal' => null, 'showActions' => true])
 
-<tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+<x-ui.table-row class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
     {{-- User Info --}}
-    <td class="py-3 px-4">
+    <x-ui.table-cell>
         <x-ui.user-avatar :user="$absen->user" size="md" :showInfo="true" />
-    </td>
+    </x-ui.table-cell>
 
     {{-- Jam Masuk --}}
-    <td class="text-center py-3 px-4">
+    <x-ui.table-cell align="center">
         @if ($absen->jam_masuk)
             <div class="text-sm text-gray-900">{{ $absen->jam_masuk->format('H:i') }}</div>
             @if ($absen->status === 'telat')
@@ -17,10 +17,10 @@
         @else
             <span class="text-gray-400">-</span>
         @endif
-    </td>
+    </x-ui.table-cell>
 
     {{-- Jam Pulang --}}
-    <td class="text-center py-3 px-4">
+    <x-ui.table-cell align="center">
         @if ($absen->jam_pulang)
             <div class="text-sm text-gray-900">{{ $absen->jam_pulang->format('H:i') }}</div>
             @if ($absen->menit_kerja)
@@ -30,10 +30,10 @@
         @else
             <span class="text-gray-400">-</span>
         @endif
-    </td>
+    </x-ui.table-cell>
 
     {{-- Status --}}
-    <td class="text-center py-3 px-4">
+    <x-ui.table-cell align="center">
         @if ($absen->libur)
             <x-ui.status-badge type="info" size="md">Libur</x-ui.status-badge>
         @elseif($absen->tidak_hadir)
@@ -49,10 +49,10 @@
         @else
             <x-ui.status-badge type="default" size="md">Belum Absen</x-ui.status-badge>
         @endif
-    </td>
+    </x-ui.table-cell>
 
     {{-- Lokasi --}}
-    <td class="text-center py-3 px-4 text-gray-700">
+    <x-ui.table-cell align="center">
         @if ($absen->lat_masuk && $absen->lng_masuk)
             <div class="text-xs">Masuk: {{ number_format($absen->lat_masuk, 6) }},
                 {{ number_format($absen->lng_masuk, 6) }}</div>
@@ -64,10 +64,10 @@
         @if (!$absen->lat_masuk && !$absen->lat_pulang)
             <span class="text-gray-400">-</span>
         @endif
-    </td>
+    </x-ui.table-cell>
 
     {{-- Foto --}}
-    <td class="text-center py-3 px-4">
+    <x-ui.table-cell align="center">
         <div class="flex flex-wrap gap-1 justify-center">
             @if ($absen->foto_masuk)
                 <x-ui.action-button variant="icon-success" size="sm" :onclick="'openPhotoModal(' .
@@ -112,16 +112,16 @@
                 <span class="text-xs text-gray-400">-</span>
             @endif
         </div>
-    </td>
+    </x-ui.table-cell>
 
     {{-- Keterangan --}}
-    <td class="text-center py-3 px-4 text-gray-700">
+    <x-ui.table-cell align="center">
         {{ $absen->izin && $absen->izin_keterangan ? $absen->izin_keterangan : '-' }}
-    </td>
+    </x-ui.table-cell>
 
     {{-- Actions --}}
     @if ($showActions)
-        <td class="flex items-center justify-center py-3 px-4">
+        <x-ui.table-cell align="center" class="flex items-center justify-center">
             <div class="flex items-center gap-2">
                 @if ($absen->exists)
                     <x-ui.action-button type="link" :href="route('absen.edit', $absen)" variant="icon-info" title="Edit">
@@ -146,6 +146,6 @@
                     </x-ui.action-button>
                 @endif
             </div>
-        </td>
+        </x-ui.table-cell>
     @endif
-</tr>
+</x-ui.table-row>
