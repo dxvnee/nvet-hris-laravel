@@ -38,8 +38,7 @@
 
             @include('layouts.sidebar')
 
-            <div id="main-content"
-                class="transform duration-300 ease-in-out h-full flex flex-col w-full overflow-y-auto">
+            <div id="main-content" class="h-full flex flex-col w-full overflow-y-auto">
 
 
                 @include('components.ui.main-topbar', ['title' => $header, 'subtle' => $subtle])

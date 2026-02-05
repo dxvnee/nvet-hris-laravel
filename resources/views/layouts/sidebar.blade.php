@@ -3,7 +3,7 @@
 </div>
 
 <div id="sidebar"
-    class="sidebar m.   r-5 overflow-y-auto overflow-x-hidden  shadow-2xl-lr rounded-xl flex w-96 p-5 bg-white hover:shadow-3xl
+    class="sidebar mr-5 overflow-y-auto overflow-x-hidden shadow-2xl-lr rounded-xl flex w-96 p-5 bg-white hover:shadow-3xl
     lg:relative fixed top-0 left-0 h-full z-50 lg:z-auto lg:h-auto lg:m-0 lg:mr-5">
     <div class="flex h-full w-full flex-col">
 
@@ -239,19 +239,43 @@
 </div>
 
 <style>
-    .sidebar-hidden {
-        transform: translateX(-110%);
+    /* Sidebar base transition */
+    #sidebar {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        will-change: transform;
     }
 
-    .content-shift {
-        margin-left: -25.2rem;
-        transition: margin-left 0.3s ease;
+    /* Main content base transition */
+    #main-content {
+        transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: margin-left;
     }
 
-    /* Mobile sidebar styles */
-    @media (max-width: 1023px) {
+    /* Disable transitions on initial load */
+    .no-transition {
+        transition: none !important;
+    }
+
+    /* Desktop: sidebar hidden state */
+    @media (min-width: 1024px) {
         .sidebar-hidden {
-            transform: translateX(-100);
+            transform: translateX(-110%);
+            opacity: 0;
+        }
+
+        .content-full {
+            margin-left: -25.5rem;
+        }
+    }
+
+    /* Mobile: sidebar hidden state */
+    @media (max-width: 1023px) {
+        #sidebar {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar-hidden {
+            transform: translateX(-100%);
         }
     }
 </style>
@@ -267,57 +291,74 @@
             sidebar.classList.toggle('sidebar-hidden');
             backdrop.classList.toggle('hidden');
         } else {
-            // Desktop: original behavior
+            // Desktop: toggle sidebar and shift content
             sidebar.classList.toggle('sidebar-hidden');
-            mainContent.classList.toggle('content-shift');
+            mainContent.classList.toggle('content-full');
         }
     }
 
-    // Initialize sidebar state on mobile
+    // Initialize sidebar state without animation
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('main-content');
 
-        if (window.innerWidth < 1024) {
-            // Disable transition for initial load
-            sidebar.style.transition = 'none';
-            sidebar.classList.add('sidebar-hidden');
-            // Re-enable transition after a short delay
-            setTimeout(() => {
-                sidebar.style.transition = '';
-            }, 10);
-        } else {
-            sidebar.style.transition = 'none';
+        // Add no-transition class to prevent animation on load
+        sidebar.classList.add('no-transition');
+        mainContent.classList.add('no-transition');
 
-            // DESKTOP MODE
-            sidebar.classList.add('sidebar-hidden');
-            mainContent.classList.add('content-shift');
+        // Set initial state: sidebar hidden, content full
+        sidebar.classList.add('sidebar-hidden');
+
+        if (window.innerWidth >= 1024) {
+            mainContent.classList.add('content-full');
         }
+
+        // Force browser to apply styles before enabling transitions
+        // Use requestAnimationFrame for smoother handling
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                sidebar.classList.remove('no-transition');
+                mainContent.classList.remove('no-transition');
+            });
+        });
     });
 
+    // Handle window resize
+    let resizeTimeout;
     window.addEventListener('resize', function() {
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('main-content');
         const backdrop = document.getElementById('sidebar-backdrop');
 
-        // Matikan animasi saat resize
-        sidebar.classList.remove('sidebar-animate');
-        mainContent.classList.remove('content-animate');
+        // Debounce resize to prevent jank
+        clearTimeout(resizeTimeout);
 
-        if (window.innerWidth >= 1024) {
-            // DESKTOP MODE
-            backdrop.classList.add('hidden');
+        // Temporarily disable transitions during resize
+        sidebar.classList.add('no-transition');
+        mainContent.classList.add('no-transition');
 
-            sidebar.classList.remove('sidebar-hidden');
-            mainContent.classList.remove('content-shift');
+        resizeTimeout = setTimeout(() => {
+            if (window.innerWidth >= 1024) {
+                // Desktop mode
+                backdrop.classList.add('hidden');
+                // Keep current state but ensure content-full matches sidebar state
+                if (sidebar.classList.contains('sidebar-hidden')) {
+                    mainContent.classList.add('content-full');
+                } else {
+                    mainContent.classList.remove('content-full');
+                }
+            } else {
+                // Mobile mode
+                mainContent.classList.remove('content-full');
+                sidebar.classList.add('sidebar-hidden');
+                backdrop.classList.add('hidden');
+            }
 
-        } else {
-            // MOBILE MODE
-            mainContent.classList.remove('content-shift');
-
-            // Default mobile: sidebar tertutup
-            sidebar.classList.add('sidebar-hidden');
-            backdrop.classList.add('hidden');
-        }
+            // Re-enable transitions after resize
+            requestAnimationFrame(() => {
+                sidebar.classList.remove('no-transition');
+                mainContent.classList.remove('no-transition');
+            });
+        }, 100);
     });
 </script>
