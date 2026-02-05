@@ -176,11 +176,8 @@
                                                     class="inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit"
-                                                        class="p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
-                                                        title="Hapus">
-                                                        <x-icons.trash class="w-4 h-4" />
-                                                    </button>
+                                                    <x-ui.action-button type="submit" variant="icon-danger"
+                                                        title="Hapus" iconName="trash" />
                                                 </form>
                                             </div>
                                         </td>

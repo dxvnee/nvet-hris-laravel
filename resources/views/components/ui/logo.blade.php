@@ -1,3 +1,10 @@
+@props([
+    'size' => 'md',
+    'src' => asset('images/logo.png'),
+    'alt' => 'Logo',
+    'animated' => false,
+])
+
 @php
     $sizes = [
         'sm' => 'w-32 h-32',
@@ -12,5 +19,5 @@
         $sizes[$size],
         'logo-animation' => $animated,
     ]) }}>
-    <img src="{{ asset($src) }}" alt="{{ $alt }}">
+    <img src="{{ $src }}" alt="{{ $alt }}">
 </div>

@@ -298,89 +298,92 @@
     <x-absensi.camera-modal :storeRoute="route('absen.store')" />
 
     {{-- Lembur Confirmation Modal --}}
-    <div id="lembur-modal"
-        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md transform transition-all animate-slide-up">
-            <div class="p-6">
-                <div class="flex items-center justify-center mb-4">
-                    <div class="p-4 bg-gradient-to-br from-orange-100 to-amber-100 rounded-2xl shadow-lg">
-                        <x-icons.clock class="h-12 w-12 text-orange-500" />
+    <div id="lembur-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] p-4 hidden">
+        <div class="flex items-center justify-center min-h-full">
+            <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md transform transition-all animate-slide-up">
+                <div class="p-6">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="p-4 bg-gradient-to-br from-orange-100 to-amber-100 rounded-2xl shadow-lg">
+                            <x-icons.clock class="h-12 w-12 text-orange-500" />
+                        </div>
                     </div>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Konfirmasi Lembur</h3>
-                <p class="text-gray-600 text-center mb-4">
-                    Anda pulang <span id="lembur-menit" class="font-bold text-orange-600">0</span> menit setelah jam
-                    kerja berakhir.
-                </p>
-                <p class="text-gray-600 text-center mb-6">
-                    Apakah ini termasuk <span class="font-bold text-orange-600">lembur</span>?
-                </p>
+                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Konfirmasi Lembur</h3>
+                    <p class="text-gray-600 text-center mb-4">
+                        Anda pulang <span id="lembur-menit" class="font-bold text-orange-600">0</span> menit setelah
+                        jam
+                        kerja berakhir.
+                    </p>
+                    <p class="text-gray-600 text-center mb-6">
+                        Apakah ini termasuk <span class="font-bold text-orange-600">lembur</span>?
+                    </p>
 
-                <div id="lembur-keterangan-wrapper" class="mb-6 hidden">
-                    <label class="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
-                        <x-icons.chat-bubble class="w-4 h-4 text-orange-500" /> Keterangan Lembur
-                    </label>
-                    <textarea id="lembur-keterangan-input" rows="2"
-                        class="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
-                        placeholder="Masukkan keterangan lembur (opsional)..."></textarea>
-                </div>
+                    <div id="lembur-keterangan-wrapper" class="mb-6 hidden">
+                        <label class="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                            <x-icons.chat-bubble class="w-4 h-4 text-orange-500" /> Keterangan Lembur
+                        </label>
+                        <x-ui.form-input type="textarea" name="lembur-keterangan-input" id="lembur-keterangan-input"
+                            rows="2" placeholder="Masukkan keterangan lembur (opsional)..." class="!mb-0" />
+                    </div>
 
-                <div class="flex gap-3">
-                    <button type="button" onclick="confirmLembur(false)"
-                        class="flex-1 py-3 px-6 rounded-2xl font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-200 transition-all">
-                        Bukan Lembur
-                    </button>
-                    <button type="button" onclick="showLemburKeterangan()"
-                        class="flex-1 py-3 px-6 rounded-2xl font-bold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl">
-                        Ya, Lembur
-                    </button>
-                </div>
+                    <div class="flex gap-3">
+                        <x-ui.action-button type="button" onclick="confirmLembur(false)" variant="secondary"
+                            class="flex-1">
+                            Bukan Lembur
+                        </x-ui.action-button>
+                        <x-ui.action-button type="button" onclick="showLemburKeterangan()" variant="warning"
+                            class="flex-1">
+                            Ya, Lembur
+                        </x-ui.action-button>
+                    </div>
 
-                <button type="button" id="btn-submit-lembur" onclick="confirmLembur(true)"
-                    class="hidden w-full mt-4 py-4 px-6 rounded-2xl font-bold text-white bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transition-all shadow-lg hover:shadow-xl">
-                    Kirim dengan Lembur
-                </button>
+                    <x-ui.action-button type="button" id="btn-submit-lembur" onclick="confirmLembur(true)"
+                        variant="success" class="hidden w-full mt-4">
+                        Kirim dengan Lembur
+                    </x-ui.action-button>
+                </div>
             </div>
         </div>
     </div>
 
     {{-- Lembur Holiday Modal --}}
-    <div id="lembur-libur-modal"
-        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md transform transition-all animate-slide-up">
-            <div class="p-6">
-                <div class="flex items-center justify-center mb-4">
-                    <div class="p-4 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl shadow-lg">
-                        <x-icons.sun class="h-12 w-12 text-blue-500" />
+    <div id="lembur-libur-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] p-4 hidden">
+        <div class="flex items-center justify-center min-h-full">
+            <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md transform transition-all animate-slide-up">
+                <div class="p-6">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="p-4 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl shadow-lg">
+                            <x-icons.sun class="h-12 w-12 text-blue-500" />
+                        </div>
                     </div>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Konfirmasi Lembur Hari Libur</h3>
-                <p class="text-gray-600 text-center mb-4">
-                    Hari ini adalah <span class="font-bold text-blue-600">hari libur</span> Anda.
-                </p>
-                <p class="text-gray-600 text-center mb-6">
-                    Apakah Anda yakin ingin masuk untuk <span class="font-bold text-orange-600">lembur</span>?
-                </p>
+                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Konfirmasi Lembur Hari Libur</h3>
+                    <p class="text-gray-600 text-center mb-4">
+                        Hari ini adalah <span class="font-bold text-blue-600">hari libur</span> Anda.
+                    </p>
+                    <p class="text-gray-600 text-center mb-6">
+                        Apakah Anda yakin ingin masuk untuk <span class="font-bold text-orange-600">lembur</span>?
+                    </p>
 
-                <div id="lembur-libur-keterangan-wrapper" class="mb-6">
-                    <label class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                        <x-icons.pencil class="w-4 h-4 text-orange-500" /> Keterangan Lembur <span
-                            class="text-red-500">*</span>
-                    </label>
-                    <textarea id="lembur-libur-keterangan-input" rows="3"
-                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-orange-400 focus:ring-4 focus:ring-orange-100 transition-all resize-none text-gray-700 placeholder-gray-400"
-                        placeholder="Jelaskan alasan dan detail pekerjaan lembur di hari libur..."></textarea>
-                </div>
+                    <div id="lembur-libur-keterangan-wrapper" class="mb-6">
+                        <label class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                            <x-icons.pencil class="w-4 h-4 text-orange-500" /> Keterangan Lembur <span
+                                class="text-red-500">*</span>
+                        </label>
+                        <x-ui.form-input type="textarea" name="lembur-libur-keterangan-input"
+                            id="lembur-libur-keterangan-input" rows="3"
+                            placeholder="Jelaskan alasan dan detail pekerjaan lembur di hari libur..."
+                            class="!mb-0" />
+                    </div>
 
-                <div class="flex gap-3">
-                    <button type="button" onclick="closeLemburLiburModal()"
-                        class="group flex-1 py-3.5 px-6 rounded-2xl font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2">
-                        <x-icons.x-mark class="w-5 h-5 transition-transform group-hover:scale-110" /> Batal
-                    </button>
-                    <button type="button" onclick="confirmLemburLibur()"
-                        class="group flex-1 py-3.5 px-6 rounded-2xl font-bold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2">
-                        <x-icons.check class="w-5 h-5 transition-transform group-hover:scale-110" /> Ya, Lembur
-                    </button>
+                    <div class="flex gap-3">
+                        <x-ui.action-button type="button" onclick="closeLemburLiburModal()" variant="secondary"
+                            iconName="x-mark" class="flex-1">
+                            Batal
+                        </x-ui.action-button>
+                        <x-ui.action-button type="button" onclick="confirmLemburLibur()" variant="warning"
+                            iconName="check" class="flex-1">
+                            Ya, Lembur
+                        </x-ui.action-button>
+                    </div>
                 </div>
             </div>
         </div>

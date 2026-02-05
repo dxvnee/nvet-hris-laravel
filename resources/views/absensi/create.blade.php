@@ -85,12 +85,8 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Status Izin</label>
                             <x-ui.form-checkbox name="izin" label="Izin" color="primary" />
                         </div>
-                        <div>
-                            <label for="izin_keterangan" class="block text-sm font-medium text-gray-700 mb-2">Keterangan
-                                Izin</label>
-                            <textarea name="izin_keterangan" id="izin_keterangan" rows="3"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">{{ old('izin_keterangan') }}</textarea>
-                        </div>
+                        <x-ui.form-input type="textarea" name="izin_keterangan" label="Keterangan Izin"
+                            :value="old('izin_keterangan')" rows="3" />
                     </div>
                 </x-ui.form-section>
 

@@ -77,9 +77,8 @@
                     </div>
 
                     <div class="mt-4">
-                        <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
-                        <textarea name="deskripsi" id="deskripsi" rows="2" placeholder="Deskripsi tambahan (opsional)"
-                            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none">{{ old('deskripsi', $hariLibur->deskripsi) }}</textarea>
+                        <x-ui.form-input type="textarea" name="deskripsi" label="Deskripsi" :value="old('deskripsi', $hariLibur->deskripsi)"
+                            placeholder="Deskripsi tambahan (opsional)" rows="2" />
                     </div>
 
                     <div class="mt-4">
@@ -204,17 +203,9 @@
                                 size="lg" variant="stacked" />
 
                             <div x-show="isLembur" x-transition>
-                                <label for="upah_multiplier" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Pengali Upah
-                                </label>
-                                <div class="flex items-center gap-3">
-                                    <input type="number" name="upah_multiplier" id="upah_multiplier"
-                                        value="{{ old('upah_multiplier', $hariLibur->upah_multiplier ?? '1.0') }}"
-                                        min="0.5" max="5" step="0.5"
-                                        class="w-32 px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
-                                    <span class="text-gray-500">× upah normal</span>
-                                </div>
-                                <p class="text-sm text-gray-500 mt-1">Contoh: 2.0 = upah 2x lipat</p>
+                                <x-ui.form-input type="number" name="upah_multiplier" label="Pengali Upah"
+                                    :value="old('upah_multiplier', $hariLibur->upah_multiplier ?? '1.0')" min="0.5" max="5" step="0.5" class="w-32"
+                                    suffix="× upah normal" hint="Contoh: 2.0 = upah 2x lipat" />
                             </div>
                         </div>
                     </x-ui.section-card variant="simple">
@@ -222,14 +213,13 @@
 
                 {{-- Buttons --}}
                 <div class="flex gap-3 pt-4">
-                    <a href="{{ route('hari-libur.index') }}"
-                        class="flex-1 py-3 px-6 rounded-xl font-bold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all text-center">
+                    <x-ui.action-button tag="a" :href="route('hari-libur.index')" variant="secondary"
+                        class="flex-1 text-center">
                         Batal
-                    </a>
-                    <button type="submit"
-                        class="flex-1 py-3 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-primary to-primaryDark hover:from-primaryDark hover:to-primary transition-all shadow-lg">
+                    </x-ui.action-button>
+                    <x-ui.action-button type="submit" variant="primary" class="flex-1">
                         Perbarui
-                    </button>
+                    </x-ui.action-button>
                 </div>
             </form>
         </x-ui.section-card>

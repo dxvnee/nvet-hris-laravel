@@ -14,22 +14,22 @@
                     <form method="GET" action="{{ route('absen.kalender') }}"
                         class="flex flex-col md:flex-row gap-2 w-full sm:w-auto">
                         <div class="flex gap-2 w-full sm:w-auto">
-                            <select name="bulan"
-                                class="flex-1 sm:flex-none px-3 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all min-w-[140px] text-center sm:text-left">
+                            <x-ui.form-select name="bulan" :value="$bulan"
+                                class="!mb-0 flex-1 sm:flex-none min-w-[140px]">
                                 @for ($m = 1; $m <= 12; $m++)
                                     <option value="{{ $m }}" {{ $m == $bulan ? 'selected' : '' }}>
                                         {{ \Carbon\Carbon::create(null, $m)->format('F') }}
                                     </option>
                                 @endfor
-                            </select>
-                            <select name="tahun"
-                                class="flex-1 sm:flex-none px-3 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all min-w-[100px] text-center sm:text-left">
+                            </x-ui.form-select>
+                            <x-ui.form-select name="tahun" :value="$tahun"
+                                class="!mb-0 flex-1 sm:flex-none min-w-[100px]">
                                 @for ($y = date('Y') - 2; $y <= date('Y') + 2; $y++)
                                     <option value="{{ $y }}" {{ $y == $tahun ? 'selected' : '' }}>
                                         {{ $y }}
                                     </option>
                                 @endfor
-                            </select>
+                            </x-ui.form-select>
                         </div>
                         <x-ui.action-button type="submit" variant="primary" class="w-full sm:w-auto">
                             Tampilkan

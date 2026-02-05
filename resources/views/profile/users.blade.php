@@ -16,10 +16,7 @@
                         </div>
                         <button type="button" onclick="document.getElementById('avatar-input').click()"
                             class="absolute bottom-0 right-0 bg-primary hover:bg-primaryDark text-white p-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
+                            <x-icons.plus class="w-5 h-5" />
                         </button>
                     </div>
                     <p class="text-sm text-gray-500 mt-3 text-center lg:text-left">Klik ikon + untuk mengganti foto</p>
@@ -49,7 +46,8 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Jabatan</label>
                             <div class="bg-gray-50 rounded-xl px-4 py-3 border border-gray-200">
                                 <div class="flex items-center gap-2">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
                                         {{ auth()->user()->jabatan === 'Dokter' ? 'bg-purple-100 text-purple-700' : '' }}
                                         {{ auth()->user()->jabatan === 'Paramedis' ? 'bg-blue-100 text-blue-700' : '' }}
                                         {{ auth()->user()->jabatan === 'Tech' ? 'bg-green-100 text-green-700' : '' }}
@@ -145,7 +143,8 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-6">
+            <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data"
+                class="space-y-6">
                 @csrf
                 @method('patch')
 
@@ -156,9 +155,7 @@
                 <!-- Name -->
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
-                    <input id="name" name="name" type="text" value="{{ old('name', auth()->user()->name) }}"
-                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all @error('name') border-red-500 @enderror"
-                        required>
+                    <x-ui.form-input type="text" id="name" name="name" :value="old('name', auth()->user()->name)" required />
                     @error('name')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -167,9 +164,7 @@
                 <!-- Email -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                    <input id="email" name="email" type="email" value="{{ old('email', auth()->user()->email) }}"
-                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all @error('email') border-red-500 @enderror"
-                        required>
+                    <x-ui.form-input type="email" id="email" name="email" :value="old('email', auth()->user()->email)" required />
                     @error('email')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -179,7 +174,8 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Jabatan</label>
                     <div class="bg-gray-50 rounded-xl px-4 py-3 border border-gray-200">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
                             {{ auth()->user()->jabatan === 'Dokter' ? 'bg-purple-100 text-purple-700' : '' }}
                             {{ auth()->user()->jabatan === 'Paramedis' ? 'bg-blue-100 text-blue-700' : '' }}
                             {{ auth()->user()->jabatan === 'Tech' ? 'bg-green-100 text-green-700' : '' }}
@@ -192,10 +188,9 @@
 
                 <!-- Submit Button -->
                 <div class="flex justify-end">
-                    <button type="submit"
-                        class="px-8 py-3 bg-gradient-to-r from-primary to-primaryDark text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <x-ui.action-button type="submit" variant="primary">
                         Simpan Perubahan
-                    </button>
+                    </x-ui.action-button>
                 </div>
             </form>
         </div>
@@ -225,11 +220,10 @@
                 @csrf
                 @method('delete')
 
-                <button type="submit"
-                    class="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                <x-ui.action-button type="submit" variant="danger"
                     onclick="return confirm('Apakah Anda yakin ingin menghapus akun? Tindakan ini tidak dapat dibatalkan.')">
                     Hapus Akun
-                </button>
+                </x-ui.action-button>
             </form>
         </div>
     </div>
@@ -238,7 +232,7 @@
         function previewAvatar(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     document.getElementById('profile-preview').src = e.target.result;
                 };
                 reader.readAsDataURL(input.files[0]);
@@ -246,7 +240,7 @@
         }
 
         // Auto-submit form when avatar is selected
-        document.getElementById('avatar-input').addEventListener('change', function () {
+        document.getElementById('avatar-input').addEventListener('change', function() {
             if (this.files && this.files[0]) {
                 // Create a form data to submit avatar only
                 const formData = new FormData();
@@ -254,10 +248,10 @@
                 formData.append('_method', 'PATCH');
                 formData.append('avatar', this.files[0]);
 
-                fetch('{{ route("profile.update") }}', {
-                    method: 'POST',
-                    body: formData
-                })
+                fetch('{{ route('profile.update') }}', {
+                        method: 'POST',
+                        body: formData
+                    })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {

@@ -6,53 +6,57 @@
     'variant' => 'default', // default, simple
 ])
 
-<div id="{{ $id }}"
-    class="fixed inset-0 flex items-center justify-center z-50 hidden opacity-0 transition-all duration-300 ease-out">
-    {{-- Modal Content --}}
-    <div
-        class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden transform scale-95 transition-all duration-300 ease-out relative z-10">
-        @if ($variant === 'simple')
-            {{-- Simple header --}}
-            <div class="flex items-center justify-between p-4 border-b border-gray-200">
-                <h3 id="{{ $id }}-title" class="text-lg font-semibold text-gray-900">{{ $title }}</h3>
-                <button type="button" onclick="closePhotoModal('{{ $id }}')"
-                    class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                    <x-icons.x-mark class="w-5 h-5 text-gray-500" />
-                </button>
-            </div>
-        @else
-            {{-- Gradient header --}}
-            <div class="p-4 bg-gradient-to-r from-primary to-primaryDark text-white flex justify-between items-center">
-                <div>
-                    <h3 id="{{ $id }}-title" class="text-lg font-bold">{{ $title }}</h3>
-                    <p id="{{ $id }}-subtitle" class="text-sm opacity-90"></p>
+<div id="{{ $id }}" class="fixed inset-0 z-50 p-4 opacity-0 transition-all duration-300 ease-out hidden">
+    {{-- Flex centering wrapper --}}
+    <div class="flex items-center justify-center min-h-full">
+        {{-- Modal Content --}}
+        <div
+            class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden transform scale-95 transition-all duration-300 ease-out relative z-10">
+            @if ($variant === 'simple')
+                {{-- Simple header --}}
+                <div class="flex items-center justify-between p-4 border-b border-gray-200">
+                    <h3 id="{{ $id }}-title" class="text-lg font-semibold text-gray-900">{{ $title }}
+                    </h3>
+                    <x-ui.action-button type="button" onclick="closePhotoModal('{{ $id }}')" variant="ghost"
+                        class="!p-2">
+                        <x-icons.x-mark class="w-5 h-5 text-gray-500" />
+                    </x-ui.action-button>
                 </div>
-                <button onclick="closePhotoModal('{{ $id }}')"
-                    class="p-1 hover:bg-white/20 rounded-lg transition-colors">
-                    <x-icons.x-mark class="w-6 h-6" />
-                </button>
-            </div>
-        @endif
-
-        {{-- Image Container --}}
-        <div class="p-4">
-            <div class="bg-gray-100 rounded-xl overflow-hidden">
-                <img id="{{ $id }}-image" src="" alt="{{ $title }}"
-                    class="w-full h-auto max-h-96 object-contain opacity-0 transform scale-95 transition-all duration-500 ease-out delay-150">
-            </div>
-
-            @if ($showDownload)
-                <div class="mt-4 flex justify-end gap-3">
-                    <button onclick="closePhotoModal('{{ $id }}')"
-                        class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-bold rounded-lg transition-colors">
-                        Tutup
-                    </button>
-                    <a id="{{ $id }}-download" href="" download
-                        class="px-4 py-2 bg-primary hover:bg-primaryDark text-white font-bold rounded-lg transition-colors">
-                        Download
-                    </a>
+            @else
+                {{-- Gradient header --}}
+                <div
+                    class="p-4 bg-gradient-to-r from-primary to-primaryDark text-white flex justify-between items-center">
+                    <div>
+                        <h3 id="{{ $id }}-title" class="text-lg font-bold">{{ $title }}</h3>
+                        <p id="{{ $id }}-subtitle" class="text-sm opacity-90"></p>
+                    </div>
+                    <x-ui.action-button type="button" onclick="closePhotoModal('{{ $id }}')" variant="ghost"
+                        class="!p-1 !bg-transparent hover:!bg-white/20">
+                        <x-icons.x-mark class="w-6 h-6" />
+                    </x-ui.action-button>
                 </div>
             @endif
+
+            {{-- Image Container --}}
+            <div class="p-4">
+                <div class="bg-gray-100 rounded-xl overflow-hidden">
+                    <img id="{{ $id }}-image" src="" alt="{{ $title }}"
+                        class="w-full h-auto max-h-96 object-contain opacity-0 transform scale-95 transition-all duration-500 ease-out delay-150">
+                </div>
+
+                @if ($showDownload)
+                    <div class="mt-4 flex justify-end gap-3">
+                        <x-ui.action-button type="button" onclick="closePhotoModal('{{ $id }}')"
+                            variant="secondary">
+                            Tutup
+                        </x-ui.action-button>
+                        <x-ui.action-button tag="a" id="{{ $id }}-download" href="" download
+                            variant="primary">
+                            Download
+                        </x-ui.action-button>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </div>

@@ -85,12 +85,8 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Status Izin</label>
                             <x-ui.form-checkbox name="izin" label="Izin" color="primary" :checked="$absen->izin" />
                         </div>
-                        <div>
-                            <label for="izin_keterangan" class="block text-sm font-medium text-gray-700 mb-2">Keterangan
-                                Izin</label>
-                            <textarea name="izin_keterangan" id="izin_keterangan" rows="3"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">{{ old('izin_keterangan', $absen->izin_keterangan) }}</textarea>
-                        </div>
+                        <x-ui.form-input type="textarea" name="izin_keterangan" label="Keterangan Izin"
+                            :value="old('izin_keterangan', $absen->izin_keterangan)" rows="3" />
                     </div>
                 </x-ui.form-section>
 
@@ -110,11 +106,11 @@
                                             class="w-full h-48 object-cover rounded-lg border border-gray-200">
                                         <div
                                             class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                                            <button type="button"
+                                            <x-ui.action-button type="button"
                                                 onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_masuk) }}', '{{ $absen->user->name }} - Foto Masuk', '{{ $absen->jam_masuk ? $absen->jam_masuk->format('d/m/Y H:i') : '' }}')"
-                                                class="px-3 py-2 bg-white text-gray-800 rounded-lg font-medium text-sm">
+                                                variant="ghost" class="!bg-white !text-gray-800">
                                                 Lihat Foto
-                                            </button>
+                                            </x-ui.action-button>
                                         </div>
                                     </div>
                                 </div>
@@ -127,11 +123,11 @@
                                             class="w-full h-48 object-cover rounded-lg border border-gray-200">
                                         <div
                                             class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                                            <button type="button"
+                                            <x-ui.action-button type="button"
                                                 onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_pulang) }}', '{{ $absen->user->name }} - Foto Pulang', '{{ $absen->jam_pulang ? $absen->jam_pulang->format('d/m/Y H:i') : '' }}')"
-                                                class="px-3 py-2 bg-white text-gray-800 rounded-lg font-medium text-sm">
+                                                variant="ghost" class="!bg-white !text-gray-800">
                                                 Lihat Foto
-                                            </button>
+                                            </x-ui.action-button>
                                         </div>
                                     </div>
                                 </div>
@@ -144,11 +140,11 @@
                                             class="w-full h-48 object-cover rounded-lg border border-gray-200">
                                         <div
                                             class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                                            <button type="button"
+                                            <x-ui.action-button type="button"
                                                 onclick="openPhotoModal('{{ asset('storage/' . $absen->foto_izin) }}', '{{ $absen->user->name }} - Foto Izin', '{{ $absen->tanggal->format('d/m/Y') }}')"
-                                                class="px-3 py-2 bg-white text-gray-800 rounded-lg font-medium text-sm">
+                                                variant="ghost" class="!bg-white !text-gray-800">
                                                 Lihat Foto
-                                            </button>
+                                            </x-ui.action-button>
                                         </div>
                                     </div>
                                 </div>

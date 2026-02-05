@@ -23,7 +23,8 @@
             <!-- LEFT -->
             <div
                 class="md:flex-1 bg-gradient-to-br bg-white md:p-10 md:pt-0 pt-10 flex flex-col justify-center items-center">
-                <x-ui.logo :animated="true" />
+                <x-ui.logo :animated="true" size="lg" :src="asset('images/logo.png')" alt="logo" />
+
             </div>
 
             <!-- RIGHT -->
@@ -55,9 +56,9 @@
                         </label>
                     </div>
 
-                    <button class="btn btn-primary w-full">
+                    <x-ui.action-button type="submit" variant="primary" class="w-full">
                         Masuk
-                    </button>
+                    </x-ui.action-button>
 
                 </form>
 

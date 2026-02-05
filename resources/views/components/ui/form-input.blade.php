@@ -1,7 +1,7 @@
 {{-- Universal Form Input Component --}}
 @props([
     'type' => 'text', // text, email, password, number, date, time, textarea
-    'name',
+    'name' => 'name',
     'label' => null,
     'value' => null,
     'placeholder' => null,

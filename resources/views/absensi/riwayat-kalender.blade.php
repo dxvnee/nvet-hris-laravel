@@ -41,22 +41,22 @@
                     <form method="GET" action="{{ route('absen.riwayatKalender') }}"
                         class="flex flex-col md:flex-row gap-2 w-full sm:w-auto">
                         <div class="flex gap-2 w-full sm:w-auto">
-                            <select name="bulan"
-                                class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all min-w-[140px] text-center sm:text-left font-medium">
+                            <x-ui.form-select name="bulan" :value="$bulan"
+                                class="!mb-0 flex-1 sm:flex-none min-w-[140px]">
                                 @for ($m = 1; $m <= 12; $m++)
                                     <option value="{{ $m }}" {{ $m == $bulan ? 'selected' : '' }}>
                                         {{ \Carbon\Carbon::create(null, $m)->locale('id')->isoFormat('MMMM') }}
                                     </option>
                                 @endfor
-                            </select>
-                            <select name="tahun"
-                                class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all min-w-[100px] text-center sm:text-left font-medium">
+                            </x-ui.form-select>
+                            <x-ui.form-select name="tahun" :value="$tahun"
+                                class="!mb-0 flex-1 sm:flex-none min-w-[100px]">
                                 @for ($y = date('Y') - 2; $y <= date('Y') + 2; $y++)
                                     <option value="{{ $y }}" {{ $y == $tahun ? 'selected' : '' }}>
                                         {{ $y }}
                                     </option>
                                 @endfor
-                            </select>
+                            </x-ui.form-select>
                         </div>
                         <x-ui.action-button type="submit" variant="primary" class="group w-full sm:w-auto">
                             <x-icons.search class="w-5 h-5 group-hover:scale-110 transition-transform" />

@@ -44,6 +44,11 @@
 
                 @include('components.ui.main-topbar', ['title' => $header, 'subtle' => $subtle])
 
+                {{-- Main Content Slot --}}
+                <div class="flex-1 px-1">
+                    {{ $slot }}
+                </div>
+
                 @include('components.ui.main-bottombar', ['title' => $header])
             </div>
         </div>
