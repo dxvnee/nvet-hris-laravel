@@ -51,7 +51,7 @@ class PegawaiDashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('dashboard.pegawai', compact(
+        return view('pages.dashboard.pegawai', compact(
             'user',
             'absensiToday',
             'totalHadir',

@@ -38,7 +38,7 @@ class UserController extends Controller
 
         $users = $query->paginate(10)->withQueryString();
 
-        return view('users.index', compact('users'));
+        return view('pages.users.index', compact('users'));
     }
 
     /**
@@ -48,7 +48,7 @@ class UserController extends Controller
     {
         // Get all pegawai for shift partner selection
         $pegawaiList = User::where('role', 'pegawai')->orderBy('name')->get();
-        return view('users.create', compact('pegawaiList'));
+        return view('pages.users.create', compact('pegawaiList'));
     }
 
     /**
@@ -144,7 +144,7 @@ class UserController extends Controller
             ->where('id', '!=', $user->id)
             ->orderBy('name')
             ->get();
-        return view('users.edit', compact('user', 'pegawaiList'));
+        return view('pages.users.edit', compact('user', 'pegawaiList'));
     }
 
     /**

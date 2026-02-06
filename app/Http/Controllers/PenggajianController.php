@@ -54,7 +54,7 @@ class PenggajianController extends Controller
         // Get all employees for creating new payroll
         $employees = User::where('role', 'pegawai')->get();
 
-        return view('penggajian.index', compact('penggajian', 'periode', 'employees'));
+        return view('pages.penggajian.index', compact('penggajian', 'periode', 'employees'));
     }
 
     /**
@@ -95,7 +95,7 @@ class PenggajianController extends Controller
         $jamKerja = $user->jam_kerja ?? 8;
         $potonganPerMenit = round(($user->gaji_pokok / ($jamKerja * 26)) / 60);
         $potonganPerTidakHadir = round($user->gaji_pokok / 26); // 1 hari kerja
-        return view('penggajian.create', compact('user', 'periode', 'potonganPerMenit', 'totalMenitTelat', 'absensi', 'totalMenitLembur', 'totalLupaPulang', 'totalTidakHadir', 'potonganPerTidakHadir'));
+        return view('pages.penggajian.create', compact('user', 'periode', 'potonganPerMenit', 'totalMenitTelat', 'absensi', 'totalMenitLembur', 'totalLupaPulang', 'totalTidakHadir', 'potonganPerTidakHadir'));
     }
 
     /**
@@ -222,7 +222,7 @@ class PenggajianController extends Controller
         $potonganPerMenit = round(($user->gaji_pokok / ($jamKerja * 26)) / 60);
         $potonganPerTidakHadir = round($user->gaji_pokok / 26); // 1 hari kerja
 
-        return view('penggajian.edit', compact('penggajian', 'user', 'periode', 'absensi', 'totalMenitTelat', 'potonganPerMenit', 'totalMenitLembur', 'upahLemburPerMenit', 'totalUpahLembur', 'totalLupaPulang', 'totalTidakHadir', 'potonganPerTidakHadir'));
+        return view('pages.penggajian.edit', compact('penggajian', 'user', 'periode', 'absensi', 'totalMenitTelat', 'potonganPerMenit', 'totalMenitLembur', 'upahLemburPerMenit', 'totalUpahLembur', 'totalLupaPulang', 'totalTidakHadir', 'potonganPerTidakHadir'));
     }
 
     /**
@@ -327,7 +327,7 @@ class PenggajianController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return view('penggajian.print', compact('penggajian'));
+        return view('pages.penggajian.print', compact('penggajian'));
     }
 
     /**
@@ -433,6 +433,6 @@ class PenggajianController extends Controller
 
         $penggajian = $query->paginate(12)->withQueryString();
 
-        return view('penggajian.riwayat-pegawai', compact('penggajian'));
+        return view('pages.penggajian.riwayat-pegawai', compact('penggajian'));
     }
 }

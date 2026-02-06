@@ -104,7 +104,7 @@ class AdminDashboardController extends Controller
         // Grafik absensi 7 hari terakhir
         $grafikAbsensi = $this->getGrafikAbsensi();
 
-        return view('dashboard.admin', compact(
+        return view('pages.dashboard.admin', compact(
             'user',
             'today',
             'totalPegawai',

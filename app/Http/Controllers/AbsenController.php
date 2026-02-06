@@ -36,7 +36,7 @@ class AbsenController extends Controller
 
         // Check if user is inactive today
         if ($user->isInactiveOnDate($today)) {
-            return view('absensi.absen', [
+            return view('pages.absensi.absen', [
                 'officeLatitude' => $officeLatitude,
                 'officeLongitude' => $officeLongitude,
                 'allowedRadius' => $allowedRadius,
@@ -137,7 +137,7 @@ class AbsenController extends Controller
         $hariKhususInfo = $isHariKhususKerjaBiasa ? $publicHolidayInfo : null;
         $isInactive = $user->isInactiveOnDate($today);
 
-        return view('absensi.absen', compact(
+        return view('pages.absensi.absen', compact(
             'absenHariIni',
             'sudahHadir',
             'sudahIzin',
@@ -199,7 +199,7 @@ class AbsenController extends Controller
 
         $riwayat = $query->paginate(10)->appends(request()->query());
 
-        return view('absensi.riwayat', compact(
+        return view('pages.absensi.riwayat', compact(
             'riwayat',
             'sortBy',
             'sortDirection'
@@ -307,7 +307,7 @@ class AbsenController extends Controller
         $totalJam = floor($totalMenitKerja / 60);
         $sisaMenit = $totalMenitKerja % 60;
 
-        return view('absensi.riwayat-kalender', compact(
+        return view('pages.absensi.riwayat-kalender', compact(
             'kalenderData',
             'bulan',
             'tahun',
@@ -718,7 +718,7 @@ class AbsenController extends Controller
             ];
         }
 
-        return view('absensi.kalender', compact('kalenderData', 'bulan', 'tahun'));
+        return view('pages.absensi.kalender', compact('kalenderData', 'bulan', 'tahun'));
     }
 
     public function detailHari(Request $request, $tanggal)
@@ -798,7 +798,7 @@ class AbsenController extends Controller
             }
         });
 
-        return view('absensi.detail-hari', compact('absensiHari', 'tanggal'));
+        return view('pages.absensi.detail-hari', compact('absensiHari', 'tanggal'));
     }
 
     public function absensiUser(Request $request)
@@ -825,12 +825,12 @@ class AbsenController extends Controller
                 ->get();
         }
 
-        return view('absensi.user', compact('users', 'absensi', 'userId', 'user', 'bulan', 'tahun'));
+        return view('pages.absensi.user', compact('users', 'absensi', 'userId', 'user', 'bulan', 'tahun'));
     }
 
     public function edit(Absen $absen)
     {
-        return view('absensi.edit', compact('absen'));
+        return view('pages.absensi.edit', compact('absen'));
     }
 
     public function create($tanggal, User $user)
@@ -847,7 +847,7 @@ class AbsenController extends Controller
                 ->with('info', 'Data absensi sudah ada untuk tanggal ini. Menampilkan form edit.');
         }
 
-        return view('absensi.create', compact('user', 'tanggal'));
+        return view('pages.absensi.create', compact('user', 'tanggal'));
     }
 
     public function storeManual(Request $request)

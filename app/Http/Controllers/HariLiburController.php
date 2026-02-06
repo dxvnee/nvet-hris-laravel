@@ -21,7 +21,7 @@ class HariLiburController extends Controller
             ->orderBy('tanggal')
             ->get();
 
-        return view('hari-libur.index', compact('hariLiburs', 'tahun'));
+        return view('pages.hari-libur.index', compact('hariLiburs', 'tahun'));
     }
 
     /**
@@ -33,7 +33,7 @@ class HariLiburController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('hari-libur.create', compact('pegawai'));
+        return view('pages.hari-libur.create', compact('pegawai'));
     }
 
     /**
@@ -98,7 +98,7 @@ class HariLiburController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('hari-libur.edit', compact('hariLibur', 'pegawai'));
+        return view('pages.hari-libur.edit', compact('hariLibur', 'pegawai'));
     }
 
     /**

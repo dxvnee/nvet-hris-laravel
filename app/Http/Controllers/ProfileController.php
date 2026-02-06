@@ -22,7 +22,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        return view('pages.profile.edit', [
             'user' => $request->user(),
         ]);
     }
@@ -48,14 +48,14 @@ class ProfileController extends Controller
                 ->whereYear('tanggal', now()->year)
                 ->count(),
             'total_jam' => round(
-            Absen::where('user_id', $user->id)
-                ->whereNotNull('jam_pulang')
-                ->sum('menit_kerja') / 60
+                Absen::where('user_id', $user->id)
+                    ->whereNotNull('jam_pulang')
+                    ->sum('menit_kerja') / 60
             ),
             'tidak_hadir' => $userAbsensiBulanIni->where('tidak_hadir', true)->count()
         ];
 
-        return view('profile.profile', [
+        return view('pages.profile.profile', [
             'user' => $user,
             'stats' => $stats,
         ]);

@@ -64,7 +64,7 @@ class LemburController extends Controller
 
         $canLembur = $today->gt($jamPulangToday);
 
-        return view('lembur.index', compact(
+        return view('pages.lembur.index', compact(
             'activeLembur',
             'riwayatLembur',
             'canLembur',
@@ -166,7 +166,7 @@ class LemburController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('lembur.admin', compact('lemburs'));
+        return view('pages.lembur.admin', compact('lemburs'));
     }
 
     public function approve(Lembur $lembur)
