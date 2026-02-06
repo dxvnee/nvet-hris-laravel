@@ -13,54 +13,70 @@
     @vite('resources/css/app.css')
 </head>
 
-<body class="min-h-screen flex items-center justify-center bg-primaryExtraLight font-sans">
+<body
+    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-stone-100 font-sans">
 
     <x-ui.error-message />
 
-    <main class="w-full min-h-screen flex items-center justify-center  bg-primaryExtraLight">
+    @php
+        $emailIcon = view('components.icons.mail', ['class' => 'w-5 h-5'])->render();
+        $lockIcon = view('components.icons.lock-closed', ['class' => 'w-5 h-5'])->render();
+    @endphp
+
+    <main class="w-full min-h-screen flex items-center justify-center p-4">
         <div
-            class="flex flex-col md:flex-row w-full max-w-[900px] m-4 bg-white rounded-2xl shadow-[0_20px_60px_rgba(133,94,65,0.15)] overflow-hidden animate-[slideUp_0.8s_ease-out]">
+            class="flex flex-col md:flex-row w-full max-w-[900px] m-4 bg-white rounded-2xl shadow-[0_20px_60px_rgba(133,94,65,0.15)] overflow-hidden animate-slide-up">
             <!-- LEFT -->
             <div
-                class="md:flex-1 bg-gradient-to-br bg-white md:p-10 md:pt-0 pt-10 flex flex-col justify-center items-center">
-                <x-ui.logo :animated="true" size="lg" :src="asset('images/logo.png')" alt="logo" />
+                class="md:flex-1 bg-gradient-to-br from-primary via-primaryDark to-primary md:p-12 p-8 flex flex-col justify-center items-center text-white relative overflow-hidden">
 
+                <div class="relative z-10 flex flex-col items-center">
+                    <x-ui.logo :animated="true" size="lg" :src="asset('images/logo3.png')" alt="logo" />
+                    <h1 class="mt-6 text-3xl font-bold tracking-wide">MyNVet</h1>
+                    <p class="mt-2 text-white/80 text-sm text-center">Sistem manajemen karyawan dan absensi</p>
+                </div>
             </div>
 
             <!-- RIGHT -->
-            <div class="flex-1 p-10 flex flex-col justify-center animate-[slideRight_0.8s_ease-out]">
+            <div class="flex-1 p-8 md:p-12 flex flex-col justify-center animate-slide-in-left">
 
-                <div class="mb-10 justify-center text-center">
-                    <h2 class="title mb-1">NVet Clinic & Lab</h2>
-                    <p class="text-gray-500 text-sm">Sistem manajemen karyawan dan absensi</p>
+                <div class="mb-8 text-center md:text-left">
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Selamat Datang Kembali!</h2>
+                    <p class="text-gray-500 text-sm">Silakan masuk untuk melanjutkan: </p>
                 </div>
 
                 <form method="POST" action="{{ route('login') }}" autocomplete="off">
                     @csrf
 
                     <div class="mb-6">
-                        <label class="block font-semibold text-primary mb-2 text-sm">Email Address</label>
-                        <input class="w-full px-4 py-3 form-input" type="email" id="email" name="email"
-                            placeholder="Email Anda" required autocomplete="off">
+                        <x-ui.form-input type="email" name="email" label="Email Address"
+                            placeholder="nama@email.com" required variant="rounded" :prefix-html="$emailIcon"
+                            class="bg-gray-50 placeholder:text-gray-400 focus:bg-white" />
                     </div>
 
                     <div class="mb-6">
-                        <label class="block font-semibold text-primary mb-2 text-sm">Password</label>
-                        <input class="w-full px-4 py-3 form-input" type="password" id="password" name="password"
-                            placeholder="Password" required autocomplete="off">
+                        <x-ui.form-input type="password" name="password" label="Password"
+                            placeholder="Masukkan password" required variant="rounded" :prefix-html="$lockIcon"
+                            class="bg-gray-50 placeholder:text-gray-400 focus:bg-white" />
                     </div>
 
                     <div class="flex justify-between items-center mb-6 text-sm">
-                        <label class="flex items-center form-checkbox-label gap-2">
-                            <input type="checkbox" class="w-4 h-4 form-checkbox"> Ingat saya
-                        </label>
+                        <x-ui.form-checkbox name="remember" label="Ingat saya" size="sm" />
+                        <a href="#" class="text-primary font-medium hover:text-primaryDark transition-colors">Lupa
+                            password?</a>
                     </div>
 
-                    <x-ui.action-button type="submit" variant="primary" class="w-full">
-                        Masuk
+                    <x-ui.action-button type="submit" variant="primary"
+                        class="w-full !rounded-xl !py-3.5 !text-base shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300"
+                        size="lg">
+                        Masuk Sekarang
                     </x-ui.action-button>
 
                 </form>
+
+                <div class="mt-8 pt-6 border-t border-gray-100 text-center text-xs text-gray-400">
+                    <p>&copy; {{ date('Y') }} MyNVet. All rights reserved.</p>
+                </div>
 
             </div>
         </div>

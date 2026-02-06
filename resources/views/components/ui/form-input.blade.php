@@ -11,7 +11,9 @@
     'error' => null,
     'hint' => null,
     'prefix' => null,
+    'prefixHtml' => null,
     'suffix' => null,
+    'suffixHtml' => null,
     'xModel' => null,
     'min' => null,
     'max' => null,
@@ -28,8 +30,22 @@
             => 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition-colors',
     };
 
-    $paddingLeft = $prefix ? ($variant === 'rounded' ? 'pl-12' : 'pl-10') : ($variant === 'rounded' ? 'px-4' : 'px-3');
-    $paddingRight = $suffix ? ($variant === 'rounded' ? 'pr-16' : 'pr-12') : ($variant === 'rounded' ? 'pr-4' : 'pr-3');
+    $paddingLeft =
+        $prefix || $prefixHtml
+            ? ($variant === 'rounded'
+                ? 'pl-12'
+                : 'pl-10')
+            : ($variant === 'rounded'
+                ? 'px-4'
+                : 'px-3');
+    $paddingRight =
+        $suffix || $suffixHtml
+            ? ($variant === 'rounded'
+                ? 'pr-16'
+                : 'pr-12')
+            : ($variant === 'rounded'
+                ? 'pr-4'
+                : 'pr-3');
 @endphp
 
 <div class="space-y-2">
@@ -43,7 +59,9 @@
     @endif
 
     <div class="relative">
-        @if ($prefix && $type !== 'textarea')
+        @if ($prefixHtml && $type !== 'textarea')
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">{!! $prefixHtml !!}</span>
+        @elseif ($prefix && $type !== 'textarea')
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">{{ $prefix }}</span>
         @endif
 
@@ -65,7 +83,9 @@
                 {{ $attributes->merge(['class' => "$inputClasses $paddingLeft $paddingRight" . ($disabled || $readonly ? ' bg-gray-100 cursor-not-allowed' : '')]) }}>
         @endif
 
-        @if ($suffix && $type !== 'textarea')
+        @if ($suffixHtml && $type !== 'textarea')
+            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">{!! $suffixHtml !!}</span>
+        @elseif ($suffix && $type !== 'textarea')
             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">{{ $suffix }}</span>
         @endif
     </div>

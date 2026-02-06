@@ -21,7 +21,7 @@
     $variantClasses = [
         // Standard variants
         'primary' =>
-            'bg-gradient-to-r from-primary to-primaryDark text-white hover:from-primaryDark hover:to-primary shadow-lg hover:shadow-xl',
+            'btn-primary',
         'secondary' =>
             'bg-white text-gray-700 border border-gray-200 hover:border-primary hover:text-primary shadow-sm hover:shadow-md',
         'success' =>

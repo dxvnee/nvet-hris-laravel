@@ -16,12 +16,8 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         if (Auth::user()->role !== $role) {
-            abort(403, 'Unauthorized');
+            abort(403);
         }
 
         return $next($request);
