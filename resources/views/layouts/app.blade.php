@@ -33,7 +33,7 @@
 
 
     <div class="w-full h-screen bg-primaryUltraLight">
-        <div class="flex h-full p-5">
+        <div class="flex h-full p-3">
 
 
             @include('layouts.sidebar')

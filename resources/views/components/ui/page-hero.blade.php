@@ -80,7 +80,7 @@
                     <p class="text-white/70 text-xs uppercase tracking-wider mb-1">
                         {{ $variant === 'admin' ? 'Waktu Sekarang' : 'Waktu' }}</p>
                     <p class="{{ $variant === 'admin' ? 'text-3xl' : 'text-2xl md:text-3xl' }} font-bold font-mono"
-                        x-data="{ time: '' }" x-init="setInterval(() => time = new Date().toLocaleTimeString('id-ID'), 1000)" x-text="time"></p>
+                        x-data="{ time: '' }" x-init="time = new Date().toLocaleTimeString('id-ID'); setInterval(() => time = new Date().toLocaleTimeString('id-ID'), 1000)" x-text="time"></p>
                 </div>
             </div>
         @elseif(isset($actions))

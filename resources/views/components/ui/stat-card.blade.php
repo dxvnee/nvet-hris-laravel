@@ -12,6 +12,7 @@
     'gradient' => null, // custom gradient override
     'hoverBorder' => null, // custom hover border
     'valueColor' => null, // custom value color
+    'valueClass' => null, // custom value size/spacing classes
     'valueId' => null, // ID for value element (for JS updates)
     'pulse' => false, // pulse animation
 ])
@@ -95,6 +96,7 @@
     $customGradient = $gradient ?? $config['gradient'];
     $customHoverBorder = $hoverBorder ?? 'hover:border-primary/20';
     $customValueColor = $valueColor ?? $config['value'];
+    $customValueClass = $valueClass ?? 'text-3xl lg:text-4xl';
 @endphp
 
 @if ($variant === 'gradient')
@@ -155,7 +157,7 @@
                 @endif
             </div>
             <div class="text-right">
-                <span class="text-3xl lg:text-4xl font-bold {{ $customValueColor }}">{{ $value }}</span>
+                <span class="font-bold {{ $customValueClass }} {{ $customValueColor }} font-semibold text-gray-500 tracking-wider whitespace-normal break-words">{{ $value }}</span>
             </div>
         </div>
         <h3 class="text-xs lg:text-sm font-semibold text-gray-500 uppercase tracking-wider">{{ $displayLabel }}</h3>

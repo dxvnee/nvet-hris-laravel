@@ -46,7 +46,8 @@
     </div>
 @else
     {{-- Default variant (card with shadow) --}}
-    <div {{ $attributes->merge(['class' => "bg-white rounded-2xl shadow-xl p-6 {$animation}"]) }}>
+    <div
+        {{ $attributes->merge(['class' => "bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100/80 {$animation}"]) }}>
         @if ($title || isset($header))
             <div class="flex items-center gap-3 mb-6">
                 @if ($icon)

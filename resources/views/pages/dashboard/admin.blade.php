@@ -11,123 +11,111 @@
         </x-ui.page-hero>
 
         {{-- Stats Cards Admin --}}
-        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6">
-            {{-- Total Pegawai --}}
-            <x-ui.stat-card title="Total Pegawai" :value="$totalPegawai" delay="1">
-                <x-slot name="iconSlot">
-                    <x-icons.users-group class="h-5 w-5 lg:h-6 lg:w-6 text-white" />
-                </x-slot>
-                <x-slot name="footer">
-                    <div class="flex flex-wrap gap-1">
-                        @foreach ($pegawaiByJabatan as $jabatan => $total)
-                            @php
-                                $variant = match ($jabatan) {
-                                    'Dokter' => 'purple',
-                                    'Paramedis' => 'info',
-                                    'Tech' => 'green',
-                                    'FO' => 'orange',
-                                    default => 'default',
-                                };
-                            @endphp
-                            <x-ui.status-badge :type="$variant">{{ $jabatan }}:
-                                {{ $total }}</x-ui.status-badge>
-                        @endforeach
-                    </div>
-                </x-slot>
-            </x-ui.stat-card>
-
-            {{-- Absensi Hari Ini --}}
-            <x-ui.stat-card title="Hadir Hari Ini" :value="$absensiHariIni" gradient="from-emerald-500 to-green-600"
-                hoverBorder="hover:border-green-200"
-                valueColor="bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent"
-                delay="2">
-                <x-slot name="iconSlot">
-                    <x-icons.check-circle class="h-5 w-5 lg:h-6 lg:w-6 text-white" />
-                </x-slot>
-                <x-slot name="footer">
-                    <div class="flex flex-wrap gap-2">
-                        <x-ui.status-badge type="success">
-                            <x-slot name="iconSlot">
-                                <x-icons.check-circle-solid class="w-3 h-3" />
-                            </x-slot>
-                            {{ $tepatWaktuHariIni }}
-                        </x-ui.status-badge>
-                        <x-ui.status-badge type="danger">
-                            <x-slot name="iconSlot">
-                                <x-icons.x-circle-solid class="w-3 h-3" />
-                            </x-slot>
-                            {{ $telatHariIni }}
-                        </x-ui.status-badge>
-                    </div>
-                </x-slot>
-            </x-ui.stat-card>
-
-            {{-- Total Gaji Bulan Ini --}}
-            <x-ui.stat-card title="Gaji Bulan Ini" :value="'Rp ' . number_format($totalGajiBulanIni, 0, ',', '.')" gradient="from-blue-500 to-indigo-600"
-                hoverBorder="hover:border-blue-200" valueColor="text-gray-800" delay="3" :formatValue="false">
-                <x-slot name="iconSlot">
-                    <x-icons.currency class="h-5 w-5 lg:h-6 lg:w-6 text-white" />
-                </x-slot>
-                <x-slot name="footer">
-                    @if ($penggajianDraft > 0)
-                        <x-ui.status-badge type="warning">
-                            <x-slot name="iconSlot">
-                                <x-icons.exclamation-circle-solid class="w-3 h-3" />
-                            </x-slot>
-                            {{ $penggajianDraft }} Draft
-                        </x-ui.status-badge>
-                    @endif
-                </x-slot>
-            </x-ui.stat-card>
-
-            {{-- Belum Absen --}}
-            <x-ui.stat-card title="Belum Absen" :value="count($belumAbsen)" gradient="from-amber-500 to-orange-500"
-                hoverBorder="hover:border-orange-200" :valueColor="count($belumAbsen) > 0 ? 'text-orange-500' : 'text-green-500'" delay="4" :pulse="count($belumAbsen) > 0">
-                <x-slot name="iconSlot">
-                    <x-icons.exclamation-circle class="h-5 w-5 lg:h-6 lg:w-6 text-white" />
-                </x-slot>
-                <x-slot name="footer">
-                    @if (count($belumAbsen) > 0)
-                        <div class="flex -space-x-2">
-                            @foreach ($belumAbsen->take(4) as $pegawai)
-                                <img src="{{ $pegawai->avatar ? asset('storage/' . $pegawai->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($pegawai->name) . '&size=32&background=f97316&color=ffffff' }}"
-                                    class="w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-transform cursor-pointer"
-                                    title="{{ $pegawai->name }}">
+        <div>
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4 px-1">Ringkasan Hari Ini</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-4">
+                {{-- Total Pegawai --}}
+                <x-ui.stat-card title="Total Pegawai" :value="$totalPegawai" delay="1">
+                    <x-slot name="iconSlot">
+                        <x-icons.users-group class="h-5 w-5 lg:h-6 lg:w-6 text-white" />
+                    </x-slot>
+                    <x-slot name="footer">
+                        <div class="flex flex-wrap gap-1">
+                            @foreach ($pegawaiByJabatan as $jabatan => $total)
+                                @php
+                                    $variant = match ($jabatan) {
+                                        'Dokter' => 'purple',
+                                        'Paramedis' => 'info',
+                                        'Tech' => 'green',
+                                        'FO' => 'orange',
+                                        default => 'default',
+                                    };
+                                @endphp
+                                <x-ui.status-badge :type="$variant">{{ $jabatan }}:
+                                    {{ $total }}</x-ui.status-badge>
                             @endforeach
-                            @if (count($belumAbsen) > 4)
-                                <span
-                                    class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 border-2 border-white flex items-center justify-center text-xs font-bold text-orange-600 shadow-sm">+{{ count($belumAbsen) - 4 }}</span>
-                            @endif
                         </div>
-                    @else
-                        <p class="text-xs text-green-500 font-medium">✓ Semua sudah absen</p>
-                    @endif
-                </x-slot>
-            </x-ui.stat-card>
+                    </x-slot>
+                </x-ui.stat-card>
 
-            {{-- Lupa Pulang Bulan Ini --}}
-            <x-ui.stat-card title="Lupa Pulang" :value="$totalLupaPulangBulanIni" gradient="from-rose-500 to-pink-600"
-                hoverBorder="hover:border-rose-200" :valueColor="$totalLupaPulangBulanIni > 3 ? 'text-rose-500' : 'text-gray-800'" delay="4">
-                <x-slot name="iconSlot">
-                    <x-icons.arrow-right-on-rectangle class="h-5 w-5 lg:h-6 lg:w-6 text-white" />
-                </x-slot>
-                <x-slot name="footer">
-                    @if ($totalLupaPulangBulanIni > 3)
-                        <x-ui.status-badge type="danger">⚠️ Potong Gaji</x-ui.status-badge>
-                    @elseif($totalLupaPulangBulanIni > 0)
-                        <x-ui.status-badge type="warning">⚡ Perhatian</x-ui.status-badge>
-                    @else
-                        <x-ui.status-badge type="success">✓ Baik</x-ui.status-badge>
-                    @endif
-                </x-slot>
-            </x-ui.stat-card>
+                {{-- Absensi Hari Ini --}}
+                <x-ui.stat-card title="Hadir Hari Ini" :value="$absensiHariIni" gradient="from-emerald-500 to-green-600"
+                    hoverBorder="hover:border-green-200"
+                    valueColor="bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent"
+                    delay="2">
+                    <x-slot name="iconSlot">
+                        <x-icons.check-circle class="h-5 w-5 lg:h-6 lg:w-6 text-white" />
+                    </x-slot>
+                    <x-slot name="footer">
+                        <div class="flex flex-wrap gap-2">
+                            <x-ui.status-badge type="success">
+                                <x-slot name="iconSlot">
+                                    <x-icons.check-circle-solid class="w-3 h-3" />
+                                </x-slot>
+                                {{ $tepatWaktuHariIni }}
+                            </x-ui.status-badge>
+                            <x-ui.status-badge type="danger">
+                                <x-slot name="iconSlot">
+                                    <x-icons.x-circle-solid class="w-3 h-3" />
+                                </x-slot>
+                                {{ $telatHariIni }}
+                            </x-ui.status-badge>
+                        </div>
+                    </x-slot>
+                </x-ui.stat-card>
+
+                {{-- Total Gaji Bulan Ini --}}
+                <x-ui.stat-card title="Gaji Bulan Ini" :value="'Rp ' . number_format($totalGajiBulanIni, 0, ',', '.')" gradient="from-blue-500 to-indigo-600"
+                    hoverBorder="hover:border-blue-200" valueColor="text-gray-800" valueClass="text-xl lg:text-3xl leading-tight" delay="3" :formatValue="false">
+                    <x-slot name="iconSlot">
+                        <x-icons.currency class="h-5 w-5 lg:h-6 lg:w-6 text-white" />
+                    </x-slot>
+                    <x-slot name="footer">
+                        @if ($penggajianDraft > 0)
+                            <x-ui.status-badge type="warning">
+                                <x-slot name="iconSlot">
+                                    <x-icons.exclamation-circle-solid class="w-3 h-3" />
+                                </x-slot>
+                                {{ $penggajianDraft }} Draft
+                            </x-ui.status-badge>
+                        @endif
+                    </x-slot>
+                </x-ui.stat-card>
+
+                {{-- Belum Absen --}}
+                <x-ui.stat-card title="Belum Absen" :value="count($belumAbsen)" gradient="from-amber-500 to-orange-500"
+                    hoverBorder="hover:border-orange-200" :valueColor="count($belumAbsen) > 0 ? 'text-orange-500' : 'text-green-500'" delay="4" :pulse="count($belumAbsen) > 0">
+                    <x-slot name="iconSlot">
+                        <x-icons.exclamation-circle class="h-5 w-5 lg:h-6 lg:w-6 text-white" />
+                    </x-slot>
+                    <x-slot name="footer">
+                        @if (count($belumAbsen) > 0)
+                            <div class="flex -space-x-2">
+                                @foreach ($belumAbsen->take(4) as $pegawai)
+                                    <img src="{{ $pegawai->avatar ? asset('storage/' . $pegawai->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($pegawai->name) . '&size=32&background=f97316&color=ffffff' }}"
+                                        class="w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-transform cursor-pointer"
+                                        title="{{ $pegawai->name }}">
+                                @endforeach
+                                @if (count($belumAbsen) > 4)
+                                    <span
+                                        class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 border-2 border-white flex items-center justify-center text-xs font-bold text-orange-600 shadow-sm">+{{ count($belumAbsen) - 4 }}</span>
+                                @endif
+                            </div>
+                        @else
+                            <p class="text-xs text-green-500 font-medium">✓ Semua sudah absen</p>
+                        @endif
+                    </x-slot>
+                </x-ui.stat-card>
+
+
+            </div>
         </div>
 
         {{-- Grafik & Detail Section --}}
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {{-- Grafik Absensi 7 Hari --}}
             <div
-                class="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6 border border-gray-100 animate-slide-up-delay-5">
+                class="lg:col-span-2 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100/80 animate-slide-up-delay-5">
                 <x-ui.section-header title="Statistik Absensi" subtitle="7 hari terakhir">
                     <x-slot name="iconSlot">
                         <x-icons.chart-bar class="h-5 w-5 text-white" />
@@ -146,11 +134,11 @@
                     </x-slot>
                 </x-ui.section-header>
 
-                <div class="grid grid-cols-7 gap-2 lg:gap-3">
+                <div class="grid grid-cols-7 gap-2 lg:gap-3 mt-1">
                     @foreach ($grafikAbsensi as $data)
                         <div class="text-center group">
                             <div
-                                class="h-28 lg:h-36 bg-gradient-to-t from-gray-50 to-gray-100/50 rounded-xl relative overflow-hidden flex flex-col justify-end border border-gray-100 group-hover:border-primary/30 transition-colors">
+                                class="h-28 lg:h-36 bg-gradient-to-t from-gray-50 to-gray-100/50 rounded-xl relative overflow-hidden flex flex-col justify-end border border-gray-100 group-hover:border-primary/30 transition-all duration-300 group-hover:shadow-sm">
                                 @php
                                     $maxHadir = max(array_column($grafikAbsensi, 'hadir')) ?: 1;
                                     $heightHadir = ($data['hadir'] / $maxHadir) * 100;
@@ -163,7 +151,7 @@
                                         </div>
                                     @endif
                                     <div
-                                        class="absolute -top-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                        class="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
                                         {{ $data['hadir'] }} hadir
                                     </div>
                                 </div>
@@ -176,7 +164,8 @@
             </div>
 
             {{-- Top Telat --}}
-            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 animate-slide-up-delay-5">
+            <div
+                class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100/80 animate-slide-up-delay-5">
                 <x-ui.section-header title="Top Keterlambatan" subtitle="Bulan ini" gradient="from-rose-500 to-red-600">
                     <x-slot name="iconSlot">
                         <x-icons.clock class="h-5 w-5 text-white" />
@@ -226,37 +215,40 @@
         </x-ui.section-card>
 
         {{-- Quick Actions Admin --}}
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <x-ui.quick-action href="{{ route('users.index') }}" title="Kelola Pegawai"
-                subtitle="Tambah, edit, hapus">
-                <x-slot name="iconSlot">
-                    <x-icons.users class="h-6 w-6 text-white" />
-                </x-slot>
-            </x-ui.quick-action>
+        <div>
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4 px-1">Aksi Cepat</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <x-ui.quick-action href="{{ route('users.index') }}" title="Kelola Pegawai"
+                    subtitle="Tambah, edit, hapus">
+                    <x-slot name="iconSlot">
+                        <x-icons.users class="h-6 w-6 text-white" />
+                    </x-slot>
+                </x-ui.quick-action>
 
-            <x-ui.quick-action href="{{ route('penggajian.index') }}" title="Penggajian"
-                subtitle="Kelola gaji pegawai" gradient="from-emerald-500 to-green-600"
-                hoverBorder="hover:border-emerald-300" hoverText="group-hover:text-emerald-600">
-                <x-slot name="iconSlot">
-                    <x-icons.wallet class="h-6 w-6 text-white" />
-                </x-slot>
-            </x-ui.quick-action>
+                <x-ui.quick-action href="{{ route('penggajian.index') }}" title="Penggajian"
+                    subtitle="Kelola gaji pegawai" gradient="from-emerald-500 to-green-600"
+                    hoverBorder="hover:border-emerald-300" hoverText="group-hover:text-emerald-600">
+                    <x-slot name="iconSlot">
+                        <x-icons.wallet class="h-6 w-6 text-white" />
+                    </x-slot>
+                </x-ui.quick-action>
 
-            <x-ui.quick-action href="{{ route('absen.kalender') }}" title="Riwayat Absensi"
-                subtitle="Lihat semua absensi" gradient="from-blue-500 to-indigo-600"
-                hoverBorder="hover:border-blue-300" hoverText="group-hover:text-blue-600">
-                <x-slot name="iconSlot">
-                    <x-icons.calendar class="h-6 w-6 text-white" />
-                </x-slot>
-            </x-ui.quick-action>
+                <x-ui.quick-action href="{{ route('absen.kalender') }}" title="Riwayat Absensi"
+                    subtitle="Lihat semua absensi" gradient="from-blue-500 to-indigo-600"
+                    hoverBorder="hover:border-blue-300" hoverText="group-hover:text-blue-600">
+                    <x-slot name="iconSlot">
+                        <x-icons.calendar class="h-6 w-6 text-white" />
+                    </x-slot>
+                </x-ui.quick-action>
 
-            <x-ui.quick-action href="{{ route('users.create') }}" title="Tambah Pegawai"
-                subtitle="Daftarkan pegawai baru" gradient="from-purple-500 to-violet-600"
-                hoverBorder="hover:border-purple-300" hoverText="group-hover:text-purple-600">
-                <x-slot name="iconSlot">
-                    <x-icons.user-plus class="h-6 w-6 text-white" />
-                </x-slot>
-            </x-ui.quick-action>
+                <x-ui.quick-action href="{{ route('users.create') }}" title="Tambah Pegawai"
+                    subtitle="Daftarkan pegawai baru" gradient="from-purple-500 to-violet-600"
+                    hoverBorder="hover:border-purple-300" hoverText="group-hover:text-purple-600">
+                    <x-slot name="iconSlot">
+                        <x-icons.user-plus class="h-6 w-6 text-white" />
+                    </x-slot>
+                </x-ui.quick-action>
+            </div>
         </div>
     </div>
 </x-app-layout>

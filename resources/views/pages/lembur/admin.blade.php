@@ -57,7 +57,7 @@
     <x-ui.photo-modal title="Foto Lembur" variant="simple" :showDownload="false" />
 
     {{-- Reject Modal --}}
-    <x-ui.modal id="reject-modal" title="Tolak Lembur" maxWidth="md">
+    <x-ui.modal name="reject-modal" title="Tolak Lembur" maxWidth="md">
         <form id="reject-form" method="POST" class="p-4 space-y-4">
             @csrf
             @method('PATCH')
@@ -77,6 +77,18 @@
     </x-ui.modal>
 
     <script>
+        function openModal(name) {
+            window.dispatchEvent(new CustomEvent('open-modal', {
+                detail: name
+            }));
+        }
+
+        function closeModal(name) {
+            window.dispatchEvent(new CustomEvent('close-modal', {
+                detail: name
+            }));
+        }
+
         function openRejectModal(lemburId) {
             document.getElementById('reject-form').action = `/lembur/${lemburId}/reject`;
             openModal('reject-modal');

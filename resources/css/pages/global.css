@@ -13,6 +13,7 @@
     transition: none !important;
 }
 
+
 @layer components {
     .btn {
         @apply inline-flex items-center justify-center px-5 py-3 rounded-xl font-semibold uppercase tracking-wide
@@ -633,4 +634,30 @@
         gap: 15px;
         margin-top: 30px;
     }
+}
+
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F3E8DD/* slate-50 */
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        to bottom,
+        var(--primary-color, #855E41),
+        var(--primary-dark, #6B4423)
+    );
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+        to bottom,
+        var(--primary-dark, #6B4423),
+        var(--primary-darker, #4A2E16)
+    );
 }

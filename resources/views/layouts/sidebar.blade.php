@@ -259,12 +259,12 @@
     /* Desktop: sidebar hidden state */
     @media (min-width: 1024px) {
         .sidebar-hidden {
-            transform: translateX(-110%);
+            transform: translateX(-100%);
             opacity: 0;
         }
 
         .content-full {
-            margin-left: -25.5rem;
+            margin-left: -25rem;
         }
     }
 
