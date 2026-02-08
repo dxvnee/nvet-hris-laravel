@@ -22,14 +22,14 @@
         // Standard variants
         'primary' => 'btn-primary',
         'secondary' =>
-            'bg-white text-gray-700 border border-gray-200 hover:border-primary hover:text-primary shadow-sm hover:shadow-md',
+            'btn-primary bg-white text-gray-700 border border-gray-200 hover:border-primary hover:text-primary shadow-sm hover:shadow-md',
         'success' =>
-            'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-lg hover:shadow-xl',
+            'btn-primary bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-lg hover:shadow-xl',
         'danger' =>
-            'bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 shadow-lg hover:shadow-xl',
+            'btn-primary bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 shadow-lg hover:shadow-xl',
         'warning' =>
-            'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white hover:from-yellow-600 hover:to-yellow-700 shadow-lg hover:shadow-xl',
-        'ghost' => 'bg-transparent text-gray-600 hover:text-primary hover:bg-gray-100',
+            'btn-primary bg-gradient-to-r from-yellow-500 to-yellow-600 text-white hover:from-yellow-600 hover:to-yellow-700 shadow-lg hover:shadow-xl',
+        'ghost' => 'btn-primary bg-transparent text-gray-600 hover:text-primary hover:bg-gray-100',
 
         // Icon variants
         'icon-primary' => 'p-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg',

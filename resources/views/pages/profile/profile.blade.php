@@ -65,7 +65,7 @@
                 </svg>
             </x-slot>
 
-            {{-- <x-profile.password-form :action="route('password.update')" /> --}}
+            <x-profile.password-form :action="route('profile.password.update')" />
         </x-ui.section-card>
     </div>
 

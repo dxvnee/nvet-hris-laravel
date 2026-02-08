@@ -32,8 +32,8 @@
 
                 <div class="relative z-10 flex flex-col items-center">
                     <x-ui.logo :animated="true" size="lg" :src="asset('images/logo3.png')" alt="logo" />
-                    <h1 class="mt-6 text-3xl font-bold tracking-wide">MyNVet</h1>
-                    <p class="mt-2 text-white/80 text-sm text-center">Sistem manajemen karyawan dan absensi</p>
+                    <h1 class="mt-6 text-3xl font-bold tracking-wide">MyNNvet</h1>
+                    <p class="mt-2 text-white/80 text-xs text-center">Copyright © {{ date('Y') }} MyNNvet. All rights reserved.</p>
                 </div>
             </div>
 

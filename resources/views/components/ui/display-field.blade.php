@@ -1,7 +1,7 @@
 {{-- Display Field Component - Read-only display with optional status badge --}}
 @props([
     'label',
-    'value',
+    'value' => '',
     'status' => null, // 'danger', 'success', 'warning', 'info', null
     'statusText' => null,
     'hint' => null,

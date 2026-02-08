@@ -6,7 +6,7 @@
             <div class="flex items-center gap-3">
                 <img src="{{ asset('images/logo3.png') }}" alt="logo"
                     class="h-8 w-8 transition-transform duration-300 hover:scale-110">
-                <p class="text-white font-bold text-lg tracking-wide">NVet Clinic & Lab</p>
+                <p class="text-white font-bold text-lg tracking-wide">MyNvet</p>
             </div>
             <p class="text-white/80 text-sm text-center">© {{ date('Y') }} NVet Clinic & Lab. All rights reserved.</p>
             <p class="text-white/60 text-xs text-center">Kelola klinik hewan peliharaan Anda dengan mudah dan

@@ -195,8 +195,66 @@
             </form>
         </div>
 
-        <!-- Delete Account Section -->
+        <!-- Change Password Section -->
         <div class="bg-white rounded-2xl shadow-xl p-8 animate-slide-up-delay-2">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="p-3 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl shadow-lg">
+                    <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                        </path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">Ganti Password</h2>
+                    <p class="text-gray-500 text-sm">Pastikan menggunakan password yang kuat</p>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ route('profile.password.update') }}" class="space-y-6">
+                @csrf
+                @method('put')
+
+                <!-- Current Password -->
+                <div>
+                    <label for="current_password" class="block text-sm font-medium text-gray-700 mb-2">Password Saat
+                        Ini</label>
+                    <x-ui.form-input type="password" id="current_password" name="current_password"
+                        placeholder="Masukkan password saat ini" required />
+                    @error('current_password')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- New Password -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password Baru</label>
+                    <x-ui.form-input type="password" id="password" name="password" placeholder="Minimal 8 karakter"
+                        required />
+                    @error('password')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi
+                        Password Baru</label>
+                    <x-ui.form-input type="password" id="password_confirmation" name="password_confirmation"
+                        placeholder="Ulangi password baru" required />
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end">
+                    <x-ui.action-button type="submit" variant="primary">
+                        Perbarui Password
+                    </x-ui.action-button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Delete Account Section -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 animate-slide-up-delay-3">
             <div class="flex items-center gap-3 mb-6">
                 <div class="p-3 bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg">
                     <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -14,6 +14,11 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Chelsea+Market&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lexend:wght@100..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
 
 
     <!-- Scripts -->
@@ -32,8 +37,9 @@
                     : null)))" />
 
 
-    <div class="w-full h-screen bg-primaryUltraLight">
-        <div class="flex h-full p-3">
+    <div class="app-shell">
+        <x-ui.background-pattern />
+        <div class="flex h-full p-3 relative z-10">
 
 
             @include('layouts.sidebar')
