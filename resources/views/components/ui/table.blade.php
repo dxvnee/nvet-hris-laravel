@@ -4,7 +4,7 @@
 
 @php
     $variantClasses = [
-        'default' => 'w-full',
+        'default' => 'w-full border-collapse',
         'print' => 'w-full text-sm',
     ];
 

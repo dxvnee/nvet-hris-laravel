@@ -318,9 +318,9 @@
                                     </x-ui.table-cell>
                                     <x-ui.table-cell>
                                         <div class="flex items-center gap-2">
-                                            <x-ui.action-button tag="a" :href="route('penggajian.print', $gaji)" target="_blank"
+                                            <x-ui.action-button type="link" :href="route('penggajian.print', $gaji)" target="_blank"
                                                 variant="icon-success" title="Cetak" iconName="printer" />
-                                            <x-ui.action-button tag="a" :href="route('penggajian.edit', $gaji)" variant="icon-info"
+                                            <x-ui.action-button type="link" :href="route('penggajian.edit', $gaji)" variant="icon-info"
                                                 title="Edit" iconName="pencil" />
                                             <form action="{{ route('penggajian.destroy', $gaji) }}" method="POST"
                                                 class="inline"

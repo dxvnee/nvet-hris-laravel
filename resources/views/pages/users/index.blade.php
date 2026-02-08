@@ -301,7 +301,7 @@
                                                 onsubmit="return confirm('Apakah Anda yakin ingin menghapus pegawai ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <x-ui.action-button type="submit" variant="icon-danger"
+                                                <x-ui.action-button type="submit" variant="icon-danger" 
                                                     title="Hapus" iconName="trash" />
                                             </form>
                                         </div>

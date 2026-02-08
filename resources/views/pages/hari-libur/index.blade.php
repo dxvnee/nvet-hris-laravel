@@ -5,7 +5,7 @@
 
     <div class="space-y-6">
         {{-- Actions --}}
-        <div class="flex flex-col sm:flex-row justify-between gap-4">
+        <div class="flex flex-col sm:flex-row justify-between gap-4 animate-slide-up">
             {{-- Year Filter --}}
             @php
                 $startYear = 2024;
@@ -36,7 +36,8 @@
         @endif
 
         {{-- Table --}}
-        <x-ui.section-card title="Daftar Hari Libur & Hari Khusus {{ $tahun }}">
+        <x-ui.section-card title="Daftar Hari Libur & Hari Khusus {{ $tahun }}"
+            animation="animate-slide-up-delay-1">
             <x-slot name="iconSlot">
                 <x-icons.calendar class="h-6 w-6 text-white" />
             </x-slot>

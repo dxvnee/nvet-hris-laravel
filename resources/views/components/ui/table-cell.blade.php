@@ -13,9 +13,9 @@
 
     $variantClass =
         [
-            'default' => 'py-3 px-4 text-gray-700',
+            'default' => 'py-3 px-6 text-gray-700',
             'print' => 'p-0 text-gray-900',
-        ][$variant] ?? 'py-3 px-4 text-gray-700';
+        ][$variant] ?? 'py-3 px-6 text-gray-700';
 @endphp
 
 <td {{ $attributes->merge(['class' => "$alignClass $variantClass"]) }}>

@@ -20,8 +20,7 @@
 
     $variantClasses = [
         // Standard variants
-        'primary' =>
-            'btn-primary',
+        'primary' => 'btn-primary',
         'secondary' =>
             'bg-white text-gray-700 border border-gray-200 hover:border-primary hover:text-primary shadow-sm hover:shadow-md',
         'success' =>
@@ -65,6 +64,8 @@
             '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>',
         'trash' =>
             '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>',
+        'printer' =>
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V4h12v5M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2m-12 0h12v2H6v-2m0 0v-4h12v4"></path>',
     ];
 
     $baseClasses = 'inline-flex items-center justify-center font-bold rounded-2xl transition-all duration-300';
@@ -82,9 +83,7 @@
         @if ($icon)
             {!! $icon !!}
         @elseif($iconPath)
-            <div class="p-2 bg-white/20 rounded-xl">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">{!! $iconPath !!}</svg>
-            </div>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">{!! $iconPath !!}</svg>
         @endif
         {{ $slot }}
     </a>
@@ -94,10 +93,7 @@
         @if ($icon)
             {!! $icon !!}
         @elseif($iconPath)
-            <div class="p-2 bg-white/20 rounded-xl group-hover:scale-110 transition-transform">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">{!! $iconPath !!}</svg>
-            </div>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">{!! $iconPath !!}</svg>
         @endif
         {{ $slot }}
     </button>

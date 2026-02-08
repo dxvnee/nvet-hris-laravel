@@ -11,10 +11,12 @@
         pegawaiMode: '{{ $hariLibur->pegawai_semua ?? true ? 'semua' : 'pilih' }}'
     }">
         {{-- Back Button --}}
-        <x-ui.back-button :href="route('hari-libur.index')" />
+        <div class="animate-slide-up">
+            <x-ui.back-button :href="route('hari-libur.index')" />
+        </div>
 
         {{-- Form Card --}}
-        <x-ui.section-card title="Form Hari Libur / Hari Khusus">
+        <x-ui.section-card title="Form Hari Libur / Hari Khusus" animation="animate-slide-up-delay-1">
             <x-slot name="iconSlot">
                 <x-icons.calendar class="h-6 w-6 text-white" />
             </x-slot>
@@ -65,7 +67,7 @@
                     @error('tipe')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
-                </x-ui.section-card variant="simple">
+                </x-ui.section-card>
 
                 {{-- Basic Info --}}
                 <x-ui.section-card variant="simple" title="Informasi Dasar">
@@ -86,7 +88,7 @@
                             description="Tanggal ini akan otomatis menjadi libur/hari khusus setiap tahunnya"
                             :checked="old('is_recurring', $hariLibur->is_recurring)" size="lg" variant="stacked" />
                     </div>
-                </x-ui.section-card variant="simple">
+                </x-ui.section-card>
 
                 {{-- Hari Khusus Options --}}
                 <div x-show="tipe === 'hari_khusus'" x-transition class="space-y-6">
@@ -103,7 +105,7 @@
                                     :checked="old('is_lembur', $hariLibur->is_lembur)" size="lg" variant="stacked" />
                             </div>
                         </div>
-                    </x-ui.section-card variant="simple">
+                    </x-ui.section-card>
 
                     {{-- Jam Kerja --}}
                     <div x-show="isMasuk" x-transition>
@@ -123,7 +125,7 @@
                                             : '',
                                     )" />
                             </div>
-                        </x-ui.section-card variant="simple">
+                        </x-ui.section-card>
                     </div>
 
                     {{-- Shift Settings --}}
@@ -132,8 +134,7 @@
                             description="Atur jam kerja berbeda untuk pegawai shift" xModel="isShiftEnabled"
                             :checked="old('is_shift_enabled', $hariLibur->is_shift_enabled)" size="lg" variant="stacked" />
 
-                        <div x-show="isShiftEnabled" x-transition
-                            class="space-y-4 pt-4 border-t border-gray-200 mt-4">
+                        <div x-show="isShiftEnabled" x-transition class="space-y-4 pt-4 border-t border-gray-200 mt-4">
                             <x-ui.time-range-input badge="Shift 1" badgeType="success" startName="shift1_jam_masuk"
                                 endName="shift1_jam_keluar" :startValue="old(
                                     'shift1_jam_masuk',
@@ -160,7 +161,7 @@
                                         : '',
                                 )" />
                         </div>
-                    </x-ui.section-card variant="simple">
+                    </x-ui.section-card>
 
                     {{-- Pegawai Selection --}}
                     <x-ui.section-card variant="simple" title="Pegawai yang Hadir">
@@ -189,7 +190,7 @@
                                     :selected="in_array($p->id, $selectedPegawai)" />
                             @endforeach
                         </div>
-                    </x-ui.section-card variant="simple">
+                    </x-ui.section-card>
 
                     {{-- Additional Options --}}
                     <x-ui.section-card variant="simple" title="Opsi Tambahan">
@@ -208,7 +209,7 @@
                                     suffix="× upah normal" hint="Contoh: 2.0 = upah 2x lipat" />
                             </div>
                         </div>
-                    </x-ui.section-card variant="simple">
+                    </x-ui.section-card>
                 </div>
 
                 {{-- Buttons --}}

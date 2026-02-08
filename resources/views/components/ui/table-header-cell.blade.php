@@ -13,9 +13,9 @@
 
     $variantClass =
         [
-            'default' => 'py-3 px-4 font-semibold text-gray-600',
+            'default' => 'py-3 px-6 font-semibold text-gray-600',
             'print' => 'p-0 font-semibold text-gray-900',
-        ][$variant] ?? 'py-3 px-4 font-semibold text-gray-600';
+        ][$variant] ?? 'py-3 px-6 font-semibold text-gray-600';
 @endphp
 
 <th {{ $attributes->merge(['class' => "$alignClass $variantClass"]) }}>

@@ -4,10 +4,12 @@
 
     <div class="space-y-6">
         {{-- Back Button --}}
-        <x-ui.back-button label="Kembali ke Halaman Sebelumnya" />
+        <div class="animate-slide-up">
+            <x-ui.back-button label="Kembali ke Halaman Sebelumnya" />
+        </div>
 
         {{-- User Info --}}
-        <x-ui.section-card>
+        <x-ui.section-card animation="animate-slide-up-delay-1">
             <div class="flex items-center gap-4">
                 <x-ui.user-avatar :user="$absen->user" size="lg" class="border-2 border-primary" />
                 <div>
@@ -19,7 +21,7 @@
         </x-ui.section-card>
 
         {{-- Edit Form --}}
-        <x-ui.section-card>
+        <x-ui.section-card animation="animate-slide-up-delay-2">
             <form method="POST" action="{{ route('absen.update', $absen) }}" class="space-y-6">
                 @csrf
                 @method('PATCH')

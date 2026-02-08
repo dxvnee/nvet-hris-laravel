@@ -4,7 +4,7 @@
 
     <div class="space-y-6">
         {{-- Filter Form --}}
-        <x-ui.section-card>
+        <x-ui.section-card animation="animate-slide-up">
             <form method="GET" action="{{ route('absen.user') }}" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <x-ui.form-select name="user_id" label="Pilih Pegawai" :value="$userId"
@@ -47,7 +47,7 @@
 
         @if ($user)
             {{-- User Info --}}
-            <x-ui.section-card>
+            <x-ui.section-card animation="animate-slide-up-delay-1">
                 <div class="flex items-center gap-4">
                     <x-ui.user-avatar :user="$user" size="lg" class="border-2 border-primary" />
                     <div>
@@ -59,7 +59,7 @@
             </x-ui.section-card>
 
             {{-- Absensi Table --}}
-            <x-ui.section-card class="overflow-hidden">
+            <x-ui.section-card class="overflow-hidden" animation="animate-slide-up-delay-2">
                 <div class="px-6 py-4 border-b border-gray-200 -mx-6 -mt-6 mb-6">
                     <h3 class="text-lg font-semibold text-gray-800">
                         Riwayat Absensi - {{ \Carbon\Carbon::create($tahun, $bulan)->format('F Y') }}

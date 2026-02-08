@@ -4,7 +4,7 @@
 
     <div class="space-y-6">
         {{-- Navigation Bulan/Tahun --}}
-        <x-ui.section-card>
+        <x-ui.section-card animation="animate-slide-up">
             <div class="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
                 <h2 class="text-xl md:text-2xl font-bold text-gray-800">
                     {{ \Carbon\Carbon::create($tahun, $bulan)->format('F Y') }}

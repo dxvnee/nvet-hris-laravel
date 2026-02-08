@@ -4,10 +4,12 @@
 
     <div class="space-y-6">
         {{-- Back Button --}}
-        <x-ui.back-button :href="route('absen.detailHari', $tanggal)" label="Kembali ke Detail Hari" />
+        <div class="animate-slide-up">
+            <x-ui.back-button :href="route('absen.detailHari', $tanggal)" label="Kembali ke Detail Hari" />
+        </div>
 
         {{-- User Info --}}
-        <x-ui.section-card>
+        <x-ui.section-card animation="animate-slide-up-delay-1">
             <div class="flex items-center gap-4">
                 <x-ui.user-avatar :user="$user" size="lg" class="border-2 border-primary" />
                 <div>
@@ -19,7 +21,7 @@
         </x-ui.section-card>
 
         {{-- Create Form --}}
-        <x-ui.section-card>
+        <x-ui.section-card animation="animate-slide-up-delay-2">
             <form method="POST" action="{{ route('absen.storeManual') }}" class="space-y-6">
                 @csrf
                 <input type="hidden" name="user_id" value="{{ $user->id }}">
