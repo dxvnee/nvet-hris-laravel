@@ -3,7 +3,7 @@
     <div class="text-center">
 
         <!-- Spinner -->
-        <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-primary mx-auto"></div>
+<div class="animate-spin rounded-full h-12 w-12 border-8 border-primary border-t-transparent mx-auto"></div>
         <p class="mt-4 text-gray-600">Loading...</p>
     </div>
 </div>

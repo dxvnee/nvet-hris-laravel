@@ -39,7 +39,7 @@
                             $sortOptions = [
                                 'tanggal' => ['label' => 'Tanggal', 'icon' => 'calendar'],
                                 'jam_masuk' => ['label' => 'Jam Masuk', 'icon' => 'clock'],
-                                'menit_kerja' => ['label' => 'Total Kerja', 'icon' => 'clock'],
+                                'menit_kerja' => ['label' => 'Total', 'icon' => 'clock'],
                             ];
                         @endphp
                         @foreach ($sortOptions as $sortKey => $sortInfo)
@@ -85,7 +85,7 @@
                                 : null;
                         @endphp
                         <x-ui.history-card :date="$absen->tanggal->format('d M Y')" :dayName="$absen->tanggal->locale('id')->isoFormat('dddd')" :status="$status" :primaryTime="$absen->jam_masuk ? $absen->jam_masuk->format('H:i') : null"
-                            :secondaryTime="$absen->jam_pulang ? $absen->jam_pulang->format('H:i') : null" :tertiaryValue="$totalKerja" tertiaryLabel="Total Kerja" :description="$absen->izin_keterangan">
+                            :secondaryTime="$absen->jam_pulang ? $absen->jam_pulang->format('H:i') : null" :tertiaryValue="$totalKerja" tertiaryLabel="Total" :description="$absen->izin_keterangan">
                             <x-slot:badge>
                                 @if ($absen->libur)
                                     <x-ui.status-badge type="libur">Libur</x-ui.status-badge>
@@ -109,7 +109,7 @@
                 {{-- Pagination --}}
                 @if ($riwayat->hasPages())
                     <div class="mt-6 pt-6 border-t border-gray-100">
-                        {{ $riwayat->links() }}
+                        <x-ui.pagination :paginator="$riwayat" />
                     </div>
                 @endif
             @else
