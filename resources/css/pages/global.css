@@ -22,7 +22,7 @@
     }
 
     .btn-primary:hover {
-        @apply from-primaryDark to-primaryDark shadow-xl scale-[1.02];
+        @apply from-primaryDark to-primaryDark shadow-xl transform -translate-y-0.5;
     }
 
     .btn-primary:active {
@@ -41,7 +41,7 @@
     }
 
     .btn-secondary:hover {
-        @apply bg-primaryExtraLight scale-[1.02];
+        @apply bg-primaryExtraLight transform -translate-y-0.5;
     }
 
     .btn-secondary:active {

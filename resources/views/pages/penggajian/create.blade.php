@@ -19,18 +19,12 @@
             <input type="hidden" name="user_id" value="{{ $user->id }}">
             <input type="hidden" name="periode" value="{{ $periode }}">
 
-            <!-- Gaji Pokok & Potongan Section -->
+            <!-- Card 1: Gaji Pokok + Potongan + Lain-lain -->
             <x-penggajian.gaji-potongan-section :user="$user" :total-menit-telat="$totalMenitTelat" :potongan-per-menit="$potonganPerMenit" :total-lupa-pulang="$totalLupaPulang"
                 :total-tidak-hadir="$totalTidakHadir" :potongan-per-tidak-hadir="$potonganPerTidakHadir" />
 
-            <!-- Lembur Section -->
-            <x-penggajian.lembur-section :total-menit-lembur="$totalMenitLembur ?? 0" :upah-lembur-per-menit="$upahLemburPerMenit ?? 0" />
-
-            <!-- Insentif Section -->
-            <x-penggajian.insentif-section :jabatan="$user->jabatan" :detail="$detail" />
-
-            <!-- Lain-lain Section -->
-            <x-penggajian.lain-lain-section />
+            <!-- Card 2: Insentif + Lembur -->
+            <x-penggajian.insentif-section :jabatan="$user->jabatan" :detail="$detail" :total-menit-lembur="$totalMenitLembur ?? 0" :upah-lembur-per-menit="$upahLemburPerMenit ?? 0" />
 
             <!-- Total & Submit -->
             <x-penggajian.total-submit />

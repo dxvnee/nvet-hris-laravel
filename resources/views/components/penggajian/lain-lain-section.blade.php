@@ -57,10 +57,7 @@
         </div>
     </template>
 
-    <template x-if="lainLainItems.length === 0">
-        <x-ui.empty-state icon="clipboard-check" title="Belum ada item lain-lain"
-            subtitle="Klik tombol 'Tambah Item' untuk menambahkan" />
-    </template>
+    
 
     <div class="mt-6">
         <x-ui.form-input type="textarea" name="catatan" label="Catatan" :value="$catatan"

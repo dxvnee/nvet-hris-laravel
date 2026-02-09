@@ -22,14 +22,14 @@
         // Standard variants
         'primary' => 'btn-primary',
         'secondary' =>
-            'btn-primary bg-white text-gray-700 border border-gray-200 hover:border-primary hover:text-primary shadow-sm hover:shadow-md',
+            'btn-primary bg-white text-white border border-gray-200 hover:border-primary shadow-sm hover:shadow-md',
         'success' =>
             'btn-primary bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-lg hover:shadow-xl',
         'danger' =>
             'btn-primary bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 shadow-lg hover:shadow-xl',
         'warning' =>
             'btn-primary bg-gradient-to-r from-yellow-500 to-yellow-600 text-white hover:from-yellow-600 hover:to-yellow-700 shadow-lg hover:shadow-xl',
-        'ghost' => 'btn-primary bg-transparent text-gray-600 hover:text-primary hover:bg-gray-100',
+        'ghost' => 'btn-primary bg-transparent text-white hover:bg-gray-100',
 
         // Icon variants
         'icon-primary' => 'p-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg',
@@ -40,13 +40,13 @@
 
         // Absensi variants
         'hadir' =>
-            'bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02]',
+            'bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5',
         'pulang' =>
-            'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02]',
+            'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5',
         'izin' =>
-            'bg-gradient-to-r from-amber-500 to-yellow-600 text-white hover:from-amber-600 hover:to-yellow-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02]',
+            'bg-gradient-to-r from-amber-500 to-yellow-600 text-white hover:from-amber-600 hover:to-yellow-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5',
         'lembur' =>
-            'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02]',
+            'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5',
     ];
 
     $icons = [

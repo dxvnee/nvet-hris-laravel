@@ -21,11 +21,9 @@
             </form>
 
             {{-- Add Button --}}
-            <a href="{{ route('hari-libur.create') }}"
-                class="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primaryDark text-white font-semibold rounded-lg transition-all">
-                <x-icons.plus class="w-5 h-5" />
+            <x-ui.action-button type="link" :href="route('hari-libur.create')" variant="primary" iconName="plus">
                 Tambah Hari Libur / Hari Khusus
-            </a>
+            </x-ui.action-button>
         </div>
 
         {{-- Flash Messages --}}
@@ -63,8 +61,7 @@
                     </x-ui.table>
                 </div>
             @else
-                <x-ui.empty-state message="Tidak ada data hari libur" icon="calendar" size="lg" :actionHref="route('hari-libur.create')"
-                    actionLabel="Tambah Hari Libur" />
+                <x-ui.empty-state message="Tidak ada data hari libur" icon="calendar" size="lg"/>
             @endif
         </x-ui.section-card>
     </div>

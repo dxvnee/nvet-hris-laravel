@@ -73,6 +73,15 @@
 
         <x-penggajian.dynamic-insentif-items :model-name="$config['model'] . '.lainLainItems'" />
 
-        <x-ui.value-display label="Total Insentif" variant="green" :xText="'formatNumber(' . $config['calcFunc'] . ')'" showSign />
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Total Insentif</label>
+            <div class="rounded-xl px-4 py-3 border"
+                :class="{{ $config['calcFunc'] }} >= 0 ? 'bg-green-50 border-green-200 text-green-700' :
+                    'bg-red-50 border-red-200 text-red-700'">
+                <p class="font-bold text-lg"
+                    x-text="({{ $config['calcFunc'] }} >= 0 ? '+ ' : '- ') + 'Rp ' + formatNumber(Math.abs({{ $config['calcFunc'] }}))">
+                </p>
+            </div>
+        </div>
     </div>
 @endif

@@ -1,6 +1,4 @@
-@props([
-    'penggajian',
-])
+@props(['penggajian'])
 
 <div class="footer">
     <div class="signature-box">
@@ -17,6 +15,7 @@
     </div>
 </div>
 
-<p style="text-align: center; color: #888; font-size: 10px; margin-top: 30px;">
-    Dokumen ini dicetak pada {{ now()->format('d F Y H:i') }}
+<p class="print-timestamp">
+    Dokumen ini dicetak pada {{ now()->format('d F Y, H:i') }} WIB
 </p>
+</div> {{-- close .body-content --}}

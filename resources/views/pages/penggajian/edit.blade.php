@@ -19,18 +19,13 @@
             @csrf
             @method('PUT')
 
-            <!-- Gaji Pokok & Potongan Section -->
+            <!-- Card 1: Gaji Pokok + Potongan + Lain-lain -->
             <x-penggajian.gaji-potongan-section :user="$user" :gaji-pokok="$penggajian->gaji_pokok" :total-menit-telat="$totalMenitTelat" :potongan-per-menit="$potonganPerMenit"
-                :total-lupa-pulang="$totalLupaPulang" :total-tidak-hadir="$totalTidakHadir" :potongan-per-tidak-hadir="$potonganPerTidakHadir" />
+                :total-lupa-pulang="$totalLupaPulang" :total-tidak-hadir="$totalTidakHadir" :potongan-per-tidak-hadir="$potonganPerTidakHadir" :catatan="$penggajian->catatan ?? ''" />
 
-            <!-- Insentif Section -->
-            <x-penggajian.insentif-section :jabatan="$user->jabatan" :detail="$detail" />
-
-            <!-- Lembur Section -->
-            <x-penggajian.lembur-section :total-menit-lembur="$penggajian->total_menit_lembur ?? 0" :upah-lembur-per-menit="$penggajian->upah_lembur_per_menit ?? 0" />
-
-            <!-- Lain-lain Section -->
-            <x-penggajian.lain-lain-section :catatan="$penggajian->catatan ?? ''" />
+            <!-- Card 2: Insentif + Lembur -->
+            <x-penggajian.insentif-section :jabatan="$user->jabatan" :detail="$detail" :total-menit-lembur="$penggajian->total_menit_lembur ?? 0"
+                :upah-lembur-per-menit="$penggajian->upah_lembur_per_menit ?? 0" />
 
             <!-- Total & Submit -->
             <x-penggajian.total-submit />

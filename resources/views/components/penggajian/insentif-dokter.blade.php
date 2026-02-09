@@ -26,7 +26,15 @@
 
     <x-penggajian.dynamic-insentif-items model-name="dokter.lainLainItems" />
 
-    <x-ui.value-display label="Total Insentif" variant="green" xText="formatNumber(calculateDokterInsentif())" showSign>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Total Insentif</label>
+        <div class="rounded-xl px-4 py-3 border"
+            :class="calculateDokterInsentif() >= 0 ? 'bg-green-50 border-green-200 text-green-700' :
+                'bg-red-50 border-red-200 text-red-700'">
+            <p class="font-bold text-lg"
+                x-text="(calculateDokterInsentif() >= 0 ? '+ ' : '- ') + 'Rp ' + formatNumber(Math.abs(calculateDokterInsentif()))">
+            </p>
+        </div>
         <p class="text-sm text-gray-600 mt-1">Formula: (Transaksi - Pengurangan + Penambahan) × Persenan + Lain-lain</p>
-    </x-ui.value-display>
+    </div>
 </div>
