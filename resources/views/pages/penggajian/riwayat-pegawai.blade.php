@@ -26,7 +26,6 @@
                                 <x-ui.sortable-header column="total_potongan_telat" label="Potongan Telat" />
                                 <x-ui.sortable-header column="total_insentif" label="Insentif" />
                                 <x-ui.sortable-header column="total_gaji" label="Total Gaji" />
-                                <x-ui.table-header-cell>Status</x-ui.table-header-cell>
                                 <x-ui.table-header-cell>Aksi</x-ui.table-header-cell>
                             </x-ui.table-row>
                         </x-ui.table-head>

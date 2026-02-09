@@ -22,9 +22,6 @@
         <x-ui.currency-display :amount="$gaji->total_gaji" size="lg" />
     </x-ui.table-cell>
     <x-ui.table-cell>
-        <x-ui.status-badge :status="$gaji->status" />
-    </x-ui.table-cell>
-    <x-ui.table-cell>
         <x-ui.action-button type="link" :href="route('penggajian.print', $gaji)" variant="icon-success" target="_blank" title="Cetak Slip Gaji">
             <x-icons.printer class="w-5 h-5" />
         </x-ui.action-button>
