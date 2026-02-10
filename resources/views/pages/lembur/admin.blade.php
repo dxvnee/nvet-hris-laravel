@@ -29,6 +29,7 @@
                                 <x-ui.table-header-cell>Tanggal</x-ui.table-header-cell>
                                 <x-ui.table-header-cell>Waktu</x-ui.table-header-cell>
                                 <x-ui.table-header-cell>Durasi</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Perkiraan Biaya</x-ui.table-header-cell>
                                 <x-ui.table-header-cell>Status</x-ui.table-header-cell>
                                 <x-ui.table-header-cell align="center">Aksi</x-ui.table-header-cell>
                             </x-ui.table-row>
@@ -44,7 +45,7 @@
                 {{-- Pagination --}}
                 @if ($lemburs->hasPages())
                     <div class="mt-6 pt-4 border-t border-gray-200">
-                        {{ $lemburs->links() }}
+                        <x-ui.pagination :paginator="$lemburs" />
                     </div>
                 @endif
             @else

@@ -2,11 +2,11 @@
 
 <div class="header">
     <div class="company-info">
-        <div class="company-logo">N</div>
+        <img src="{{ asset('images/logo3.png') }}" alt="logo" class="company-logo-image" />
         <div class="company-text">
-            <h1>NVet Clinic</h1>
-            <p>Jl. Contoh No. 123, Kota XYZ</p>
-            <p>Telp: (021) 123-4567 | info@nvet.id</p>
+            <h1>NVet Clinic & Lab</h1>
+            <p>Jn. Untung Suropati, RT.004/RW.007, Cimone Jaya, Karawaci, Kota Tangerang, Banten 15114</p>
+            <p>Telp: +62 285-1177-1526 | nvetties@gmail.com</p>
         </div>
     </div>
     <div class="slip-info">
@@ -16,8 +16,5 @@
             Periode: {{ \Carbon\Carbon::parse($penggajian->periode)->format('F Y') }}<br>
             No: #{{ str_pad($penggajian->id, 6, '0', STR_PAD_LEFT) }}
         </div>
-        <span class="status-badge {{ $penggajian->status === 'final' ? 'status-final' : 'status-draft' }}">
-            {{ $penggajian->status === 'final' ? '● Final' : '● Draft' }}
-        </span>
     </div>
 </div>

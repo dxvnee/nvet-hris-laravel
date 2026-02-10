@@ -7,17 +7,19 @@
         <div class="bg-white rounded-2xl shadow-xl p-6 animate-slide-up">
             <div class="flex flex-col lg:flex-row gap-4 justify-between items-center">
                 <!-- Period Filter -->
-                <form method="GET" action="{{ route('penggajian.index') }}" class="flex gap-3 items-center">
+                <form method="GET" action="{{ route('penggajian.index') }}"
+                    class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center w-full lg:w-auto">
                     <label class="text-sm font-medium text-gray-700 hidden md:block">Periode:</label>
-                    <x-ui.form-input type="month" name="periode" :value="$periode" class="!mb-0" />
-                    <x-ui.action-button type="submit" variant="primary">
+                    <x-ui.form-input type="month" name="periode" :value="$periode" class="!mb-0 w-full" />
+                    <x-ui.action-button type="submit" variant="primary" class="w-full sm:w-auto">
                         Filter
                     </x-ui.action-button>
                 </form>
 
                 <!-- Add New Payroll -->
-                <div x-data="{ open: false }" class="relative">
-                    <x-ui.action-button type="button" variant="primary" @click="open = !open" iconName="plus">
+                <div x-data="{ open: false }" class="relative w-full lg:w-auto">
+                    <x-ui.action-button type="button" variant="primary" @click="open = !open" iconName="plus"
+                        class="w-full lg:w-auto">
                         Buat Penggajian
                     </x-ui.action-button>
 

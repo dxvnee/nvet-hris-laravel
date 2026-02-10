@@ -162,11 +162,17 @@ class LemburController extends Controller
     // Admin Methods
     public function adminIndex()
     {
+        $stats = [
+            'total' => Lembur::count(),
+            'pending' => Lembur::where('status', 'pending')->count(),
+            'approved' => Lembur::where('status', 'approved')->count(),
+        ];
+
         $lemburs = Lembur::with('user')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('pages.lembur.admin', compact('lemburs'));
+        return view('pages.lembur.admin', compact('lemburs', 'stats'));
     }
 
     public function approve(Lembur $lembur)

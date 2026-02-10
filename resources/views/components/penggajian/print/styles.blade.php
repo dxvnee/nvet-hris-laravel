@@ -64,6 +64,13 @@
         gap: 16px;
     }
 
+    .company-logo-image {
+        width: 44px;
+        height: 44px;
+        object-fit: contain;
+        flex-shrink: 0;
+    }
+
     .company-logo {
         width: 48px;
         height: 48px;

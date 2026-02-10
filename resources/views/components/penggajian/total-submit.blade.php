@@ -33,8 +33,7 @@
                         Simpan Draft
                     </x-ui.action-button>
                 @endif
-                <x-ui.action-button type="submit" variant="secondary" size="lg"
-                    class="!bg-white !text-primary hover:!bg-white/90">
+                <x-ui.action-button type="submit" variant="secondary" size="lg">
                     <input type="hidden" name="status" value="final" x-ref="statusFinal">
                     Finalkan
                 </x-ui.action-button>

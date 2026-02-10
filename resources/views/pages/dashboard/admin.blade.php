@@ -58,7 +58,7 @@
                                 <x-slot name="iconSlot">
                                     <x-icons.x-circle-solid class="w-3 h-3" />
                                 </x-slot>
-                                {{ $telatHariIni }}
+                                {{ $belumAbsenCount }} belum
                             </x-ui.status-badge>
                         </div>
                     </x-slot>
@@ -82,27 +82,25 @@
                     </x-slot>
                 </x-ui.stat-card>
 
-                {{-- Belum Absen --}}
-                <x-ui.stat-card title="Belum Absen" :value="count($belumAbsen)" gradient="from-amber-500 to-orange-500"
-                    hoverBorder="hover:border-orange-200" :valueColor="count($belumAbsen) > 0 ? 'text-orange-500' : 'text-green-500'" delay="4" :pulse="count($belumAbsen) > 0">
+                {{-- Pegawai Libur Hari Ini --}}
+                <x-ui.stat-card title="Libur Hari Ini" :value="$pegawaiLibur->count()" gradient="from-amber-500 to-orange-500"
+                    hoverBorder="hover:border-orange-200" :valueColor="$pegawaiLibur->count() > 0 ? 'text-orange-500' : 'text-gray-400'" delay="4">
                     <x-slot name="iconSlot">
-                        <x-icons.exclamation-circle class="h-5 w-5 lg:h-6 lg:w-6 text-white" />
+                        <x-icons.calendar class="h-5 w-5 lg:h-6 lg:w-6 text-white" />
                     </x-slot>
                     <x-slot name="footer">
-                        @if (count($belumAbsen) > 0)
-                            <div class="flex -space-x-2">
-                                @foreach ($belumAbsen->take(4) as $pegawai)
-                                    <img src="{{ $pegawai->avatar ? asset('storage/' . $pegawai->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($pegawai->name) . '&size=32&background=f97316&color=ffffff' }}"
-                                        class="w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-transform cursor-pointer"
-                                        title="{{ $pegawai->name }}">
+                        @if ($pegawaiLibur->count() > 0)
+                            <div class="flex flex-wrap gap-1">
+                                @foreach ($pegawaiLibur->take(3) as $pLibur)
+                                    <span class="text-xs bg-orange-50 text-orange-600 px-2 py-0.5 rounded-full font-medium truncate max-w-[100px]"
+                                        title="{{ $pLibur->name }}">{{ $pLibur->name }}</span>
                                 @endforeach
-                                @if (count($belumAbsen) > 4)
-                                    <span
-                                        class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 border-2 border-white flex items-center justify-center text-xs font-bold text-orange-600 shadow-sm">+{{ count($belumAbsen) - 4 }}</span>
+                                @if ($pegawaiLibur->count() > 3)
+                                    <span class="text-xs bg-orange-50 text-orange-600 px-2 py-0.5 rounded-full font-medium">+{{ $pegawaiLibur->count() - 3 }}</span>
                                 @endif
                             </div>
                         @else
-                            <p class="text-xs text-green-500 font-medium">✓ Semua sudah absen</p>
+                            <p class="text-xs text-gray-400 font-medium">Semua masuk kerja</p>
                         @endif
                     </x-slot>
                 </x-ui.stat-card>
@@ -124,11 +122,11 @@
                         <div class="flex items-center gap-4">
                             <div class="flex items-center gap-2">
                                 <span class="w-3 h-3 bg-gradient-to-r from-primary to-primaryDark rounded-full"></span>
-                                <span class="text-xs text-gray-500">Tepat</span>
+                                <span class="text-xs text-gray-500">Hadir</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="w-3 h-3 bg-gradient-to-r from-rose-500 to-red-500 rounded-full"></span>
-                                <span class="text-xs text-gray-500">Telat</span>
+                                <span class="text-xs text-gray-500">Belum Absen</span>
                             </div>
                         </div>
                     </x-slot>
@@ -140,16 +138,19 @@
                             <div
                                 class="h-28 lg:h-36 bg-gradient-to-t from-gray-50 to-gray-100/50 rounded-xl relative overflow-hidden flex flex-col justify-end border border-gray-100 group-hover:border-primary/30 transition-all duration-300 group-hover:shadow-sm">
                                 @php
-                                    $maxHadir = max(array_column($grafikAbsensi, 'hadir')) ?: 1;
-                                    $heightHadir = ($data['hadir'] / $maxHadir) * 100;
+                                    $maxTotal = max(array_map(fn($d) => $d['hadir'] + $d['belum_absen'], $grafikAbsensi)) ?: 1;
+                                    $totalBar = $data['hadir'] + $data['belum_absen'];
+                                    $heightTotal = ($totalBar / $maxTotal) * 100;
                                 @endphp
-                                <div class="bg-gradient-to-t from-primary to-primary/60 transition-all duration-500 relative rounded-t-lg group-hover:from-primaryDark"
-                                    style="height: {{ $heightHadir }}%">
-                                    @if ($data['telat'] > 0)
-                                        <div class="bg-gradient-to-t from-rose-500 to-rose-400 w-full absolute top-0 rounded-t-lg"
-                                            style="height: {{ ($data['telat'] / max($data['hadir'], 1)) * 100 }}%">
+                                <div class="transition-all duration-500 relative rounded-t-lg flex flex-col justify-end"
+                                    style="height: {{ $heightTotal }}%">
+                                    @if ($data['belum_absen'] > 0)
+                                        <div class="bg-gradient-to-t from-rose-500 to-rose-400 w-full rounded-t-lg"
+                                            style="height: {{ ($data['belum_absen'] / max($totalBar, 1)) * 100 }}%">
                                         </div>
                                     @endif
+                                    <div class="bg-gradient-to-t from-primary to-primary/60 w-full group-hover:from-primaryDark flex-1">
+                                    </div>
                                     <div
                                         class="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
                                         {{ $data['hadir'] }} hadir

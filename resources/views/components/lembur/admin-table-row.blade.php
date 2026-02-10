@@ -3,20 +3,26 @@
 
 @php
     $statusMap = [
-        'disetujui' => 'success',
-        'ditolak' => 'danger',
+        'approved' => 'success',
+        'rejected' => 'danger',
         'pending' => 'warning',
     ];
     $statusType = $statusMap[$item->status] ?? 'warning';
     $statusLabel = match ($item->status) {
-        'disetujui' => 'Disetujui',
-        'ditolak' => 'Ditolak',
+        'approved' => 'Disetujui',
+        'rejected' => 'Ditolak',
         default => 'Pending',
     };
 
     $mulai = \Carbon\Carbon::parse($item->jam_mulai);
     $selesai = \Carbon\Carbon::parse($item->jam_selesai);
     $durasi = $mulai->diff($selesai);
+
+    //Hitung perkiraan biaya lembur
+    $totalMenit = $item->durasi_menit ?? $durasi->h * 60 + $durasi->i;
+    $jamKerja = $item->user->jam_kerja ?? 8;
+    $upahLemburPerMenit = round((($item->user->gaji_pokok ?? 0) / ($jamKerja * 26) / 60) * 1.5);
+    $perkiraanBiaya = $totalMenit * $upahLemburPerMenit;
 @endphp
 
 <x-ui.table-row class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
@@ -44,6 +50,11 @@
         <span class="text-sm font-medium text-gray-900">
             {{ $durasi->h }}j {{ $durasi->i }}m
         </span>
+    </x-ui.table-cell>
+
+    {{-- Estimated Cost --}}
+    <x-ui.table-cell>
+        <span class="text-sm font-semibold text-green-600">Rp {{ number_format($perkiraanBiaya, 0, ',', '.') }}</span>
     </x-ui.table-cell>
 
     {{-- Status --}}

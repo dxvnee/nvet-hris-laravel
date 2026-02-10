@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Absen;
+use App\Models\HariLibur;
 use App\Models\Penggajian;
 use App\Models\User;
 use Carbon\Carbon;
@@ -41,9 +42,6 @@ class AdminDashboardController extends Controller
             ->pluck('total', 'jabatan')
             ->toArray();
 
-        $pegawaiLibur = User::where('role', 'pegawai')
-            ->where('is_inactive', false)
-            ->where('hari_libur', $today);
         // Absensi hari ini (semua pegawai)
         $absensiHariIni = Absen::whereDate('tanggal', $today)
             ->whereNotNull('jam_masuk')
@@ -54,22 +52,49 @@ class AdminDashboardController extends Controller
             ->whereNotNull('jam_masuk')
             ->count();
 
-        $telatHariIni = Absen::whereDate('tanggal', $today)
-            ->where('menit_telat', '>', 0)
-            ->count();
+        // Pegawai yang seharusnya kerja tapi belum absen hari ini
+        $dayOfWeek = now()->dayOfWeek;
+        $holiday = HariLibur::getHoliday($today);
 
-        // Pegawai yang belum absen hari ini
-        $belumAbsen = User::where('role', 'pegawai')
+        $semuaPegawaiAktif = User::where('role', 'pegawai')
             ->activeOnDate($today)
-            ->whereIn('id', function ($q) {
-                $q->select('user_id')
-                    ->from('absens')
-                    ->whereDate('tanggal', now())
-                    ->whereNull('jam_masuk')
-                    ->where('izin', false)
-                    ->where('libur', false);
-            })
             ->get();
+
+        // Filter: pegawai yang seharusnya kerja hari ini
+        $sudahAbsenIds = Absen::whereDate('tanggal', $today)
+            ->whereNotNull('jam_masuk')
+            ->pluck('user_id')
+            ->toArray();
+
+        $belumAbsen = $semuaPegawaiAktif->filter(function ($pegawai) use ($dayOfWeek, $holiday) {
+            // Cek hari libur mingguan pegawai
+            $userHariLibur = $pegawai->hari_libur ?? [];
+            $isUserDayOff = in_array($dayOfWeek, $userHariLibur);
+
+            // Jika ada hari libur nasional/khusus
+            if ($holiday) {
+                return $holiday->shouldUserWork($pegawai);
+            }
+
+            // Jika hari libur mingguan pegawai, tidak wajib kerja
+            return !$isUserDayOff;
+        })->filter(function ($pegawai) use ($sudahAbsenIds) {
+            return !in_array($pegawai->id, $sudahAbsenIds);
+        });
+
+        $belumAbsenCount = $belumAbsen->count();
+
+        // Pegawai yang libur hari ini
+        $pegawaiLibur = $semuaPegawaiAktif->filter(function ($pegawai) use ($dayOfWeek, $holiday) {
+            $userHariLibur = $pegawai->hari_libur ?? [];
+            $isUserDayOff = in_array($dayOfWeek, $userHariLibur);
+
+            if ($holiday) {
+                return !$holiday->shouldUserWork($pegawai);
+            }
+
+            return $isUserDayOff;
+        });
 
         // Total gaji bulan ini
         $totalGajiBulanIni = Penggajian::where('periode', $currentMonth)
@@ -111,8 +136,9 @@ class AdminDashboardController extends Controller
             'pegawaiByJabatan',
             'absensiHariIni',
             'tepatWaktuHariIni',
-            'telatHariIni',
+            'belumAbsenCount',
             'belumAbsen',
+            'pegawaiLibur',
             'totalGajiBulanIni',
             'penggajianDraft',
             'aktivitasTerbaru',
@@ -131,12 +157,24 @@ class AdminDashboardController extends Controller
 
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i)->toDateString();
+            $dateCarbon = Carbon::parse($date);
+            $dow = $dateCarbon->dayOfWeek;
+            $hol = HariLibur::getHoliday($date);
+
+            $totalAktif = User::where('role', 'pegawai')->activeOnDate($date)->get();
+            $harusKerja = $totalAktif->filter(function ($p) use ($dow, $hol) {
+                $off = in_array($dow, $p->hari_libur ?? []);
+                if ($hol) return $hol->shouldUserWork($p);
+                return !$off;
+            })->count();
+
+            $hadir = Absen::whereDate('tanggal', $date)->whereNotNull('jam_masuk')->count();
+            $belum = max($harusKerja - $hadir, 0);
+
             $grafikAbsensi[] = [
-                'tanggal' => Carbon::parse($date)->format('d M'),
-                'hadir' => Absen::whereDate('tanggal', $date)->count(),
-                'telat' => Absen::whereDate('tanggal', $date)
-                    ->where('menit_telat', '>', 0)
-                    ->count(),
+                'tanggal' => $dateCarbon->format('d M'),
+                'hadir' => $hadir,
+                'belum_absen' => $belum,
             ];
         }
 
