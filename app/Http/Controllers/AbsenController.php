@@ -708,7 +708,8 @@ class AbsenController extends Controller
                 if ($hol) return $hol->shouldUserWork($p);
                 return !$off;
             })->count();
-            $sudahAbsen = $absensiHari->whereNotNull('jam_masuk')->where('tidak_hadir', true)->count();
+            $sudahAbsen = $absensiHari->whereNotNull('jam_masuk')->count()
+                + $absensiHari->where('tidak_hadir', true)->count();
             $belumAbsen = max($harusKerja - $sudahAbsen, 0);
 
             $kalenderData[$tanggal] = [
