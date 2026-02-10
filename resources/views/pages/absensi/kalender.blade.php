@@ -130,9 +130,15 @@
                                             </span>
                                         @endif
                                         @if ($dayData['tidak_hadir'] > 0)
-                                            <span class="px-1.5 py-0.5 bg-gray-500 text-white rounded-full"
+                                            <span class="px-1.5 py-0.5 bg-red-500 text-white rounded-full"
                                                 title="Tidak Hadir">
                                                 ✗ {{ $dayData['tidak_hadir'] }}
+                                            </span>
+                                        @endif
+                                        @if (($dayData['belum_absen'] ?? 0) > 0)
+                                            <span class="px-1.5 py-0.5 bg-gray-500 text-white rounded-full"
+                                                title="Belum Absen">
+                                                ✗ {{ $dayData['belum_absen'] }}
                                             </span>
                                         @endif
                                     </div>
@@ -144,13 +150,16 @@
                                         <div class="w-2 h-2 rounded-full bg-green-500"></div>
                                     @endif
                                     @if ($dayData['hadir_terlambat'] > 0)
-                                        <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                                        <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
                                     @endif
                                     @if ($dayData['izin'] > 0)
-                                        <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                        <div class="w-2 h-2 rounded-full bg-orange-500"></div>
                                     @endif
                                     @if ($dayData['libur'] > 0)
                                         <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                                    @endif
+                                    @if (($dayData['belum_absen'] ?? 0) > 0)
+                                        <div class="w-2 h-2 rounded-full bg-gray-500"></div>
                                     @endif
                                 </div>
                             @else
@@ -178,11 +187,15 @@
                         <span class="text-gray-600">Libur</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 rounded-full bg-gray-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
                         <span class="text-gray-600">Tidak Hadir</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-gray-500"></div>
+                        <span class="text-gray-600">Belum Absen</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="px-2 py-0.5 rounded text-[10px] font-medium bg-red-500 text-white">Libur</div>
                         <span class="text-gray-600">Hari Libur Nasional</span>
                     </div>
                 </div>

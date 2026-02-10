@@ -699,6 +699,18 @@ class AbsenController extends Controller
             // Check if this day is a public holiday
             $publicHoliday = $publicHolidays->get($monthDay);
 
+            // Hitung belum absen (pegawai yang seharusnya kerja tapi belum absen)
+            $dow = $date->copy()->dayOfWeek;
+            $hol = $publicHoliday;
+            $allActive = \App\Models\User::where('role', 'pegawai')->activeOnDate($tanggal)->get();
+            $harusKerja = $allActive->filter(function ($p) use ($dow, $hol) {
+                $off = in_array($dow, $p->hari_libur ?? []);
+                if ($hol) return $hol->shouldUserWork($p);
+                return !$off;
+            })->count();
+            $sudahAbsen = $absensiHari->whereNotNull('jam_masuk')->count();
+            $belumAbsen = max($harusKerja - $sudahAbsen, 0);
+
             $kalenderData[$tanggal] = [
                 'tanggal' => $date,
                 'total_absen' => $absensiHari->count(),
@@ -713,6 +725,7 @@ class AbsenController extends Controller
                 'izin' => $absensiHari->where('izin', true)->count(),
                 'libur' => $absensiHari->where('libur', true)->count(),
                 'tidak_hadir' => $absensiHari->where('tidak_hadir', true)->count(),
+                'belum_absen' => $belumAbsen,
                 'absensi' => $absensiHari,
                 'public_holiday' => $publicHoliday,
             ];
@@ -736,16 +749,32 @@ class AbsenController extends Controller
             ->get()
             ->keyBy('user_id');
 
+        // Cek hari libur
+        $dayOfWeek = $date->dayOfWeek;
+        $holiday = HariLibur::getHoliday($tanggal);
+
         // Gabungkan data
-        $absensiHari = $employees->map(function ($employee) use ($absensi) {
+        $absensiHari = $employees->map(function ($employee) use ($absensi, $dayOfWeek, $holiday) {
             if ($absensi->has($employee->id)) {
                 return $absensi->get($employee->id);
+            }
+
+            // Cek apakah pegawai libur hari ini
+            $userHariLibur = $employee->hari_libur ?? [];
+            $isUserDayOff = in_array($dayOfWeek, $userHariLibur);
+
+            $isDayOff = false;
+            if ($holiday) {
+                $isDayOff = !$holiday->shouldUserWork($employee);
+            } elseif ($isUserDayOff) {
+                $isDayOff = true;
             }
 
             // Buat objek absen kosong untuk pegawai yang belum absen
             $emptyAbsen = new Absen();
             $emptyAbsen->user = $employee; // Set relation manually
             $emptyAbsen->user_id = $employee->id;
+            $emptyAbsen->is_day_off = $isDayOff;
             return $emptyAbsen;
         });
 

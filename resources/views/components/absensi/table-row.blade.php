@@ -46,6 +46,10 @@
             @else
                 <x-ui.status-badge type="danger" size="md">Terlambat</x-ui.status-badge>
             @endif
+        @elseif(!empty($absen->is_day_off))
+            <x-ui.status-badge type="info" size="md">Libur</x-ui.status-badge>
+        @elseif($absen->exists)
+            <x-ui.status-badge type="danger" size="md">Tidak Hadir</x-ui.status-badge>
         @else
             <x-ui.status-badge type="default" size="md">Belum Absen</x-ui.status-badge>
         @endif
