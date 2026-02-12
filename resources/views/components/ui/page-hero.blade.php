@@ -79,8 +79,9 @@
                     class="{{ $variant === 'pegawai' ? 'hidden lg:block text-center' : 'hidden md:block text-right' }} bg-white/10 backdrop-blur-sm rounded-2xl {{ $variant === 'admin' ? 'px-6' : 'px-4 md:px-6' }} py-3">
                     <p class="text-white/70 text-xs uppercase tracking-wider mb-1">
                         {{ $variant === 'admin' ? 'Waktu Sekarang' : 'Waktu' }}</p>
-                    <p class="{{ $variant === 'admin' ? 'text-3xl' : 'text-2xl md:text-3xl' }} font-bold font-mono"
-                        x-data="{ time: '' }" x-init="time = new Date().toLocaleTimeString('id-ID'); setInterval(() => time = new Date().toLocaleTimeString('id-ID'), 1000)" x-text="time"></p>
+                    <p class="{{ $variant === 'admin' ? 'text-3xl' : 'text-2xl md:text-3xl' }} font-extrabold"
+                        x-data="{ time: '' }" x-init="time = new Date().toLocaleTimeString('id-ID');
+                        setInterval(() => time = new Date().toLocaleTimeString('id-ID'), 1000)" x-text="time"></p>
                 </div>
             </div>
         @elseif(isset($actions))

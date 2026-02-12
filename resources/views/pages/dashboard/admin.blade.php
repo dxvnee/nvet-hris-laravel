@@ -52,7 +52,7 @@
                                 <x-slot name="iconSlot">
                                     <x-icons.check-circle-solid class="w-3 h-3" />
                                 </x-slot>
-                                {{ $tepatWaktuHariIni }}
+                                {{ $absensiHariIni }} hadir
                             </x-ui.status-badge>
                             <x-ui.status-badge type="danger">
                                 <x-slot name="iconSlot">

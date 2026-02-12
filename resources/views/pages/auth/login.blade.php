@@ -28,12 +28,10 @@
             class="flex flex-col md:flex-row w-full max-w-[900px] m-4 bg-white rounded-2xl shadow-[0_20px_60px_rgba(133,94,65,0.15)] overflow-hidden animate-slide-up">
             <!-- LEFT -->
             <div
-                class="md:flex-1 bg-gradient-to-br from-primary via-primaryDark to-primary md:p-12 p-8 flex flex-col justify-center items-center text-white relative overflow-hidden">
+                class="md:flex-1 bg-primaryExtraLight md:p-12 p-8 flex flex-col justify-center items-center text-white relative overflow-hidden">
 
                 <div class="relative z-10 flex flex-col items-center">
-                    <x-ui.logo :animated="true" size="lg" :src="asset('images/logo3.png')" alt="logo" />
-                    <h1 class="mt-6 text-3xl font-bold tracking-wide">MyNvet</h1>
-
+                    <x-ui.logo :animated="true" size="xl" :src="asset('images/logo3.png')" alt="logo" />
                 </div>
             </div>
 

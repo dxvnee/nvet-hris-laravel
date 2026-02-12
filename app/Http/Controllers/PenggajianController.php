@@ -52,7 +52,9 @@ class PenggajianController extends Controller
         $penggajian = $query->paginate(10)->withQueryString();
 
         // Get all employees for creating new payroll
-        $employees = User::where('role', 'pegawai')->get();
+        $employees = User::where('role', 'pegawai')
+            ->where('is_inactive', false)
+            ->get();
 
         return view('pages.penggajian.index', compact('penggajian', 'periode', 'employees'));
     }
