@@ -30,7 +30,8 @@
                                 <x-ui.table-header-cell>Tanggal</x-ui.table-header-cell>
                                 <x-ui.table-header-cell>Waktu</x-ui.table-header-cell>
                                 <x-ui.table-header-cell>Durasi</x-ui.table-header-cell>
-                                <x-ui.table-header-cell>Keterangan</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Foto</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Alasan Lembur</x-ui.table-header-cell>
                                 <x-ui.table-header-cell>Status</x-ui.table-header-cell>
                             </x-ui.table-row>
                         </x-ui.table-head>
@@ -66,6 +67,28 @@
                                             {{ $durasi->i }}m</span>
                                     </x-ui.table-cell>
                                     <x-ui.table-cell>
+                                        @if ($lembur->foto_selesai)
+                                            <x-ui.action-button variant="icon-info" size="sm" :onclick="'openPhotoModal(' .
+                                                json_encode(asset('storage/' . $lembur->foto_selesai)) .
+                                                ', ' .
+                                                json_encode('Foto Lembur') .
+                                                ', ' .
+                                                json_encode(
+                                                    \Carbon\Carbon::parse($lembur->tanggal)->format('d/m/Y') .
+                                                        ' ' .
+                                                        $selesai->format('H:i'),
+                                                ) .
+                                                ', ' .
+                                                json_encode('photo-modal') .
+                                                ')'"
+                                                title="Lihat Foto">
+                                                📷 Foto
+                                            </x-ui.action-button>
+                                        @else
+                                            <span class="text-sm text-gray-500">-</span>
+                                        @endif
+                                    </x-ui.table-cell>
+                                    <x-ui.table-cell>
                                         <span class="text-sm text-gray-600">{{ $lembur->keterangan ?? '-' }}</span>
                                     </x-ui.table-cell>
                                     <x-ui.table-cell>
@@ -88,4 +111,7 @@
             @endif
         </x-ui.section-card>
     </div>
+
+    {{-- Photo Modal --}}
+    <x-ui.photo-modal title="Foto Lembur" variant="simple" :showDownload="false" />
 </x-app-layout>

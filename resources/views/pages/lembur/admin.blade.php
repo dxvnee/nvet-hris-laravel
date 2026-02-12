@@ -30,6 +30,8 @@
                                 <x-ui.table-header-cell>Waktu</x-ui.table-header-cell>
                                 <x-ui.table-header-cell>Durasi</x-ui.table-header-cell>
                                 <x-ui.table-header-cell>Perkiraan Biaya</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Foto</x-ui.table-header-cell>
+                                <x-ui.table-header-cell>Alasan Lembur</x-ui.table-header-cell>
                                 <x-ui.table-header-cell>Status</x-ui.table-header-cell>
                                 <x-ui.table-header-cell align="center">Aksi</x-ui.table-header-cell>
                             </x-ui.table-row>

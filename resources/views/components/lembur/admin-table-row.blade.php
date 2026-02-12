@@ -57,6 +57,30 @@
         <span class="text-sm font-semibold text-green-600">Rp {{ number_format($perkiraanBiaya, 0, ',', '.') }}</span>
     </x-ui.table-cell>
 
+    {{-- Photo --}}
+    <x-ui.table-cell>
+        @if ($item->foto_selesai)
+            <x-ui.action-button variant="icon-info" size="sm" :onclick="'openPhotoModal(' .
+                json_encode(asset('storage/' . $item->foto_selesai)) .
+                ', ' .
+                json_encode($item->user->name . ' - Foto Lembur') .
+                ', ' .
+                json_encode(\Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') . ' ' . $selesai->format('H:i')) .
+                ', ' .
+                json_encode('photo-modal') .
+                ')'" title="Lihat Foto">
+                📷 Foto
+            </x-ui.action-button>
+        @else
+            <span class="text-sm text-gray-500">-</span>
+        @endif
+    </x-ui.table-cell>
+
+    {{-- Reason --}}
+    <x-ui.table-cell>
+        <span class="text-sm text-gray-600">{{ $item->keterangan ?? '-' }}</span>
+    </x-ui.table-cell>
+
     {{-- Status --}}
     <x-ui.table-cell>
         <x-ui.status-badge :type="$statusType" size="md">{{ $statusLabel }}</x-ui.status-badge>
