@@ -26,15 +26,16 @@
                 <p class="text-4xl font-bold">Rp <span x-text="formatNumber(calculateTotal())"></span></p>
             </div>
             <div class="flex gap-4">
-                @if ($showDraftButton)
-                    <x-ui.action-button type="submit" variant="secondary" size="lg"
-                        class="!bg-white/20 hover:!bg-white/30 !text-white !border-0">
-                        <input type="hidden" name="status" value="draft" x-ref="statusDraft">
-                        Simpan Draft
-                    </x-ui.action-button>
-                @endif
-                <x-ui.action-button type="submit" variant="secondary" size="lg">
-                    <input type="hidden" name="status" value="final" x-ref="statusFinal">
+                <x-ui.action-button type="submit" variant="secondary" size="lg"
+                    class="!bg-white/20 hover:!bg-white/30 !text-white !border-0"
+                    name="status" value="draft" x-ref="statusDraft"
+                    >
+                    Simpan Draft
+                </x-ui.action-button>
+                <x-ui.action-button type="submit" variant="secondary" size="lg"
+                    class="!bg-white/20 hover:!bg-white/30 !text-white !border-0"
+                    name="status" value="final" x-ref="statusFinal"
+                    >
                     Finalkan
                 </x-ui.action-button>
             </div>
