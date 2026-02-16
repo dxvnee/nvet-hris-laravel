@@ -7,6 +7,7 @@
     'sudahIzin' => null,
     'sudahPulang' => null,
     'liburOrNot' => false,
+    'bisaLemburTelat' => false,
     'jamPulangHour' => 20,
     'jamPulangMinute' => 0,
 ])
@@ -310,7 +311,7 @@
     }
 
     function checkLemburEligibility() {
-        @if ($sudahHadir && !$sudahIzin && !$sudahPulang)
+        @if ($sudahHadir && !$sudahIzin && !$sudahPulang && $bisaLemburTelat)
             const jamPulang = new Date();
             jamPulang.setHours({{ $jamPulangHour }}, {{ $jamPulangMinute }}, 0);
             const now = new Date();

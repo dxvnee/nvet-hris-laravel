@@ -308,6 +308,7 @@
                         </div>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 text-center mb-2">Konfirmasi Lembur</h3>
+
                     <p class="text-gray-600 text-center mb-4">
                         Anda pulang <span id="lembur-menit" class="font-bold text-orange-600">0</span> menit setelah
                         jam
@@ -405,5 +406,5 @@
     @endphp
 
     <x-absensi.absen-script :officeLatitude="$officeLatitude" :officeLongitude="$officeLongitude" :allowedRadius="$allowedRadius" :sudahHadir="$sudahHadir"
-        :sudahIzin="$sudahIzin" :sudahPulang="$sudahPulang" :liburOrNot="$liburOrNot" :jamPulangHour="$jamPulangSetting->hour" :jamPulangMinute="$jamPulangSetting->minute" />
+        :sudahIzin="$sudahIzin" :sudahPulang="$sudahPulang" :liburOrNot="$liburOrNot"  :bisaLemburTelat="$bisaLemburTelat" :jamPulangHour="$jamPulangSetting->hour" :jamPulangMinute="$jamPulangSetting->minute"/>
 </x-app-layout>

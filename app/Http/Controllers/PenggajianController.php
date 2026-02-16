@@ -224,6 +224,7 @@ class PenggajianController extends Controller
         $potonganPerMenit = round(($user->gaji_pokok / ($jamKerja * 26)) / 60);
         $potonganPerTidakHadir = round($user->gaji_pokok / 26); // 1 hari kerja
 
+
         return view('pages.penggajian.edit', compact('penggajian', 'user', 'periode', 'absensi', 'totalMenitTelat', 'potonganPerMenit', 'totalMenitLembur', 'upahLemburPerMenit', 'totalUpahLembur', 'totalLupaPulang', 'totalTidakHadir', 'potonganPerTidakHadir'));
     }
 
@@ -274,7 +275,6 @@ class PenggajianController extends Controller
         $gajiPokok = $request->gaji_pokok;
         $totalPotonganTelat = $request->total_menit_telat * $request->potongan_per_menit;
         $totalInsentif = $this->calculateInsentif($user->jabatan, $request->insentif_detail ?? []);
-
         // Calculate lain-lain from items
         $lainLainItems = $request->lain_lain_items ?? [];
         $lainLain = $this->calculateLainLain($lainLainItems);
@@ -341,13 +341,21 @@ class PenggajianController extends Controller
 
         // Calculate lain-lain items total
         $lainLainItemsTotal = 0;
+
         if (isset($detail['lain_lain_items']) && is_array($detail['lain_lain_items'])) {
             foreach ($detail['lain_lain_items'] as $item) {
-                $qty = intval($item['qty'] ?? 0);
-                $harga = floatval($item['harga'] ?? 0);
-                $lainLainItemsTotal += $qty * $harga;
+                // Ambil nilainya, pastikan dikonversi ke angka
+                $harga = floatval($item['nilai'] ?? 0);
+
+                // Jika tidak ada field 'qty', kita asumsikan 1 atau langsung tambahkan harganya
+                $lainLainItemsTotal += $harga;
+
+                // Log untuk debug di terminal VS Code per item
+                error_log("Item: " . ($item['nama'] ?? 'Tanpa Nama') . " | Nilai: " . $harga);
             }
         }
+
+        error_log("TOTAL AKHIR: " . $lainLainItemsTotal);
 
         switch ($jabatan) {
             case 'Dokter':

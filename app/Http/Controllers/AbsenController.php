@@ -137,6 +137,14 @@ class AbsenController extends Controller
         $hariKhususInfo = $isHariKhususKerjaBiasa ? $publicHolidayInfo : null;
         $isInactive = $user->isInactiveOnDate($today);
 
+        $now = Carbon::now();
+
+        $jamPulangSetting = Carbon::parse($user->jam_keluar);
+        $menitTelat =  $absenHariIni->menit_telat;
+        $menitBisaLemburTelat = $jamPulangSetting->copy()->addMinutes($menitTelat);
+        $bisaLemburTelat = $now->gt($menitBisaLemburTelat);
+
+
         return view('pages.absensi.absen', compact(
             'absenHariIni',
             'sudahHadir',
@@ -152,7 +160,11 @@ class AbsenController extends Controller
             'officeLongitude',
             'allowedRadius',
             'totalJamKerja',
-            'totalJamKerjaText'
+            'totalJamKerjaText',
+            'menitTelat',
+            'jamPulangSetting',
+            'menitBisaLemburTelat',
+            'bisaLemburTelat'
         ));
     }
 
