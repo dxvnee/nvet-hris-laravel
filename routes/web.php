@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
     // Routes untuk admin
     Route::middleware('role:admin')->group(function () {
         // User Management Routes
-        Route::resource('users', UserController::class);
+        Route::resource('users', controller: UserController::class);
 
         // Penggajian Routes
         Route::resource('penggajian', PenggajianController::class);

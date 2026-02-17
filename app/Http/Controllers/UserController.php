@@ -37,6 +37,7 @@ class UserController extends Controller
         $query->orderBy($sortBy, $sortDir);
 
         $users = $query->paginate(10)->withQueryString();
+        error_log('Ini pesan debug');
 
         return view('pages.users.index', compact('users'));
     }
@@ -46,6 +47,7 @@ class UserController extends Controller
      */
     public function create()
     {
+
         // Get all pegawai for shift partner selection
         $pegawaiList = User::where('role', 'pegawai')->orderBy('name')->get();
         return view('pages.users.create', compact('pegawaiList'));

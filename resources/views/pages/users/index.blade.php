@@ -107,7 +107,7 @@
                 </div>
 
                 <!-- Add Button -->
-                <x-ui.action-button tag="a" :href="route('users.create')" variant="primary" iconName="plus"
+                <x-ui.action-button type="link" :href="route('users.create')" variant="primary" iconName="plus"
                     class="w-full lg:w-auto">
                     Tambah Pegawai
                 </x-ui.action-button>
@@ -301,7 +301,7 @@
                                                 onsubmit="return confirm('Apakah Anda yakin ingin menghapus pegawai ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <x-ui.action-button type="submit" variant="icon-danger" 
+                                                <x-ui.action-button type="submit" variant="icon-danger"
                                                     title="Hapus" iconName="trash" />
                                             </form>
                                         </div>
