@@ -140,7 +140,7 @@ class AbsenController extends Controller
         $now = Carbon::now();
 
         $jamPulangSetting = Carbon::parse($user->jam_keluar);
-        $menitTelat =  $absenHariIni->menit_telat;
+        $menitTelat =  $absenHariIni ? $absenHariIni->menit_telat : 0;
         $menitBisaLemburTelat = $jamPulangSetting->copy()->addMinutes($menitTelat);
         $bisaLemburTelat = $now->gt($menitBisaLemburTelat);
 

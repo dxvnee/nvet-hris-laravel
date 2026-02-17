@@ -355,7 +355,6 @@ class PenggajianController extends Controller
             }
         }
 
-        error_log("TOTAL AKHIR: " . $lainLainItemsTotal);
 
         switch ($jabatan) {
             case 'Dokter':
