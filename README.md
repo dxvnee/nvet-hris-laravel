@@ -1,59 +1,239 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# NVet Management (HRIS)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi HRIS berbasis Laravel untuk manajemen operasional klinik/hewan (NVet), mencakup:
 
-## About Laravel
+- Absensi harian pegawai (masuk, pulang, izin, lokasi, foto)
+- Kalender absensi admin dan riwayat absensi pegawai
+- Pengajuan & approval lembur
+- Penggajian bulanan (potongan telat/alpha, insentif jabatan, lembur, item lain-lain)
+- Manajemen pegawai (shift/non-shift, hari libur, status inactive)
+- Manajemen hari libur & hari khusus
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 1. Teknologi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 12, PHP 8.2+
+- **Frontend**: Blade, Vite, Tailwind CSS, Alpine.js
+- **Database**: MySQL/MariaDB (default Laravel), bisa disesuaikan via `.env`
+- **Image Processing**: `intervention/image`
+- **Auth**: Laravel Breeze (login/logout)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 2. Peran Pengguna
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Admin
+- Dashboard admin dengan statistik absensi & payroll
+- Kelola pegawai (`users`)
+- Kelola penggajian (`penggajian`)
+- Kelola hari libur/hari khusus (`hari-libur`)
+- Review lembur (`lembur-admin`) dan approve/reject
+- Kelola absensi manual dari kalender admin
 
-## Laravel Sponsors
+### Pegawai
+- Dashboard pegawai
+- Absen harian (`/absen`)
+- Riwayat absensi tabel & kalender
+- Pengajuan lembur dan penyelesaian lembur
+- Riwayat penggajian final
+- Kelola profil & password
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 3. Fitur Utama
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 3.1 Absensi
+- Absensi berdasarkan lokasi kantor dengan radius validasi.
+- Wajib foto untuk aksi absen/izin (diproses & dikompresi oleh `PhotoService`).
+- Satu record absen per pegawai per hari.
+- Mendukung:
+	- hadir masuk/pulang,
+	- izin tidak masuk,
+	- izin pulang awal,
+	- pencatatan dari luar lokasi dengan alasan,
+	- shift 1 / shift 2.
+- Admin dapat tambah/edit/hapus absensi manual dari kalender admin.
 
-## Contributing
+## 3.2 Hari Libur & Hari Khusus
+- Hari libur reguler dan hari berulang tahunan (`is_recurring`).
+- Hari khusus dapat diatur:
+	- apakah masuk (`is_masuk`),
+	- apakah dianggap lembur (`is_lembur`),
+	- jam kerja custom,
+	- mode shift custom,
+	- pegawai tertentu yang wajib hadir,
+	- `upah_multiplier`.
+- Logika `shouldUserWork()` menentukan apakah pegawai wajib kerja pada tanggal tertentu.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 3.3 Lembur
+- Pegawai memulai lembur (wajib foto) setelah jam pulang.
+- Pegawai menyelesaikan lembur (wajib foto + keterangan), sistem menghitung durasi menit.
+- Status lembur: `pending`, `approved`, `rejected`.
+- Admin memproses approval/rejection (dengan alasan penolakan).
 
-## Code of Conduct
+## 3.4 Penggajian
+- Payroll per periode (`YYYY-MM`) dan per pegawai (unik).
+- Komponen gaji:
+	- gaji pokok,
+	- potongan telat,
+	- potongan tidak hadir,
+	- potongan lupa pulang,
+	- insentif berbasis jabatan,
+	- upah lembur dari data lembur approved,
+	- item lain-lain (`lain_lain_items`, bisa plus/minus).
+- Status payroll: `draft` / `final`.
+- Slip gaji dapat dicetak oleh admin atau pegawai pemilik data.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 3.5 Manajemen Pegawai
+- CRUD pegawai (non-admin).
+- Setup jadwal kerja:
+	- **Non-shift**: `jam_masuk` / `jam_keluar`
+	- **Shift**: pasangan shift + jam shift 1 & shift 2
+- Hari libur mingguan per user (`hari_libur`).
+- Status **inactive**:
+	- permanen,
+	- sementara dengan rentang tanggal + alasan.
 
-## Security Vulnerabilities
+## 3.6 Profil
+- Ubah profil pengguna.
+- Upload avatar (crop square + resize + kompres).
+- Ubah password.
+- Hapus akun sendiri.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 4. Otomasi Terjadwal (Scheduler)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Terdaftar di `routes/console.php`:
+
+1. `photos:cleanup --days=40`
+	 - Jalan tiap hari pukul **00:00**
+	 - Menghapus foto absensi/lembur lama dari storage publik
+
+2. `absensi:check-status`
+	 - Jalan tiap hari pukul **06:00**
+	 - Menandai data absensi untuk hari sebelumnya:
+		 - `libur` jika hari libur,
+		 - `tidak_hadir` jika tidak ada absensi,
+		 - auto checkout `lupa_pulang` jika lupa absen pulang.
+
+Pastikan cron scheduler Laravel aktif di server production.
+
+Contoh cron:
+
+```bash
+* * * * * cd /path/to/project && php artisan schedule:run >> /dev/null 2>&1
+```
+
+---
+
+## 5. Instalasi & Menjalankan Lokal
+
+## 5.1 Prasyarat
+- PHP 8.2+
+- Composer
+- Node.js + npm
+- MySQL/MariaDB (atau DB lain yang didukung Laravel)
+
+## 5.2 Setup cepat
+
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+```
+
+Atur koneksi database di `.env`, lalu:
+
+```bash
+php artisan migrate
+php artisan db:seed
+php artisan storage:link
+npm install
+```
+
+Jalankan mode development (server + queue + logs + vite via script composer):
+
+```bash
+composer run dev
+```
+
+Atau manual terpisah:
+
+```bash
+php artisan serve
+php artisan queue:listen --tries=1
+npm run dev
+```
+
+---
+
+## 6. Akun Default Seeder
+
+Hasil dari `DatabaseSeeder`:
+
+- **Admin**: `admin@nvet.com`
+- **Pegawai**: `pegawai@nvet.com`
+- **Password default factory**: `password`
+
+---
+
+## 7. Struktur Modul (Ringkas)
+
+- `app/Http/Controllers/AbsenController.php` → absensi pegawai & admin
+- `app/Http/Controllers/PenggajianController.php` → payroll + slip
+- `app/Http/Controllers/LemburController.php` → lembur pegawai/admin
+- `app/Http/Controllers/UserController.php` → manajemen pegawai
+- `app/Http/Controllers/HariLiburController.php` → hari libur/hari khusus
+- `app/Http/Controllers/ProfileController.php` → profil & password
+- `app/Models/*` → model domain utama (`User`, `Absen`, `HariLibur`, `Lembur`, `Penggajian`)
+- `app/Services/PhotoService.php` → proses & cleanup foto
+- `app/Console/Commands/*` → command otomatis absensi/foto
+
+---
+
+## 8. Route Penting
+
+- Auth: `/login`, `POST /logout`
+- Dashboard redirect role: `/dashboard`
+- Dashboard admin: `/dashboard/admin`
+- Dashboard pegawai: `/dashboard/pegawai`
+
+### Pegawai
+- `/absen`, `/riwayat`, `/riwayat-kalender`
+- `/lembur`
+- `/penggajian-riwayat`
+
+### Admin
+- Resource `users`
+- Resource `penggajian`
+- `hari-libur`
+- `/lembur-admin`
+- `/absensi-kalender` + detail per tanggal
+- CRUD absensi manual (`/absen/create/...`, `/absen/manual`, `/absen/{absen}`)
+
+---
+
+## 9. Catatan Implementasi
+
+- Middleware role menggunakan alias `role` (lihat `bootstrap/app.php`).
+- Error 403 diarahkan ke login dengan pesan akses.
+- Koordinat kantor dan radius absensi saat ini hardcoded di `AbsenController`.
+- Foto absensi/lembur disimpan di disk `public` dengan struktur folder per tahun/bulan.
+
+---
+
+## 10. Testing
+
+Menjalankan test:
+
+```bash
+composer test
+```
+
+Atau:
+
+```bash
+php artisan test
+```
