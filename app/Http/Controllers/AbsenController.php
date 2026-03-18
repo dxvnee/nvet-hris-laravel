@@ -139,7 +139,15 @@ class AbsenController extends Controller
 
         $now = Carbon::now();
 
+        // Determine jam pulang based on shift
         $jamPulangSetting = Carbon::parse($user->jam_keluar);
+        if ($user->is_shift && $user->shift_partner_id && $absenHariIni && $absenHariIni->shift_number) {
+            if ((int) $absenHariIni->shift_number === 1) {
+                $jamPulangSetting = Carbon::parse($user->shift1_jam_keluar);
+            } elseif ((int) $absenHariIni->shift_number === 2) {
+                $jamPulangSetting = Carbon::parse($user->shift2_jam_keluar);
+            }
+        }
         $menitTelat =  $absenHariIni ? $absenHariIni->menit_telat : 0;
         $menitBisaLemburTelat = $jamPulangSetting->copy()->addMinutes($menitTelat);
         $bisaLemburTelat = $now->gt($menitBisaLemburTelat);
